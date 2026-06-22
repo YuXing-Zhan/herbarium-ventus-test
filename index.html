@@ -1128,8 +1128,10 @@ footer {
 <div class="container">
   <!-- Top bar -->
   <div class="top-bar">
-    <select class="voice-select" id="voiceSelect" onchange="onVoiceChange()" data-tooltip="选择发音语音，推荐意大利语女声">
-      <option value="">加载语音列表中...</option>
+    <select class="voice-select" id="voiceSelect" onchange="onVoiceChange()" data-tooltip="选择发音语言，推荐意大利语">
+      <option value="it-IT">🇮🇹 意大利语</option>
+      <option value="de-DE">🇩🇪 德语（拉丁替代）</option>
+      <option value="en-US">🇬🇧 英语</option>
     </select>
     <div class="top-bar-right">
       <button class="help-btn" onclick="openShortcuts()" data-tooltip="自定义键盘快捷键">⌨</button>
@@ -1282,8 +1284,6 @@ const PLANTS = [
   ["槭属","Acer"],["漆树属","Toxicodendron"],["木犀榄属","Olea"],
   ["刚竹属","Phyllostachys"]
 ];
-
-var IS_EDGE_ANDROID = /edga?\//i.test(navigator.userAgent) && /android/i.test(navigator.userAgent);
 
 /* ═══════════════════════════════════════════════
    LEITNER BOX LEARNING SYSTEM
@@ -2160,193 +2160,17 @@ function scrollToTop() {
 /* ═══════════════════════════════════════════════
    SPEECH
    ═══════════════════════════════════════════════ */
-var speaking = false, selectedVoice = null;
+var speaking = false, selectedLang = 'it-IT';
 
-function populateVoices() {
-  var select = document.getElementById('voiceSelect');
-  // Edge Android: getVoices() breaks the API permanently if called before
-  // the browser's native TTS engine initialises. Skip voice enumeration entirely.
-  if (IS_EDGE_ANDROID) {
-    select.innerHTML = '<option value="">🔊 系统默认 (Edge)</option>';
-    return;
-  }
-  var voices = window.speechSynthesis.getVoices();
-  if (!voices.length) { select.innerHTML = '<option value="">无可用语音</option>'; return; }
-
-  // Gender helpers: check voice name for gender hints
-  function isMale(nm) {
-    var n = nm.toLowerCase();
-    if (n.includes('male')) return true;
-    if (n.includes('david') || n.includes('mark') || n.includes('guy') ||
-        n.includes('stefan') || n.includes('pablo') || n.includes('matteo')) return true;
-    return false;
-  }
-  function isFemale(nm) {
-    var n = nm.toLowerCase();
-    if (n.includes('female')) return true;
-    if (n.includes('elsa') || n.includes('alice') || n.includes('zira') ||
-        n.includes('samantha') || n.includes('catherine') || n.includes('susan') ||
-        n.includes('linda') || n.includes('helena') || n.includes('laura') ||
-        n.includes('maria') || n.includes('elena') || n.includes('francesca')) return true;
-    return false;
-  }
-
-  var itF = null, itM = null, enF = null, enM = null;
-  var usedNames = new Set();
-
-  // --- PASS 1: Known brand-name voices ---
-  for (var v = 0; v < voices.length; v++) {
-    var name = voices[v].name;
-    var lang = voices[v].lang;
-    var key = name + '|' + lang;
-    if (usedNames.has(key)) continue;
-
-    // Italian female: Elsa, Alice (both are female on Windows)
-    if (!itF && (name.includes('Elsa') || name.includes('Alice')) && lang.startsWith('it')) {
-      itF = voices[v]; usedNames.add(key); continue;
-    }
-    // English female: Zira, Samantha, Google US
-    if (!enF && (name.includes('Zira') || name.includes('Samantha')) && lang.startsWith('en')) {
-      enF = voices[v]; usedNames.add(key); continue;
-    }
-    if (!enF && name.includes('Google') && name.includes('US') && lang.startsWith('en')) {
-      enF = voices[v]; usedNames.add(key); continue;
-    }
-    // English male: David, Google UK
-    if (!enM && name.includes('David') && lang.startsWith('en')) {
-      enM = voices[v]; usedNames.add(key); continue;
-    }
-    if (!enM && name.includes('Google') && name.includes('UK') && lang.startsWith('en')) {
-      enM = voices[v]; usedNames.add(key); continue;
-    }
-    // German male (Latin substitute — closest phonetics): Google Deutsch
-    if (!itM && name.includes('Google') && name.includes('Deutsch')) {
-      itM = voices[v]; usedNames.add(key); continue;
-    }
-  }
-
-  // --- PASS 2: Gender detection from voice name ---
-  for (var v2 = 0; v2 < voices.length; v2++) {
-    var n = voices[v2].name, l = voices[v2].lang;
-    var k = n + '|' + l;
-    if (usedNames.has(k)) continue;
-
-    if (!itF && l.startsWith('it') && isFemale(n)) {
-      itF = voices[v2]; usedNames.add(k); continue;
-    }
-    if (!enF && l.startsWith('en') && isFemale(n)) {
-      enF = voices[v2]; usedNames.add(k); continue;
-    }
-    if (!enM && l.startsWith('en') && isMale(n)) {
-      enM = voices[v2]; usedNames.add(k); continue;
-    }
-  }
-
-  // --- PASS 3: Any it/en voice as last resort ---
-  for (var v3 = 0; v3 < voices.length; v3++) {
-    var n2 = voices[v3].name, l2 = voices[v3].lang;
-    var k2 = n2 + '|' + l2;
-    if (usedNames.has(k2)) continue;
-    if (!itF && l2.startsWith('it') && !isMale(n2)) {
-      itF = voices[v3]; usedNames.add(k2); continue;
-    }
-    if (!enF && l2.startsWith('en') && !isMale(n2)) {
-      enF = voices[v3]; usedNames.add(k2); continue;
-    }
-    if (!enM && l2.startsWith('en') && !isFemale(n2)) {
-      enM = voices[v3]; usedNames.add(k2); continue;
-    }
-  }
-
-  select.innerHTML = '';
-  var idx = 0;
-  var firstItalianIdx = -1;
-
-  var optSys = document.createElement('option');
-  optSys.value = '-1'; optSys.textContent = '🌐 系统默认 (不指定语音)';
-  select.appendChild(optSys);
-
-  function addOpt(label, voice) {
-    var o = document.createElement('option');
-    o.value = idx; o.textContent = label + ' — ' + voice.name + ' (' + voice.lang + ')';
-    o._voice = voice;
-    select.appendChild(o);
-    return idx++;
-  }
-
-  // Italian female — best Latin pronunciation
-  if (itF) { firstItalianIdx = idx + 1; addOpt('🇮🇹 意大利语 · 女声', itF); }
-  // German male as Latin substitute (German phonetics closest to Latin)
-  if (itM) addOpt('🇩🇪 德语男声 · 拉丁替代', itM);
-  if (enF) addOpt('🇬🇧 英语 · 女声', enF);
-  if (enM) addOpt('🇬🇧 英语 · 男声', enM);
-
-  // --- PASS 4: Catch-all — grab any it/en voice (Android Edge has different names) ---
-  if (!itF && !itM && !enF && !enM) {
-    for (var v4 = 0; v4 < voices.length; v4++) {
-      var l3 = voices[v4].lang;
-      if (!itF && l3.startsWith('it')) { itF = voices[v4]; }
-      else if (!enF && l3.startsWith('en') && !isMale(voices[v4].name)) { enF = voices[v4]; }
-      else if (!enM && l3.startsWith('en')) { enM = voices[v4]; }
-    }
-  }
-
-  // Default to Italian female
-  if (firstItalianIdx > 0) {
-    select.selectedIndex = firstItalianIdx;
-    selectedVoice = select.options[select.selectedIndex]._voice;
-  }
-  // Fallback: select any voice so speak() can work
-  if (!selectedVoice) {
-    var fbVoice = itF || itM || enF || enM;
-    if (!fbVoice) {
-      for (var v5 = 0; v5 < voices.length; v5++) {
-        if (voices[v5].lang.startsWith('en') || voices[v5].lang.startsWith('it')) {
-          fbVoice = voices[v5]; break;
-        }
-      }
-    }
-    if (!fbVoice && voices.length > 0) fbVoice = voices[0];
-    if (fbVoice) {
-      selectedVoice = fbVoice;
-      select.selectedIndex = 1; // skip the "系统默认" option
-    }
-  }
-}
 function onVoiceChange() {
   var sel = document.getElementById('voiceSelect');
-  var o = sel.options[sel.selectedIndex];
-  selectedVoice = (o && o._voice) ? o._voice : null;
+  selectedLang = sel.value;
 }
-window.speechSynthesis.onvoiceschanged = populateVoices;
-setTimeout(populateVoices, 200);
 
 function speak(text) {
   if (speaking) { window.speechSynthesis.cancel(); speaking = false; return; }
   var u = new SpeechSynthesisUtterance(text);
-  // Edge Android: don't set voice (getVoices() would break the API).
-  // Just set lang and let the browser pick its default voice.
-  if (IS_EDGE_ANDROID) {
-    u.lang = 'it-IT';
-  } else if (selectedVoice) {
-    u.voice = selectedVoice;
-    u.lang = selectedVoice.lang;
-  } else {
-    // Fallback: try it-IT, then en-US. Never use 'la' — unsupported on Android.
-    var allVoices = window.speechSynthesis.getVoices();
-    var fb = null;
-    for (var vi = 0; vi < allVoices.length; vi++) {
-      if (allVoices[vi].lang.startsWith('it')) { fb = allVoices[vi]; break; }
-    }
-    if (!fb) {
-      for (var vj = 0; vj < allVoices.length; vj++) {
-        if (allVoices[vj].lang.startsWith('en')) { fb = allVoices[vj]; break; }
-      }
-    }
-    if (!fb && allVoices.length > 0) fb = allVoices[0];
-    if (fb) { u.voice = fb; u.lang = fb.lang; }
-    else u.lang = 'it-IT';
-  }
+  u.lang = selectedLang;
   u.rate = 0.85; u.volume = 1.0;
   u.onstart = function() {
     speaking = true;
