@@ -2489,6 +2489,11 @@ function markKnow() {
     for (var i = 0; i < PLANTS.length; i++) fcOrder.push(i);
   }
   var nextIdx = pickWeightedCard(fcOrder);
+  // Avoid showing the same card twice in a row
+  var retries = 0;
+  while (nextIdx === fcIndex && fcOrder.length > 1 && retries < 20) {
+    nextIdx = pickWeightedCard(fcOrder); retries++;
+  }
   fcIndex = nextIdx;
   fcFlipped = false; renderFlashcard(); updateFlashcardImages();
   updateProgressBar(); updateCardIndicators();
@@ -2501,6 +2506,11 @@ function markDontKnow() {
   recordWrong(la);
   updateFilterCounts();
   var nextIdx = pickWeightedCard(fcOrder);
+  // Avoid showing the same card twice in a row
+  var retries = 0;
+  while (nextIdx === fcIndex && fcOrder.length > 1 && retries < 20) {
+    nextIdx = pickWeightedCard(fcOrder); retries++;
+  }
   fcIndex = nextIdx;
   fcFlipped = false; renderFlashcard(); updateFlashcardImages();
 }
@@ -2522,7 +2532,12 @@ function nextQuestion() {
   clearAutoNext();
   var pool = getFilteredPlants(reviewMode);
   if (pool.length === 0) pool = getFilteredPlants('all');
-  quizIndex = pool[Math.floor(Math.random() * pool.length)];
+  // Avoid showing the same question twice in a row
+  var newIdx = quizIndex;
+  while (newIdx === quizIndex && pool.length > 1) {
+    newIdx = pool[Math.floor(Math.random() * pool.length)];
+  }
+  quizIndex = newIdx;
   currentAnswer = PLANTS[quizIndex][1];
   document.getElementById('quizChinese').textContent = PLANTS[quizIndex][0];
   var inp = document.getElementById('quizInput');
