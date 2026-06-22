@@ -3,1201 +3,592 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="风之植物志 — 学习40种植物拉丁文学名的交互式图鉴，支持闪卡、测验、发音和五季主题">
+<meta name="keywords" content="植物学,拉丁文,植物图鉴,闪卡学习,植物属名">
 <title>Herbarium Ventus · 风之植物志</title>
 <style>
-/* ═══════════════════════════════════════════════════
-   HERBARIUM VENTUS — PREMIUM
-   Multi-season · Multi-particle ecology · Glassmorphism
-   ═══════════════════════════════════════════════════ */
+/*══════════════════════════════════════════════════
+  HERBARIUM VENTUS — OPTIMIZED
+  Design Tokens → Reset → Layout → Components → Animations → Responsive
+ ══════════════════════════════════════════════════*/
 
-/* ── SEASONAL DESIGN TOKENS ── */
+/* ── 1. DESIGN TOKENS ── */
 :root {
-  /* Spring — Fresh green (default fallback) */
-  --sky-0: #d8e8d0;
-  --sky-1: #c8dcc0;
-  --sky-2: #c0d8b8;
-  --sky-3: #b0d0a8;
-  --sky-4: #a0c898;
-  --surface: rgba(248,252,248,0.72);
-  --surface-hover: rgba(248,252,248,0.9);
-  --surface-elevated: rgba(250,255,250,0.82);
-  --ink: #1a2818;
-  --ink-dim: #4a6048;
-  --ink-faint: #7a9078;
-  --accent: #5a9858;
-  --accent-bright: #70b868;
-  --accent-glow: rgba(90,152,88,0.2);
-  --accent-2: #70b878;
-  --accent-2-glow: rgba(112,184,120,0.15);
-  --border: rgba(80,130,70,0.12);
-  --border-glow: rgba(90,152,88,0.32);
+  /* Spacing */
+  --space-xs: 4px; --space-sm: 8px; --space-md: 16px; --space-lg: 28px; --space-xl: 42px;
+  /* Radius */
+  --radius-sm: 8px; --radius: 14px; --radius-lg: 22px; --radius-xl: 30px;
+  /* Shadows */
   --shadow-sm: 0 1px 4px rgba(0,0,0,0.03);
   --shadow-md: 0 4px 16px rgba(0,0,0,0.06);
   --shadow-lg: 0 12px 40px rgba(0,0,0,0.1);
-  --correct: #5a9858;
-  --wrong: #e06850;
-  --radius-sm: 8px;
-  --radius: 14px;
-  --radius-lg: 22px;
-  --radius-xl: 30px;
-  --tab-bg: rgba(248,252,248,0.6);
-  --gallery-bg: rgba(248,252,248,0.5);
-
-  /* Particle palette */
-  --pollen: 230,220,170;
-  --leaf-1: 75,140,65;
-  --leaf-2: 100,165,80;
-  --petal: 220,180,175;
-  --firefly: 180,240,150;
-  --spark: 255,245,200;
-
-  /* Timing tokens */
-  --dur-fast: 150ms;
-  --dur-normal: 300ms;
-  --dur-slow: 500ms;
+  /* Timing */
+  --dur-fast: 150ms; --dur-normal: 300ms; --dur-slow: 500ms;
   --ease-out: cubic-bezier(0,0,0.2,1);
   --ease-spring: cubic-bezier(0.34,1.56,0.64,1);
-
   /* Cursor */
-  --cursor-size: 20px;
-  --cursor-glow-size: 180px;
+  --cursor-size: 20px; --cursor-glow-size: 180px;
 }
 
+/* ── 1a. SEASON THEMES (only override what differs from spring default) ── */
+:root,
 [data-season="spring"] {
   --sky-0: #d8e8d0; --sky-1: #c8dcc0; --sky-2: #c0d8b8; --sky-3: #b0d0a8; --sky-4: #a0c898;
-  --surface: rgba(248,252,248,0.72); --surface-hover: rgba(248,252,248,0.9);
-  --surface-elevated: rgba(250,255,250,0.82);
+  --surface: rgba(248,252,248,0.72); --surface-hover: rgba(248,252,248,0.9); --surface-elevated: rgba(250,255,250,0.82);
   --ink: #1a2818; --ink-dim: #4a6048; --ink-faint: #7a9078;
   --accent: #5a9858; --accent-bright: #70b868; --accent-glow: rgba(90,152,88,0.2);
   --accent-2: #70b878; --accent-2-glow: rgba(112,184,120,0.15);
   --border: rgba(80,130,70,0.12); --border-glow: rgba(90,152,88,0.32);
-  --shadow-sm: 0 1px 4px rgba(0,0,0,0.03); --shadow-md: 0 4px 16px rgba(0,0,0,0.06); --shadow-lg: 0 12px 40px rgba(0,0,0,0.1);
   --correct: #5a9858; --wrong: #e06850;
   --tab-bg: rgba(248,252,248,0.6); --gallery-bg: rgba(248,252,248,0.5);
-  --pollen: 230,220,170; --leaf-1: 75,140,65; --leaf-2: 100,165,80;
-  --petal: 220,180,175; --firefly: 180,240,150; --spark: 255,245,200;
+  --pollen: 230,220,170; --leaf-1: 75,140,65; --leaf-2: 100,165,80; --petal: 220,180,175; --firefly: 180,240,150; --spark: 255,245,200;
 }
-
 [data-season="summer"] {
   --sky-0: #87ceeb; --sky-1: #98d4e8; --sky-2: #b0dcd8; --sky-3: #c8e4d8; --sky-4: #e0f0e8;
-  --surface: rgba(255,255,255,0.72); --surface-hover: rgba(255,255,255,0.9);
-  --surface-elevated: rgba(252,255,252,0.82);
+  --surface: rgba(255,255,255,0.72); --surface-hover: rgba(255,255,255,0.9); --surface-elevated: rgba(252,255,252,0.82);
   --ink: #2a3028; --ink-dim: #6a7a68; --ink-faint: #98a898;
-  --accent: #5a9858; --accent-bright: #70b868; --accent-glow: rgba(90,152,88,0.18);
+  --accent-glow: rgba(90,152,88,0.18);
   --accent-2: #5090c8; --accent-2-glow: rgba(80,144,200,0.12);
   --border: rgba(100,140,100,0.13); --border-glow: rgba(90,152,88,0.28);
-  --shadow-sm: 0 1px 4px rgba(0,0,0,0.03); --shadow-md: 0 4px 16px rgba(0,0,0,0.06); --shadow-lg: 0 12px 40px rgba(0,0,0,0.1);
-  --correct: #5a9858; --wrong: #e06850;
   --tab-bg: rgba(255,255,255,0.6); --gallery-bg: rgba(255,255,255,0.5);
-  --pollen: 240,225,170; --leaf-1: 75,140,65; --leaf-2: 100,165,80;
-  --petal: 220,150,170; --firefly: 180,235,150; --spark: 255,245,200;
+  --pollen: 240,225,170; --petal: 220,150,170; --firefly: 180,235,150;
 }
-
 [data-season="autumn"] {
   --sky-0: #f0d8b8; --sky-1: #e8c8a0; --sky-2: #e0c898; --sky-3: #d8b890; --sky-4: #c8a880;
-  --surface: rgba(255,250,242,0.72); --surface-hover: rgba(255,250,242,0.9);
-  --surface-elevated: rgba(255,252,248,0.82);
+  --surface: rgba(255,250,242,0.72); --surface-hover: rgba(255,250,242,0.9); --surface-elevated: rgba(255,252,248,0.82);
   --ink: #2a2018; --ink-dim: #6a5040; --ink-faint: #a08870;
   --accent: #c89850; --accent-bright: #e0b068; --accent-glow: rgba(200,152,80,0.2);
   --accent-2: #d07050; --accent-2-glow: rgba(208,112,80,0.15);
   --border: rgba(160,120,70,0.14); --border-glow: rgba(200,152,80,0.32);
-  --shadow-sm: 0 1px 4px rgba(0,0,0,0.04); --shadow-md: 0 4px 16px rgba(0,0,0,0.08); --shadow-lg: 0 12px 40px rgba(0,0,0,0.12);
   --correct: #8a9850; --wrong: #c86040;
   --tab-bg: rgba(255,250,242,0.6); --gallery-bg: rgba(255,250,242,0.5);
-  --pollen: 240,210,160; --leaf-1: 180,120,50; --leaf-2: 200,140,70;
-  --petal: 220,140,100; --firefly: 240,200,130; --spark: 255,220,170;
+  --pollen: 240,210,160; --leaf-1: 180,120,50; --leaf-2: 200,140,70; --petal: 220,140,100; --firefly: 240,200,130; --spark: 255,220,170;
 }
-
 [data-season="winter"] {
   --sky-0: #d8dce8; --sky-1: #c8d0e0; --sky-2: #d0d8d8; --sky-3: #c0c8d0; --sky-4: #b0b8c0;
-  --surface: rgba(248,250,252,0.72); --surface-hover: rgba(248,250,252,0.9);
-  --surface-elevated: rgba(252,252,255,0.82);
+  --surface: rgba(248,250,252,0.72); --surface-hover: rgba(248,250,252,0.9); --surface-elevated: rgba(252,252,255,0.82);
   --ink: #1a2028; --ink-dim: #505868; --ink-faint: #889098;
   --accent: #7898a8; --accent-bright: #90b0c0; --accent-glow: rgba(120,152,168,0.15);
   --accent-2: #8890b0; --accent-2-glow: rgba(136,144,176,0.12);
   --border: rgba(120,140,160,0.12); --border-glow: rgba(120,152,168,0.25);
-  --shadow-sm: 0 1px 4px rgba(0,0,0,0.04); --shadow-md: 0 4px 16px rgba(0,0,0,0.06); --shadow-lg: 0 12px 40px rgba(0,0,0,0.08);
   --correct: #689888; --wrong: #c86858;
   --tab-bg: rgba(248,250,252,0.6); --gallery-bg: rgba(248,250,252,0.5);
-  --pollen: 220,225,235; --leaf-1: 100,120,130; --leaf-2: 120,140,150;
-  --petal: 200,200,215; --firefly: 180,200,230; --spark: 235,240,248;
+  --pollen: 220,225,235; --leaf-1: 100,120,130; --leaf-2: 120,140,150; --petal: 200,200,215; --firefly: 180,200,230; --spark: 235,240,248;
 }
-
 [data-season="dusk"] {
   --sky-0: #2a2a3a; --sky-1: #1e2838; --sky-2: #1a2828; --sky-3: #162018; --sky-4: #121a14;
-  --surface: rgba(18,24,20,0.78); --surface-hover: rgba(22,30,24,0.9);
-  --surface-elevated: rgba(24,32,26,0.85);
+  --surface: rgba(18,24,20,0.78); --surface-hover: rgba(22,30,24,0.9); --surface-elevated: rgba(24,32,26,0.85);
   --ink: #d0dcd0; --ink-dim: #7a8a78; --ink-faint: #4a5a48;
   --accent: #70b868; --accent-bright: #88d878; --accent-glow: rgba(112,184,104,0.22);
   --accent-2: #b898e0; --accent-2-glow: rgba(184,152,224,0.12);
   --border: rgba(100,150,100,0.1); --border-glow: rgba(112,184,104,0.25);
-  --shadow-sm: 0 1px 4px rgba(0,0,0,0.15); --shadow-md: 0 4px 16px rgba(0,0,0,0.25); --shadow-lg: 0 12px 40px rgba(0,0,0,0.35);
   --correct: #70b868; --wrong: #e06850;
   --tab-bg: rgba(18,24,20,0.6); --gallery-bg: rgba(18,24,20,0.55);
-  --pollen: 160,190,120; --leaf-1: 70,130,60; --leaf-2: 90,155,75;
-  --petal: 180,140,200; --firefly: 160,220,120; --spark: 200,220,160;
+  --pollen: 160,190,120; --leaf-1: 70,130,60; --leaf-2: 90,155,75; --petal: 180,140,200; --firefly: 160,220,120; --spark: 200,220,160;
 }
 
-/* ── RESET & BASE ── */
+/* ── 2. RESET & BASE ── */
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-
 body {
   font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
-  color: var(--ink);
-  background: linear-gradient(180deg,
-    var(--sky-0) 0%, var(--sky-1) 15%, var(--sky-2) 40%,
-    var(--sky-3) 70%, var(--sky-4) 100%);
-  background-attachment: fixed;
-  min-height: 100vh;
-  line-height: 1.5;
+  color: var(--ink); line-height: 1.5;
+  background: linear-gradient(180deg, var(--sky-0) 0%, var(--sky-1) 15%, var(--sky-2) 40%, var(--sky-3) 70%, var(--sky-4) 100%);
+  background-attachment: fixed; min-height: 100vh;
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
   transition: background 0.8s var(--ease-out), color 0.8s var(--ease-out);
-  cursor: none;
 }
+/* Prevent custom cursor on touch devices */
 @media (pointer: coarse) { body { cursor: auto; } }
 
-/* ── CUSTOM CURSOR ── */
-#cursorGlow {
-  position: fixed; pointer-events: none; z-index: 10001;
-  width: var(--cursor-glow-size); height: var(--cursor-glow-size);
-  border-radius: 50%;
-  background: radial-gradient(circle,
-    rgba(var(--firefly), 0.1) 0%,
-    rgba(var(--firefly), 0.04) 35%,
-    transparent 70%);
-  transform: translate(-50%, -50%);
-  transition: opacity 0.4s;
-}
-#cursorLeaf {
-  position: fixed; pointer-events: none; z-index: 10002;
-  width: var(--cursor-size); height: var(--cursor-size);
-  transform: translate(-50%, -50%);
-  transition: width 0.2s, height 0.2s;
-}
-#cursorLeaf::after {
-  content: '';
-  display: block;
-  width: 100%; height: 100%;
-  border-radius: 50% 0 50% 50%;
-  background: var(--accent);
-  opacity: 0.85;
-  transform: rotate(-30deg);
-  box-shadow: 0 0 8px var(--accent-glow), 0 0 20px rgba(var(--firefly), 0.3);
-  transition: all 0.2s var(--ease-out);
-}
-#cursorLeaf.pressing::after {
-  transform: rotate(-30deg) scale(0.7);
-  opacity: 0.5;
-  border-radius: 50%;
-}
-#cursorLeaf.on-card::after {
-  border-radius: 50%;
-  transform: rotate(0) scale(1.4);
-  background: var(--accent-bright);
-  opacity: 0.6;
-  box-shadow: 0 0 16px var(--accent-glow), 0 0 40px rgba(var(--firefly), 0.5);
-}
+/* ── 3. LAYOUT ── */
+.container { max-width: 960px; margin: 0 auto; padding: 0 var(--space-lg); position: relative; z-index: 1; }
+#natureCanvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
 
-/* ── PARTICLE CANVAS ── */
-#natureCanvas {
-  position: fixed; inset: 0; z-index: 0;
-  pointer-events: none;
+/* ── 3a. HEADER ── */
+header { text-align: center; padding: 32px 0 4px; position: relative; z-index: 1; }
+header h1 {
+  font-family: "Times New Roman", "STSong", "SimSun", serif;
+  font-size: 36px; font-weight: 400; letter-spacing: 1px;
+  background: linear-gradient(135deg, var(--ink) 0%, var(--accent) 50%, var(--ink) 100%);
+  background-size: 200% 100%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  animation: textFlow 8s ease-in-out infinite; display: inline-block;
 }
+@keyframes textFlow { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
+header .subtitle { color: var(--ink-dim); font-size: 13px; margin-top: 4px; letter-spacing: 2px; }
 
-/* ── LAYOUT ── */
-.container { max-width: 960px; margin: 0 auto; padding: 0 28px; position: relative; z-index: 1; }
+/* ── 3b. TOP BAR ── */
+.top-bar { display: flex; align-items: center; justify-content: space-between; padding: 16px 0 0; gap: 12px; position: relative; z-index: 2; }
+.top-bar-right { display: flex; gap: 8px; align-items: center; }
 
-/* ── TOP BAR ── */
-.top-bar {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 16px 0 0; gap: 12px;
-  position: relative; z-index: 2;
-}
+/* ── 3c. FOOTER ── */
+footer { text-align: center; color: var(--ink-faint); font-size: 12px; padding: 42px 0 24px; position: relative; z-index: 1; }
+
+/* ── 4. COMPONENTS ── */
+
+/* 4a. Voice Select */
 .voice-select {
   padding: 8px 32px 8px 12px; border: 1px solid var(--border);
   border-radius: var(--radius-sm); background: var(--surface);
-  color: var(--ink); font-size: 12px; font-family: inherit;
-  cursor: pointer; outline: none; max-width: 240px;
+  color: var(--ink); font-size: 12px; cursor: pointer; outline: none; max-width: 240px;
   -webkit-appearance: none; appearance: none;
-  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12'%3E%3Cpath d='M3 5l3 3 3-3' fill='none' stroke='%236a7a68' stroke-width='1.5'/%3E%3C/svg%3E");
   background-repeat: no-repeat; background-position: right 8px center;
   transition: border-color var(--dur-fast) var(--ease-out);
 }
-.voice-select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+.voice-select:focus-visible { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
 
-.top-bar-right { display: flex; gap: 8px; align-items: center; }
-
-/* Season picker — compact pill buttons */
-.season-pills {
-  display: flex; gap: 3px; padding: 3px;
-  background: var(--tab-bg); border-radius: 20px;
-  border: 1px solid var(--border);
-  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-}
+/* 4b. Season Pills */
+.season-pills { display: flex; gap: 3px; padding: 3px; background: var(--tab-bg); border-radius: 20px; border: 1px solid var(--border); }
 .season-pill {
-  width: 30px; height: 30px; border-radius: 50%;
-  border: none; cursor: pointer;
-  font-size: 13px; line-height: 1;
-  display: flex; align-items: center; justify-content: center;
-  background: transparent; color: var(--ink-faint);
-  transition: all var(--dur-normal) var(--ease-spring);
-  position: relative;
+  width: 30px; height: 30px; border-radius: 50%; border: none; cursor: pointer;
+  font-size: 13px; line-height: 1; display: flex; align-items: center; justify-content: center;
+  background: transparent; color: var(--ink-faint); transition: all var(--dur-normal) var(--ease-spring);
 }
 .season-pill:hover { color: var(--ink); transform: scale(1.1); }
-.season-pill.active {
-  background: var(--accent); color: #fff;
-  box-shadow: 0 2px 8px var(--accent-glow);
-}
+.season-pill:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.season-pill.active { background: var(--accent); color: #fff; box-shadow: 0 2px 8px var(--accent-glow); }
 
-/* ── BACK TO TOP ── */
-.back-to-top {
-  position: fixed; bottom: 32px; right: 28px; z-index: 9999;
-  width: 40px; height: 40px; border-radius: 50%;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-  color: var(--ink-dim); font-size: 18px; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  opacity: 0.7;
-  transition: opacity 0.3s var(--ease-out), transform 0.3s var(--ease-out), border-color 0.3s, color 0.3s, box-shadow 0.3s;
-  box-shadow: var(--shadow-md);
-  line-height: 1; font-family: inherit;
-}
-.back-to-top:hover {
-  opacity: 1;
-  border-color: var(--accent); color: var(--accent);
-  box-shadow: var(--shadow-lg), 0 0 16px var(--accent-glow);
-  transform: translateY(-3px);
-}
-
-/* ── HELP BUTTON ── */
+/* 4c. Buttons */
 .help-btn {
   width: 30px; height: 30px; border: 1px solid var(--border);
   background: var(--surface); border-radius: 50%; cursor: pointer;
   font-size: 15px; font-weight: 700; color: var(--ink-dim);
-  font-family: "Times New Roman", serif;
-  display: flex; align-items: center; justify-content: center;
+  font-family: "Times New Roman", serif; display: flex; align-items: center; justify-content: center;
   transition: all var(--dur-fast) var(--ease-out);
-  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
 }
-.help-btn:hover { border-color: var(--accent); color: var(--accent); box-shadow: 0 0 12px var(--accent-glow); }
+.help-btn:hover, .help-btn:focus-visible { border-color: var(--accent); color: var(--accent); box-shadow: 0 0 12px var(--accent-glow); }
+.help-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-/* ── HELP BUBBLE ── */
-.help-overlay {
-  display: none; position: fixed; inset: 0;
-  background: rgba(0,0,0,0.15);
-  backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
-  z-index: 10000; align-items: center; justify-content: center;
+.back-to-top {
+  position: fixed; bottom: 32px; right: 28px; z-index: 9999;
+  width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border);
+  background: var(--surface); color: var(--ink-dim); font-size: 18px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; opacity: 0.7;
+  transition: opacity 0.3s, transform 0.3s, border-color 0.3s, color 0.3s, box-shadow 0.3s;
+  box-shadow: var(--shadow-md); line-height: 1;
 }
-.help-overlay.show { display: flex; }
-.help-panel {
-  position: relative;
-  background: var(--surface-elevated);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--border);
-  padding: 28px 28px 24px;
-  max-width: 420px; width: 88vw; max-height: 72vh;
-  overflow-y: auto;
-  box-shadow: 0 4px 30px rgba(0,0,0,0.06), 0 0 80px rgba(var(--leaf-1), 0.08);
-  animation: bubbleIn 0.35s var(--ease-spring);
-}
-@keyframes bubbleIn {
-  from { opacity: 0; transform: scale(0.92); }
-  to { opacity: 1; transform: scale(1); }
-}
-.help-close {
-  position: sticky; top: -8px; z-index: 10; float: right;
-  width: 28px; height: 28px; margin-right: -12px; margin-bottom: -20px;
-  border-radius: 50%; border: 1px solid rgba(var(--leaf-1), 0.2);
-  background: var(--surface);
-  font-size: 16px; color: var(--ink-faint); cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: all var(--dur-fast) var(--ease-out);
-  line-height: 1;
-}
-.help-close:hover { color: var(--ink); border-color: var(--accent); box-shadow: 0 0 8px var(--accent-glow); }
-.help-section {
-  margin-bottom: 14px; padding-bottom: 12px;
-  border-bottom: 1px solid rgba(var(--leaf-1), 0.08);
-}
-.help-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-.help-section h3 {
-  font-size: 13px; font-weight: 600; color: var(--accent); margin-bottom: 4px;
-}
-.help-section p {
-  font-size: 12px; color: var(--ink-dim); line-height: 1.65; margin: 0;
-}
-.help-section ul {
-  margin: 3px 0 3px 14px; font-size: 12px; color: var(--ink-dim);
-}
-.help-section li { margin-bottom: 1px; }
-.help-section strong { color: var(--ink); }
-.help-section em { color: var(--accent-bright); font-style: normal; }
+.back-to-top:hover, .back-to-top:focus-visible { opacity: 1; border-color: var(--accent); color: var(--accent); box-shadow: var(--shadow-lg), 0 0 16px var(--accent-glow); transform: translateY(-3px); }
+.back-to-top:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-/* ── SHORTCUT CONFIG ROWS ── */
-.shortcut-row {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 8px 0; border-bottom: 1px solid rgba(var(--leaf-1), 0.06);
+.btn, .btn-mastery {
+  padding: 7px 18px; border-radius: 18px; font-size: 12px; cursor: pointer; font-family: inherit;
+  transition: all var(--dur-fast) var(--ease-out); border: 1px solid var(--border);
+  background: transparent; color: var(--ink-dim);
 }
-.shortcut-row:last-child { border-bottom: none; }
-.shortcut-row .sc-label {
-  font-size: 12px; color: var(--ink-dim);
-  display: flex; align-items: center; gap: 6px;
-}
-.shortcut-row .sc-label strong { color: var(--ink); min-width: 44px; }
-.shortcut-key-input {
-  width: 52px; height: 30px; text-align: center;
-  border: 1px solid var(--border); border-radius: 8px;
-  background: var(--surface); color: var(--accent);
-  font-family: monospace; font-size: 13px; font-weight: 600;
-  cursor: pointer; transition: all var(--dur-fast);
-  outline: none;
-}
-.shortcut-key-input:hover { border-color: var(--accent); box-shadow: 0 0 8px var(--accent-glow); }
-.shortcut-key-input:focus {
-  border-color: var(--accent-bright); box-shadow: 0 0 12px var(--accent-glow);
-  background: var(--surface-elevated);
-}
-.shortcut-key-input.listening {
-  animation: pulseInput 0.5s ease-in-out infinite alternate;
-  border-color: var(--accent-bright);
-  color: var(--accent-bright);
-}
-@keyframes pulseInput {
-  from { box-shadow: 0 0 4px var(--accent-glow); }
-  to { box-shadow: 0 0 16px var(--accent-glow); }
-}
-
-/* ── HEADER ── */
-header {
-  text-align: center; padding: 32px 0 4px;
-  position: relative; z-index: 1;
-}
-header h1 {
-  font-family: "Times New Roman", "STSong", "SimSun", serif;
-  font-size: 36px; font-weight: 400; color: var(--ink);
-  letter-spacing: 1px;
-  /* Gradient flowing text */
-  background: linear-gradient(135deg, var(--ink) 0%, var(--accent) 50%, var(--ink) 100%);
-  background-size: 200% 100%;
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: textFlow 8s ease-in-out infinite;
-  position: relative;
-  display: inline-block;
-}
-@keyframes textFlow {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-header .subtitle {
-  color: var(--ink-dim); font-size: 13px; margin-top: 4px;
-  letter-spacing: 2px;
-}
-
-/* ── MORPHING TAB INDICATOR ── */
-.tabs-wrap {
-  display: flex; justify-content: center;
-  margin: 22px 0 28px;
-  position: relative; z-index: 2;
-}
-.tabs {
-  display: flex; gap: 2px;
-  background: var(--tab-bg);
-  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
-  border-radius: 16px; padding: 4px;
-  border: 1px solid var(--border);
-  position: relative;
-  box-shadow: var(--shadow-sm);
-}
-.tab-btn {
-  flex: 1; padding: 10px 20px; border: none;
-  background: transparent; border-radius: 13px; cursor: pointer;
-  font-size: 14px; font-weight: 500; color: var(--ink-dim);
-  transition: color var(--dur-normal) var(--ease-out);
-  font-family: inherit; white-space: nowrap;
-  position: relative; z-index: 2;
-}
-.tab-btn.active { color: #fff; }
-.tab-btn:hover:not(.active) { color: var(--ink); }
-/* The morphing blob */
-.tab-indicator {
-  position: absolute; top: 4px; height: calc(100% - 8px);
-  background: var(--accent);
-  border-radius: 13px;
-  z-index: 1;
-  transition: left 0.4s var(--ease-spring), width 0.4s var(--ease-spring);
-  box-shadow: 0 2px 12px var(--accent-glow);
-}
-
-.panel { display: none; }
-.panel.active { display: block; }
-.panel.active.enter {
-  animation: panelIn 0.4s var(--ease-out) both;
-}
-@keyframes panelIn {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* ── BROWSE GRID — Glassmorphism cards ── */
-.browse-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
-  gap: 10px;
-}
-.plant-card {
-  position: relative;
-  background: var(--surface);
-  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-  border-radius: var(--radius);
-  padding: 15px 16px;
-  border: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: space-between;
-  gap: 8px;
-  cursor: pointer;
-  transition: transform var(--dur-fast) var(--ease-out),
-              box-shadow var(--dur-normal) var(--ease-out),
-              border-color var(--dur-normal) var(--ease-out),
-              background var(--dur-normal) var(--ease-out);
-  overflow: visible;
-  /* Breathing animation at rest */
-  animation: cardBreathe 6s ease-in-out infinite;
-  box-shadow: var(--shadow-sm);
-}
-@keyframes cardBreathe {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-2px); }
-}
-.plant-card:hover {
-  animation-play-state: paused;
-  border-color: var(--border-glow);
-  box-shadow: var(--shadow-lg), 0 0 30px var(--accent-glow);
-  background: var(--surface-hover);
-  transform: translateY(-3px) scale(1.02);
-  z-index: 5;
-}
-/* Leaf vein border — subtle organic pattern on card edge */
-.plant-card::before {
-  content: '';
-  position: absolute; inset: 0; border-radius: var(--radius);
-  background:
-    radial-gradient(ellipse at 20% 80%, var(--accent-glow) 0%, transparent 60%),
-    radial-gradient(ellipse at 80% 20%, rgba(var(--pollen), 0.2) 0%, transparent 50%);
-  opacity: 0; transition: opacity 0.5s;
-  pointer-events: none; z-index: 0;
-}
-.plant-card:hover::before { opacity: 1; }
-.plant-card .cn { font-size: 15px; font-weight: 550; color: var(--ink); position: relative; z-index: 2; }
-.plant-card .la {
-  font-size: 13px; color: var(--accent);
-  font-family: "Times New Roman", "STSong", serif;
-  font-style: italic; font-weight: 450;
-  position: relative; z-index: 2;
-}
-.plant-card.selected {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 2px var(--accent-glow), var(--shadow-md);
-  background: rgba(var(--leaf-1), 0.06);
-}
-
-.speak-btn {
-  width: 32px; height: 32px; border: 1px solid var(--border);
-  background: var(--surface); border-radius: 50%; cursor: pointer;
-  font-size: 13px; color: var(--accent);
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0; transition: all var(--dur-fast) var(--ease-out);
-  position: relative; z-index: 3;
-}
-.speak-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); transform: scale(1.12); }
-.speak-btn:active { transform: scale(0.92); }
-
-/* Entrance stagger */
-.plant-card.animate-in {
-  opacity: 0; transform: translateY(20px);
-  animation: cardEnter 0.45s var(--ease-out) forwards;
-}
-@keyframes cardEnter {
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* ── FLASHCARD — 3D with dew-drop highlight ── */
-.flashcard-area { max-width: 480px; margin: 0 auto; text-align: center; }
-.flashcard-stage { perspective: 1200px; margin-bottom: 14px; }
-.flashcard-inner {
-  position: relative; min-height: 250px;
-  transition: transform 0.7s cubic-bezier(0.4,0,0.2,1);
-  transform-style: preserve-3d; cursor: pointer;
-}
-.flashcard-inner.flipped { transform: rotateY(180deg); }
-.flashcard-face {
-  position: absolute; inset: 0;
-  backface-visibility: hidden; -webkit-backface-visibility: hidden;
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--border);
-  background: var(--surface);
-  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  padding: 44px 28px;
-  overflow: hidden;
-  user-select: none;
-}
-.flashcard-face.back { transform: rotateY(180deg); }
-.flashcard-face .fc-label {
-  font-size: 11px; color: var(--ink-faint); letter-spacing: 3px;
-  text-transform: uppercase; margin-bottom: 14px; font-weight: 500;
-}
-.flashcard-face .fc-name {
-  font-family: "Times New Roman", "STSong", serif;
-  font-size: 40px; font-weight: 400; color: var(--ink);
-  letter-spacing: 0.5px;
-}
-.flashcard-face .fc-name.latin { font-style: italic; color: var(--accent); }
-.flashcard-face .fc-hint {
-  color: var(--ink-faint); font-size: 14px;
-  margin-top: 22px; animation: breathe 3s ease-in-out infinite;
-}
-@keyframes breathe { 0%,100%{opacity:0.3} 50%{opacity:0.85} }
-
-/* Dew-drop glossy highlight that tracks mouse */
-.flashcard-gloss {
-  position: absolute; inset: 0; border-radius: var(--radius-lg);
-  pointer-events: none; z-index: 5;
-  background: radial-gradient(circle at 50% 50%,
-    rgba(255,255,255,0.15) 0%, transparent 60%);
-  opacity: 0; transition: opacity 0.3s;
-}
-.flashcard-inner:hover .flashcard-gloss { opacity: 1; }
-
-.flashcard-face .shine-strip {
-  position: absolute; top: -80%; left: -20%;
-  width: 40%; height: 260%;
-  background: linear-gradient(105deg,
-    transparent 35%, rgba(255,255,255,0.1) 45%,
-    rgba(255,255,255,0.25) 50%, rgba(255,255,255,0.1) 55%,
-    transparent 65%);
-  transform: rotate(25deg);
-  pointer-events: none; z-index: 4;
-  animation: shineSweep 4s ease-in-out infinite;
-}
-@keyframes shineSweep {
-  0%, 100% { left: -20%; opacity: 0; }
-  40% { opacity: 1; }
-  60% { opacity: 1; }
-  80%, 100% { left: 120%; opacity: 0; }
-}
-
-.flashcard-nav {
-  display: flex; justify-content: center; align-items: center;
-  gap: 16px; margin-top: 6px;
-}
-.flashcard-nav .counter { font-size: 14px; color: var(--ink-dim); font-weight: 500; }
-
-/* ── GALLERY — Dew-drop hover ── */
-.gallery-section { margin-top: 34px; padding-top: 20px; border-top: 1px solid var(--border); }
-.gallery-header { display: flex; align-items: baseline; gap: 10px; margin-bottom: 14px; }
-.gallery-header h2 {
-  font-family: "Times New Roman", "STSong", serif;
-  font-size: 19px; font-weight: 400; color: var(--ink);
-}
-.gallery-header .genus-tag {
-  font-family: "Times New Roman", "STSong", serif;
-  font-style: italic; font-size: 15px; color: var(--accent); font-weight: 500;
-}
-.gallery-header .baike-link {
-  font-family: "Times New Roman", "STSong", serif;
-  font-style: italic; font-size: 14px; color: var(--ink-faint);
-  text-decoration: none;
-  transition: color var(--dur-fast);
-}
-.gallery-header .baike-link:hover {
-  color: var(--accent);
-}
-.gallery-header .baike-hint {
-  font-size: 11px; color: var(--ink-faint);
-  opacity: 0.55;
-}
-.gallery-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-.gallery-img-wrap {
-  position: relative; border-radius: var(--radius);
-  overflow: hidden;
-  background: var(--gallery-bg);
-  border: 1px solid var(--border);
-  cursor: pointer;
-  aspect-ratio: 4/3;
-  transition: transform var(--dur-fast) var(--ease-out),
-              box-shadow var(--dur-normal) var(--ease-out),
-              border-color var(--dur-normal) var(--ease-out);
-  box-shadow: var(--shadow-sm);
-}
-.gallery-img-wrap:hover {
-  border-color: var(--border-glow);
-  box-shadow: var(--shadow-lg);
-  transform: translateY(-4px);
-}
-.gallery-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
-
-/* Dew-drop glossy overlay on gallery images */
-.gallery-img-wrap .dew-drop {
-  position: absolute; inset: 0; pointer-events: none; z-index: 2;
-  background: radial-gradient(circle at 50% 50%,
-    rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.06) 30%, transparent 60%);
-  opacity: 0; transition: opacity 0.3s;
-}
-.gallery-img-wrap:hover .dew-drop { opacity: 1; }
-
-.gallery-img-wrap .img-caption {
-  position: absolute; bottom: 0; left: 0; right: 0;
-  padding: 8px 12px; font-size: 11px; color: rgba(255,255,255,0.9);
-  background: linear-gradient(transparent, rgba(0,0,0,0.65));
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  z-index: 3;
-}
-.gallery-empty {
-  text-align: center; color: var(--ink-faint);
-  font-size: 14px; padding: 34px 0;
-}
-.gallery-empty .icon { font-size: 38px; margin-bottom: 8px; opacity: 0.25; }
-
-/* Scroll-driven reveal (with JS fallback class) */
-.scroll-reveal {
-  opacity: 0; transform: translateY(20px);
-  transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out);
-}
-.scroll-reveal.visible { opacity: 1; transform: translateY(0); }
-
-/* ── QUIZ ── */
-.quiz-area {
-  background: var(--surface);
-  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
-  border-radius: var(--radius-lg);
-  padding: 42px 30px;
-  border: 1px solid var(--border);
-  text-align: center;
-  max-width: 520px; margin: 0 auto;
-  box-shadow: var(--shadow-md);
-}
-.quiz-prompt { font-size: 13px; color: var(--ink-dim); margin-bottom: 10px; letter-spacing: 0.5px; }
-.quiz-chinese {
-  font-family: "Times New Roman", "STSong", serif;
-  font-size: 44px; font-weight: 400; margin-bottom: 26px; color: var(--ink);
-}
-.quiz-input {
-  width: 100%; max-width: 370px; padding: 14px 18px; font-size: 17px;
-  border: 2px solid var(--border); border-radius: var(--radius);
-  text-align: center; outline: none;
-  background: rgba(255,255,255,0.4);
-  transition: all var(--dur-fast) var(--ease-out);
-  font-family: "Times New Roman", "STSong", serif;
-  font-style: italic; color: var(--ink);
-}
-.quiz-input:focus { border-color: var(--accent); box-shadow: 0 0 24px var(--accent-glow); }
-.quiz-input.wrong { border-color: var(--wrong); animation: shiver 0.45s ease; }
-.quiz-input.correct { border-color: var(--correct); box-shadow: 0 0 24px var(--accent-glow); }
-.quiz-input.locked { pointer-events: none; opacity: 0.85; }
-@keyframes shiver {
-  0%,100% { transform: translateX(0) rotate(0); }
-  20% { transform: translateX(-5px) rotate(-1deg); }
-  40% { transform: translateX(5px) rotate(1deg); }
-  60% { transform: translateX(-3px) rotate(-0.5deg); }
-  80% { transform: translateX(3px) rotate(0.5deg); }
-}
-.quiz-feedback { margin-top: 14px; min-height: 44px; font-size: 15px; transition: all var(--dur-fast) var(--ease-out); }
-.correct-text { color: var(--correct); font-weight: 550; }
-.wrong-text { color: var(--wrong); font-weight: 550; }
-.answer { color: var(--accent); font-style: italic; font-weight: 550; }
-.countdown { color: var(--ink-dim); font-size: 13px; margin-top: 4px; }
-.quiz-buttons { display: flex; gap: 10px; justify-content: center; margin-top: 18px; flex-wrap: wrap; }
-
-/* Buttons with press feedback */
-.btn {
-  padding: 9px 22px; border-radius: 22px;
-  font-size: 13px; cursor: pointer; font-family: inherit;
-  transition: all var(--dur-fast) var(--ease-out); font-weight: 500;
-  border: 1px solid var(--border);
-  position: relative; overflow: hidden;
-}
-.btn:active { transform: scale(0.96); }
+.btn:hover, .btn:focus-visible, .btn-mastery:hover, .btn-mastery:focus-visible { border-color: var(--accent); }
+.btn:focus-visible, .btn-mastery:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
-.btn-primary:hover { background: var(--accent-bright); box-shadow: 0 4px 16px var(--accent-glow); }
-.btn-outline { background: transparent; color: var(--accent); }
-.btn-outline:hover { background: rgba(var(--leaf-1), 0.06); border-color: var(--accent); }
-.btn-accent { background: rgba(var(--leaf-1), 0.05); color: var(--ink-dim); }
-.btn-accent:hover { color: var(--accent); border-color: var(--accent); }
-.btn-sm { padding: 6px 15px; font-size: 12px; }
-.btn:disabled { opacity: 0.35; cursor: not-allowed; pointer-events: none; transform: none; }
-
-.quiz-score { display: flex; justify-content: center; gap: 26px; margin-top: 18px; font-size: 14px; color: var(--ink-dim); }
-.quiz-score span { font-weight: 600; color: var(--ink); }
-
-/* ── LIGHTBOX ── */
-.lightbox {
-  display: none; position: fixed; inset: 0;
-  background: rgba(0,0,0,0.93);
-  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-  z-index: 9999;
-  align-items: center; justify-content: center; cursor: pointer;
-}
-.lightbox.show { display: flex; }
-.lightbox img { max-width: 90vw; max-height: 85vh; border-radius: 10px; }
-.lightbox .close-hint {
-  position: absolute; top: 22px; right: 30px;
-  color: rgba(255,255,255,0.5); font-size: 32px;
-  cursor: pointer; transition: color 0.2s;
-  font-weight: 300; line-height: 1;
-}
-.lightbox .close-hint:hover { color: #fff; }
-
-/* ── CELEBRATION BURST ── */
-.burst-particle {
-  position: fixed; pointer-events: none; z-index: 9990;
-  animation: burstFly 1s ease-out forwards;
-}
-@keyframes burstFly {
-  0% { transform: translate(0,0) scale(1); opacity: 1; }
-  100% { transform: translate(var(--bx),var(--by)) scale(0) rotate(var(--br)); opacity: 0; }
-}
-
-/* Sound wave ring when speaking */
-.sound-ring {
-  position: fixed; pointer-events: none; z-index: 9980;
-  border: 2px solid var(--accent);
-  border-radius: 50%;
-  animation: ringExpand 1.2s ease-out forwards;
-  opacity: 0.6;
-}
-@keyframes ringExpand {
-  0% { width: 0; height: 0; opacity: 0.7; }
-  100% { width: 200px; height: 200px; opacity: 0; margin-left: -100px; margin-top: -100px; }
-}
-
-/* ── SEASON TRANSITION OVERLAY ── */
-.season-overlay {
-  position: fixed; inset: 0; z-index: 9995;
-  pointer-events: none;
-  background: radial-gradient(circle at 50% 50%, var(--accent-glow) 0%, transparent 70%);
-  opacity: 0;
-  transition: opacity 0.8s var(--ease-out);
-}
-
-/* ── PROGRESS BAR ── */
-.progress-wrap {
-  display: flex; align-items: center; justify-content: center;
-  gap: 10px; margin-top: 10px;
-}
-.progress-bar-outer {
-  width: 260px; height: 6px;
-  background: var(--border);
-  border-radius: 3px; overflow: hidden;
-}
-.progress-bar-inner {
-  height: 100%; border-radius: 3px;
-  background: linear-gradient(90deg, var(--accent), var(--accent-bright));
-  transition: width 0.5s var(--ease-spring);
-}
-.progress-text {
-  font-size: 12px; color: var(--ink-dim);
-  white-space: nowrap;
-}
-.progress-text strong { color: var(--accent); }
-.stat-chip { cursor: help; transition: opacity 0.2s; }
-.stat-chip:hover { opacity: 0.7; }
-.reset-btn {
-  width: 26px; height: 26px; border: 1px solid var(--border);
-  background: transparent; border-radius: 50%; cursor: pointer;
-  font-size: 14px; color: var(--ink-faint);
-  display: flex; align-items: center; justify-content: center;
-  transition: all var(--dur-fast) var(--ease-out);
-  flex-shrink: 0;
-}
-.reset-icon { display: inline-block; transition: transform var(--dur-fast) var(--ease-out); }
-.reset-btn:hover { border-color: var(--wrong); color: var(--wrong); }
-.reset-btn:hover .reset-icon { transform: rotate(180deg); }
-
-/* ── CARD MASTERY INDICATOR ── */
-.plant-card .mastery-dot {
-  position: absolute; top: 8px; right: 8px;
-  width: 8px; height: 8px; border-radius: 50%;
-  z-index: 4;
-  transition: all 0.3s var(--ease-out);
-}
-.plant-card .mastery-dot.new       { background: transparent; border: 1.5px solid var(--border); }
-.plant-card .mastery-dot.weak      { background: rgba(224,104,80,0.5); border: 1.5px solid rgba(224,104,80,0.7); }
-.plant-card .mastery-dot.learning  { background: rgba(var(--pollen), 0.6); border: 1.5px solid rgba(var(--pollen), 0.8); }
-.plant-card .mastery-dot.familiar  { background: rgba(var(--leaf-1), 0.5); border: 1.5px solid rgba(var(--leaf-1), 0.6); }
-.plant-card .mastery-dot.mastered  { background: var(--accent); border: 1.5px solid var(--accent-bright); box-shadow: 0 0 6px var(--accent-glow); }
-.plant-card .mastery-dot.archived  { background: var(--accent-bright); border: 1.5px solid var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
-.plant-card .mastery-dot.starred   { background: var(--accent-bright); border: 1.5px solid gold; box-shadow: 0 0 10px rgba(255,215,0,0.4); }
-
-/* ── REVIEW TOGGLE ── */
-.review-toggle-wrap {
-  display: flex; justify-content: center; margin-top: 14px;
-}
-.review-toggle {
-  display: flex; border-radius: 20px; overflow: hidden;
-  border: 1px solid var(--border); font-size: 12px;
-}
-.review-toggle button {
-  padding: 6px 16px; border: none; cursor: pointer;
-  background: transparent; color: var(--ink-dim);
-  font-family: inherit; font-size: inherit;
-  transition: all var(--dur-fast) var(--ease-out);
-}
-.review-toggle button.active {
-  background: var(--accent); color: #fff;
-}
-.review-toggle button:hover:not(.active) { color: var(--ink); }
-
-/* ── FLASHCARD MASTERY BUTTONS ── */
-.fc-mastery-btns {
-  display: flex; gap: 8px; justify-content: center; margin-top: 8px;
-}
-.btn-mastery {
-  padding: 7px 18px; border-radius: 18px;
-  font-size: 12px; cursor: pointer; font-family: inherit;
-  transition: all var(--dur-fast) var(--ease-out);
-  border: 1px solid var(--border);
-}
-.btn-mastery.know {
-  background: var(--accent); color: #fff; border-color: var(--accent);
-}
+.btn-primary:hover { background: var(--accent-bright); box-shadow: 0 2px 10px var(--accent-glow); }
+.btn-outline { background: var(--surface); }
+.btn-accent { color: var(--accent); }
+.btn-sm { font-size: 11px; padding: 5px 10px; border-radius: 6px; }
+.btn-mastery.know { background: var(--accent); color: #fff; border-color: var(--accent); }
 .btn-mastery.know:hover { background: var(--accent-bright); box-shadow: 0 2px 10px var(--accent-glow); }
-.btn-mastery.again {
-  background: transparent; color: var(--ink-dim);
-}
 .btn-mastery.again:hover { border-color: var(--accent-2); color: var(--accent-2); }
 .btn-mastery:disabled { opacity: 0.3; cursor: not-allowed; pointer-events: none; }
 
-.plant-card .focus-star {
-  position: absolute; top: 6px; right: 20px;
-  font-size: 10px; z-index: 4; pointer-events: none;
-  filter: drop-shadow(0 0 3px rgba(255,215,0,0.5));
+/* Speak button */
+.speak-btn {
+  width: 32px; height: 32px; border: 1px solid var(--border);
+  background: var(--surface); border-radius: 50%; cursor: pointer;
+  font-size: 13px; color: var(--accent); display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: all var(--dur-fast) var(--ease-out); position: relative; z-index: 3;
 }
-.btn-mastery.focus-btn {
-  background: transparent; color: #d4a017; border-color: rgba(212,160,23,0.3);
-}
-.btn-mastery.focus-btn:hover {
-  background: rgba(212,160,23,0.1); border-color: #d4a017;
-  box-shadow: 0 0 10px rgba(255,215,0,0.15);
-}
+.speak-btn:hover, .speak-btn:focus-visible { background: var(--accent); color: #fff; border-color: var(--accent); transform: scale(1.12); }
+.speak-btn:active { transform: scale(0.92); }
+.speak-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-/* ── FOOTER ── */
-footer {
-  text-align: center; padding: 42px 0 26px;
-  color: var(--ink-faint); font-size: 12px;
-}
+/* 4d. Tabs */
+.tabs-wrap { display: flex; justify-content: center; margin: 22px 0 28px; position: relative; z-index: 2; }
+.tabs { display: flex; gap: 2px; background: var(--tab-bg); border-radius: 16px; padding: 4px; border: 1px solid var(--border); position: relative; box-shadow: var(--shadow-sm); }
+.tab-indicator { position: absolute; top: 4px; height: calc(100% - 8px); background: var(--accent); border-radius: 13px; z-index: 1; transition: left 0.4s var(--ease-spring), width 0.4s var(--ease-spring); box-shadow: 0 2px 12px var(--accent-glow); }
+.tab-btn { flex: 1; padding: 10px 20px; border: none; background: transparent; border-radius: 13px; cursor: pointer; font-size: 14px; font-weight: 500; color: var(--ink-dim); transition: color var(--dur-normal) var(--ease-out); font-family: inherit; white-space: nowrap; position: relative; z-index: 2; }
+.tab-btn.active { color: #fff; }
+.tab-btn:hover:not(.active) { color: var(--ink); }
+.tab-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; border-radius: 13px; }
 
-/* ── REDUCED MOTION ── */
+.panel { display: none; }
+.panel.active { display: block; }
+.panel.active.enter { animation: fadeSlideIn 0.4s var(--ease-out) both; }
+@keyframes fadeSlideIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
 
-/* ── GLOBAL TOOLTIP SYSTEM ── */
-[data-tooltip] {
-  position: relative;
+/* 4e. Browse Grid */
+.browse-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px; }
+.plant-card {
+  position: relative; background: var(--surface); border-radius: var(--radius);
+  padding: 15px 16px; border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between; gap: 8px; cursor: pointer;
+  transition: transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-normal) var(--ease-out), border-color var(--dur-normal) var(--ease-out);
+  overflow: visible; animation: cardBreathe 6s ease-in-out infinite; box-shadow: var(--shadow-sm);
+  will-change: auto;
 }
+@keyframes cardBreathe { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-2px)} }
+.plant-card:hover { animation-play-state: paused; border-color: var(--border-glow); box-shadow: var(--shadow-lg), 0 0 30px var(--accent-glow); background: var(--surface-hover); transform: translateY(-3px) scale(1.02); z-index: 5; }
+.plant-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.plant-card::before { content:''; position:absolute; inset:0; border-radius:var(--radius); background:radial-gradient(ellipse at 20% 80%, var(--accent-glow) 0%, transparent 60%), radial-gradient(ellipse at 80% 20%, rgba(var(--pollen),0.2) 0%, transparent 50%); opacity:0; transition:opacity 0.5s; pointer-events:none; z-index:0; }
+.plant-card:hover::before { opacity:1; }
+.plant-card .cn { font-size:15px; font-weight:550; color:var(--ink); position:relative; z-index:2; }
+.plant-card .la { font-size:13px; color:var(--accent); font-family:"Times New Roman","STSong",serif; font-style:italic; font-weight:450; position:relative; z-index:2; }
+.plant-card.selected { border-color:var(--accent); box-shadow:0 0 0 2px var(--accent-glow), var(--shadow-md); background:rgba(var(--leaf-1),0.06); }
+.plant-card.animate-in { opacity:0; transform:translateY(20px); animation:cardEnter 0.45s var(--ease-out) forwards; }
+@keyframes cardEnter { to{opacity:1;transform:translateY(0)} }
+.plant-card .mastery-dot { position:absolute; top:8px; right:8px; width:8px; height:8px; border-radius:50%; z-index:4; transition:all 0.3s var(--ease-out); }
+.plant-card .mastery-dot.new       { background:transparent; border:1.5px solid var(--border); }
+.plant-card .mastery-dot.weak      { background:rgba(224,104,80,0.5); border:1.5px solid rgba(224,104,80,0.7); }
+.plant-card .mastery-dot.learning  { background:rgba(var(--pollen),0.6); border:1.5px solid rgba(var(--pollen),0.8); }
+.plant-card .mastery-dot.familiar  { background:rgba(var(--leaf-1),0.5); border:1.5px solid rgba(var(--leaf-1),0.6); }
+.plant-card .mastery-dot.mastered  { background:var(--accent); border:1.5px solid var(--accent-bright); box-shadow:0 0 6px var(--accent-glow); }
+.plant-card .mastery-dot.archived  { background:var(--accent-bright); border:1.5px solid var(--accent); box-shadow:0 0 10px var(--accent-glow); }
+.plant-card .mastery-dot.starred   { background:var(--accent-bright); border:1.5px solid gold; box-shadow:0 0 10px rgba(255,215,0,0.4); }
+.plant-card .focus-star { position:absolute; top:6px; right:20px; font-size:10px; z-index:4; pointer-events:none; filter:drop-shadow(0 0 3px rgba(255,215,0,0.5)); }
+
+/* 4f. Flashcard */
+.flashcard-area { max-width:480px; margin:0 auto; text-align:center; }
+.flashcard-stage { perspective:1200px; margin-bottom:14px; }
+.flashcard-inner { position:relative; min-height:250px; transition:transform 0.7s cubic-bezier(0.4,0,0.2,1); transform-style:preserve-3d; cursor:pointer; }
+.flashcard-inner.flipped { transform:rotateY(180deg); }
+.flashcard-face {
+  position:absolute; inset:0; backface-visibility:hidden; -webkit-backface-visibility:hidden;
+  border-radius:var(--radius-lg); border:1px solid var(--border); background:var(--surface);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding:44px 28px; overflow:hidden; user-select:none;
+}
+.flashcard-face.back { transform:rotateY(180deg); }
+.flashcard-face .fc-label { font-size:11px; color:var(--ink-faint); letter-spacing:3px; text-transform:uppercase; margin-bottom:14px; font-weight:500; }
+.flashcard-face .fc-name { font-family:"Times New Roman","STSong",serif; font-size:40px; font-weight:400; color:var(--ink); letter-spacing:0.5px; }
+.flashcard-face .fc-name.latin { font-style:italic; color:var(--accent); }
+.flashcard-face .fc-hint { color:var(--ink-faint); font-size:14px; margin-top:22px; animation:breathe 3s ease-in-out infinite; }
+@keyframes breathe { 0%,100%{opacity:0.3} 50%{opacity:0.85} }
+.flashcard-gloss { position:absolute; inset:0; border-radius:var(--radius-lg); pointer-events:none; z-index:5; background:radial-gradient(circle at 50% 50%, rgba(255,255,255,0.15) 0%, transparent 60%); opacity:0; transition:opacity 0.3s; }
+.flashcard-inner:hover .flashcard-gloss { opacity:1; }
+.flashcard-face .shine-strip {
+  position:absolute; top:-80%; left:-20%; width:40%; height:260%;
+  background:linear-gradient(105deg, transparent 35%, rgba(255,255,255,0.1) 45%, rgba(255,255,255,0.25) 50%, rgba(255,255,255,0.1) 55%, transparent 65%);
+  transform:rotate(25deg); pointer-events:none; z-index:4; animation:shineSweep 4s ease-in-out infinite;
+}
+@keyframes shineSweep { 0%,100%{left:-20%;opacity:0} 40%{opacity:1} 60%{opacity:1} 80%,100%{left:120%;opacity:0} }
+.flashcard-nav { display:flex; justify-content:center; align-items:center; gap:16px; margin-top:6px; }
+.flashcard-nav .counter { font-size:14px; color:var(--ink-dim); font-weight:500; }
+.fc-mastery-btns { display:flex; gap:8px; justify-content:center; margin-top:8px; }
+
+/* 4g. Gallery */
+.gallery-section { margin-top:34px; padding-top:20px; border-top:1px solid var(--border); }
+.gallery-header { display:flex; align-items:baseline; gap:10px; margin-bottom:14px; }
+.gallery-header h2 { font-family:"Times New Roman","STSong",serif; font-size:19px; font-weight:400; color:var(--ink); }
+.gallery-header .genus-tag { font-family:"Times New Roman","STSong",serif; font-style:italic; font-size:15px; color:var(--accent); font-weight:500; }
+.gallery-header .baike-link { font-family:"Times New Roman","STSong",serif; font-style:italic; font-size:14px; color:var(--ink-faint); text-decoration:none; transition:color var(--dur-fast); }
+.gallery-header .baike-link:hover { color:var(--accent); }
+.gallery-header .baike-hint { font-size:11px; color:var(--ink-faint); opacity:0.55; }
+.gallery-grid { display:grid; grid-template-columns:repeat(2, 1fr); gap:12px; }
+.gallery-img-wrap { position:relative; border-radius:var(--radius); overflow:hidden; background:var(--gallery-bg); border:1px solid var(--border); cursor:pointer; aspect-ratio:4/3; transition:transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-normal) var(--ease-out); box-shadow:var(--shadow-sm); }
+.gallery-img-wrap:hover { border-color:var(--border-glow); box-shadow:var(--shadow-lg); transform:translateY(-4px); }
+.gallery-img-wrap:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+.gallery-img-wrap img { width:100%; height:100%; object-fit:cover; display:block; }
+.gallery-img-wrap .dew-drop { position:absolute; inset:0; pointer-events:none; z-index:2; background:radial-gradient(circle at 50% 50%, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.06) 30%, transparent 60%); opacity:0; transition:opacity 0.3s; }
+.gallery-img-wrap:hover .dew-drop { opacity:1; }
+.gallery-img-wrap .img-caption { position:absolute; bottom:0; left:0; right:0; padding:8px 12px; font-size:11px; color:rgba(255,255,255,0.9); background:linear-gradient(transparent, rgba(0,0,0,0.65)); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; z-index:3; }
+.gallery-empty { text-align:center; color:var(--ink-faint); font-size:14px; padding:34px 0; }
+.gallery-empty .icon { font-size:38px; margin-bottom:8px; opacity:0.25; }
+
+/* 4h. Quiz */
+.quiz-area { background:var(--surface); border-radius:var(--radius-lg); padding:42px 30px; border:1px solid var(--border); text-align:center; max-width:520px; margin:0 auto; box-shadow:var(--shadow-md); }
+.quiz-prompt { font-size:13px; color:var(--ink-dim); margin-bottom:10px; letter-spacing:0.5px; }
+.quiz-chinese { font-family:"Times New Roman","STSong",serif; font-size:44px; font-weight:400; margin-bottom:26px; color:var(--ink); }
+.quiz-input { width:100%; max-width:370px; padding:14px 18px; font-size:17px; border:2px solid var(--border); border-radius:var(--radius); text-align:center; outline:none; background:rgba(255,255,255,0.4); transition:all var(--dur-fast) var(--ease-out); font-family:"Times New Roman","STSong",serif; font-style:italic; color:var(--ink); }
+.quiz-input:focus-visible { border-color:var(--accent); box-shadow:0 0 24px var(--accent-glow); }
+.quiz-input.wrong { border-color:var(--wrong); animation:shiver 0.45s ease; }
+.quiz-input.correct { border-color:var(--correct); box-shadow:0 0 24px var(--accent-glow); }
+@keyframes shiver { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-8px)} 40%{transform:translateX(8px)} 60%{transform:translateX(-5px)} 80%{transform:translateX(5px)} }
+.quiz-feedback { min-height:22px; margin-top:10px; font-size:13px; }
+.quiz-feedback .correct-text { color:var(--correct); font-weight:600; }
+.quiz-feedback .wrong-text { color:var(--wrong); font-weight:600; }
+.quiz-feedback .answer { color:var(--accent); font-weight:600; font-style:italic; }
+.quiz-feedback .countdown { color:var(--ink-faint); font-size:11px; margin-top:4px; }
+.quiz-buttons { display:flex; gap:8px; justify-content:center; margin-top:18px; flex-wrap:wrap; }
+.quiz-score { display:flex; gap:24px; justify-content:center; margin-top:18px; font-size:15px; color:var(--ink-dim); }
+.quiz-score span { font-weight:600; color:var(--ink); }
+
+/* Review toggle */
+.review-toggle-wrap { display:flex; justify-content:center; margin-top:14px; }
+.review-toggle { display:flex; border-radius:20px; overflow:hidden; border:1px solid var(--border); font-size:12px; }
+.review-toggle button { padding:6px 16px; border:none; cursor:pointer; background:transparent; color:var(--ink-dim); font-family:inherit; font-size:inherit; transition:all var(--dur-fast) var(--ease-out); }
+.review-toggle button.active { background:var(--accent); color:#fff; }
+.review-toggle button:hover:not(.active) { color:var(--ink); }
+.review-toggle button:focus-visible { outline:2px solid var(--accent); outline-offset:-2px; }
+
+/* 4i. Progress Bar */
+.progress-wrap { display:flex; align-items:center; gap:8px; justify-content:center; margin-top:22px; font-size:12px; color:var(--ink-dim); }
+.progress-bar-outer { flex:1; max-width:240px; height:6px; border-radius:3px; background:rgba(var(--leaf-1),0.1); overflow:hidden; }
+.progress-bar-inner { height:100%; width:0%; background:linear-gradient(90deg, var(--accent), var(--accent-bright)); border-radius:3px; transition:width 0.5s var(--ease-out); }
+.progress-text { white-space:nowrap; }
+.stat-chip { display:inline-block; margin:0 2px; }
+.reset-btn { background:none; border:none; cursor:pointer; color:var(--ink-faint); font-size:16px; padding:0 4px; vertical-align:middle; transition:color var(--dur-fast), opacity var(--dur-fast); }
+.reset-btn:hover { color:var(--accent); }
+
+/* 4j. Lightbox */
+.lightbox { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.93); z-index:9999; align-items:center; justify-content:center; cursor:pointer; }
+.lightbox.show { display:flex; }
+.lightbox img { max-width:90vw; max-height:85vh; border-radius:10px; }
+.lightbox .close-hint { position:absolute; top:22px; right:30px; color:rgba(255,255,255,0.5); font-size:32px; cursor:pointer; transition:color 0.2s; }
+.lightbox .close-hint:hover { color:#fff; }
+
+/* 4k. Help & Shortcuts Overlays */
+.help-overlay, .shortcuts-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.15); z-index:10000; align-items:center; justify-content:center; }
+.help-overlay.show, .shortcuts-overlay.show { display:flex; }
+.help-panel, .shortcuts-panel {
+  position:relative; background:var(--surface-elevated); border-radius:var(--radius-lg);
+  border:1px solid var(--border); padding:28px; max-width:420px; width:88vw; max-height:72vh;
+  overflow-y:auto; box-shadow:0 4px 30px rgba(0,0,0,0.06); animation:bubbleIn 0.35s var(--ease-spring);
+}
+@keyframes bubbleIn { from{opacity:0;transform:scale(0.92)} to{opacity:1;transform:scale(1)} }
+.help-close, .shortcuts-close { position:sticky; top:-8px; z-index:10; float:right; width:28px; height:28px; margin-right:-12px; margin-bottom:-20px; border-radius:50%; border:1px solid rgba(var(--leaf-1),0.2); background:var(--surface); font-size:16px; color:var(--ink-faint); cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all var(--dur-fast) var(--ease-out); line-height:1; }
+.help-close:hover, .shortcuts-close:hover { color:var(--ink); border-color:var(--accent); }
+.help-close:focus-visible, .shortcuts-close:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+.help-section { margin-bottom:14px; padding-bottom:12px; border-bottom:1px solid rgba(var(--leaf-1),0.08); }
+.help-section:last-child { border-bottom:none; margin-bottom:0; padding-bottom:0; }
+.help-section h3 { font-size:13px; font-weight:600; color:var(--accent); margin-bottom:4px; }
+.help-section p { font-size:12px; color:var(--ink-dim); line-height:1.65; margin:0; }
+.help-section ul { margin:3px 0 3px 14px; font-size:12px; color:var(--ink-dim); }
+.help-section li { margin-bottom:1px; }
+.help-section strong { color:var(--ink); }
+.help-section em { color:var(--accent-bright); font-style:normal; }
+
+/* Shortcut config rows */
+.shortcut-row { display:flex; align-items:center; justify-content:space-between; padding:8px 0; border-bottom:1px solid rgba(var(--leaf-1),0.06); }
+.shortcut-row:last-child { border-bottom:none; }
+.shortcut-row .sc-label { font-size:12px; color:var(--ink-dim); display:flex; align-items:center; gap:6px; }
+.shortcut-row .sc-label strong { color:var(--ink); min-width:44px; }
+.shortcut-key-input { width:52px; height:30px; text-align:center; border:1px solid var(--border); border-radius:8px; background:var(--surface); color:var(--accent); font-family:monospace; font-size:13px; font-weight:600; cursor:pointer; transition:all var(--dur-fast); outline:none; }
+.shortcut-key-input:hover { border-color:var(--accent); }
+.shortcut-key-input:focus-visible { border-color:var(--accent-bright); box-shadow:0 0 12px var(--accent-glow); background:var(--surface-elevated); }
+.shortcut-key-input.listening { animation:pulseInput 0.5s ease-in-out infinite alternate; border-color:var(--accent-bright); color:var(--accent-bright); }
+@keyframes pulseInput { from{box-shadow:0 0 4px var(--accent-glow)} to{box-shadow:0 0 16px var(--accent-glow)} }
+
+/* 4l. Tooltips */
+[data-tooltip] { position:relative; }
 [data-tooltip]::after {
-  content: attr(data-tooltip);
-  position: absolute; bottom: calc(100% + 8px); left: 50%;
-  transform: translateX(-50%) translateY(4px);
-  background: var(--surface-elevated);
-  color: var(--ink);
-  font-size: 11px; font-weight: 400; font-family: inherit;
-  padding: 5px 10px; border-radius: 6px;
-  border: 1px solid var(--border);
-  white-space: nowrap; max-width: 220px; overflow: hidden; text-overflow: ellipsis;
-  pointer-events: none;
-  z-index: 9990; opacity: 0;
-  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-  box-shadow: var(--shadow-md);
-  transition: opacity 0.15s ease-out 0.3s, transform 0.15s ease-out 0.3s;
-  letter-spacing: 0;
+  content:attr(data-tooltip); position:absolute; bottom:calc(100% + 8px); left:50%;
+  transform:translateX(-50%) translateY(4px); background:var(--surface-elevated);
+  color:var(--ink); font-size:11px; font-weight:400; padding:5px 10px; border-radius:6px;
+  border:1px solid var(--border); white-space:nowrap; max-width:220px; overflow:hidden;
+  text-overflow:ellipsis; pointer-events:none; z-index:9990; opacity:0;
+  box-shadow:var(--shadow-md); transition:opacity 0.15s ease-out 0.3s, transform 0.15s ease-out 0.3s;
 }
-[data-tooltip]:hover::after {
-  opacity: 1; transform: translateX(-50%) translateY(0);
-}
-/* Arrow */
+[data-tooltip]:hover::after { opacity:1; transform:translateX(-50%) translateY(0); }
 [data-tooltip]::before {
-  content: ''; position: absolute; bottom: calc(100% + 2px); left: 50%;
-  transform: translateX(-50%) translateY(4px);
-  border: 5px solid transparent; border-top-color: var(--border);
-  z-index: 9990; opacity: 0; pointer-events: none;
-  transition: opacity 0.15s ease-out 0.3s, transform 0.15s ease-out 0.3s;
+  content:''; position:absolute; bottom:calc(100% + 2px); left:50%;
+  transform:translateX(-50%) translateY(4px); border:5px solid transparent;
+  border-top-color:var(--border); z-index:9990; opacity:0; pointer-events:none;
+  transition:opacity 0.15s ease-out 0.3s, transform 0.15s ease-out 0.3s;
 }
-[data-tooltip]:hover::before {
-  opacity: 1; transform: translateX(-50%) translateY(0);
-}
-/* Tooltip reposition for right-edge / top-bar elements — show below so they don't clip off-screen */
-.top-bar-right [data-tooltip]::after,
-.top-bar [data-tooltip]::after {
-  top: calc(100% + 8px); bottom: auto;
-  left: auto; right: 0; transform: translateX(0) translateY(-4px);
-}
-.top-bar-right [data-tooltip]:hover::after,
-.top-bar [data-tooltip]:hover::after {
-  transform: translateX(0) translateY(0);
-}
-/* Flip arrow to point upward */
-.top-bar-right [data-tooltip]::before,
-.top-bar [data-tooltip]::before {
-  top: calc(100% - 3px); bottom: auto;
-  left: auto; right: 10px;
-  border-top-color: transparent; border-bottom-color: var(--border);
-}
-.top-bar-right [data-tooltip]:hover::before,
-.top-bar [data-tooltip]:hover::before {
-  transform: translateX(0) translateY(0);
-}
+[data-tooltip]:hover::before { opacity:1; transform:translateX(-50%) translateY(0); }
 
+/* Tooltip: top-bar elements → show below to avoid clipping */
+.top-bar-right [data-tooltip]::after, .top-bar [data-tooltip]::after {
+  top:calc(100% + 8px); bottom:auto; left:auto; right:0; transform:translateX(0) translateY(-4px);
+}
+.top-bar-right [data-tooltip]:hover::after, .top-bar [data-tooltip]:hover::after { transform:translateX(0) translateY(0); }
+.top-bar-right [data-tooltip]::before, .top-bar [data-tooltip]::before {
+  top:calc(100% - 3px); bottom:auto; left:auto; right:10px;
+  border-top-color:transparent; border-bottom-color:var(--border);
+}
+.top-bar-right [data-tooltip]:hover::before, .top-bar [data-tooltip]:hover::before { transform:translateX(0) translateY(0); }
+
+/* 4m. Sound Rings + Burst */
+.sound-ring { position:fixed; width:10px; height:10px; border:2px solid var(--accent); border-radius:50%; pointer-events:none; z-index:9995; animation:ringExpand 1.3s ease-out forwards; }
+@keyframes ringExpand { 0%{transform:translate(-50%,-50%) scale(0.2);opacity:1} 100%{transform:translate(-50%,-50%) scale(8);opacity:0} }
+.burst-particle { position:fixed; pointer-events:none; z-index:9999; animation:burstFly 1s ease-out forwards; }
+@keyframes burstFly { 0%{opacity:1;transform:translate(0,0) rotate(0deg)} 100%{opacity:0;transform:translate(var(--bx),var(--by)) rotate(var(--br))} }
+
+/* Season overlay — fallback for browsers without View Transitions API */
+.season-overlay { position:fixed; inset:0; z-index:9998; pointer-events:none; background:var(--surface); opacity:0; }
+
+/* View Transitions API: smooth crossfade between seasons */
+::view-transition-old(root) { animation-duration:0.4s; }
+::view-transition-new(root) { animation-duration:0.55s; animation-delay:0.08s; }
+
+/* 4n. Scroll reveal */
+.scroll-reveal { opacity:0; transform:translateY(20px); transition:opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out); }
+.scroll-reveal.visible { opacity:1; transform:translateY(0); }
+
+/* 4o. Custom Cursor */
+#cursorGlow { position:fixed; pointer-events:none; z-index:10001; width:var(--cursor-glow-size); height:var(--cursor-glow-size); border-radius:50%; background:radial-gradient(circle, rgba(var(--firefly),0.1) 0%, rgba(var(--firefly),0.04) 35%, transparent 70%); transform:translate(-50%,-50%); transition:opacity 0.4s; }
+#cursorLeaf { position:fixed; pointer-events:none; z-index:10002; width:var(--cursor-size); height:var(--cursor-size); transform:translate(-50%,-50%); transition:width 0.2s, height 0.2s; }
+#cursorLeaf::after { content:''; display:block; width:100%; height:100%; border-radius:50% 0 50% 50%; background:var(--accent); opacity:0.85; transform:rotate(-30deg); box-shadow:0 0 8px var(--accent-glow), 0 0 20px rgba(var(--firefly),0.3); transition:all 0.2s var(--ease-out); }
+#cursorLeaf.pressing::after { transform:rotate(-30deg) scale(0.7); opacity:0.5; border-radius:50%; }
+#cursorLeaf.on-card::after { border-radius:50%; transform:rotate(0) scale(1.4); background:var(--accent-bright); opacity:0.6; box-shadow:0 0 16px var(--accent-glow), 0 0 40px rgba(var(--firefly),0.5); }
+
+/* ── 5. SCROLLBAR ── */
+::-webkit-scrollbar { width:5px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:rgba(var(--leaf-1),0.15); border-radius:3px; }
+::-webkit-scrollbar-thumb:hover { background:rgba(var(--leaf-1),0.3); }
+
+/* ── 6. REDUCED MOTION ── */
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-  #natureCanvas { display: none; }
-  body { cursor: auto; }
-  #cursorGlow, #cursorLeaf { display: none; }
+  *, *::before, *::after { animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; }
+  #natureCanvas, #cursorGlow, #cursorLeaf { display:none; }
+  body { cursor:auto; }
 }
 
-/* ── SCROLLBAR ── */
-::-webkit-scrollbar { width: 5px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(var(--leaf-1), 0.15); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(var(--leaf-1), 0.3); }
-
-/* ── MOBILE ── */
+/* ── 7. RESPONSIVE — MOBILE (≤ 640px) ── */
 @media (max-width: 640px) {
-  header h1 { font-size: 24px; }
-  .browse-grid { grid-template-columns: repeat(auto-fill, minmax(148px, 1fr)); gap: 8px; }
-  .plant-card { padding: 11px 13px; border-radius: 10px; }
-  .plant-card .cn { font-size: 13px; }
-  .plant-card .la { font-size: 11px; }
-  .quiz-chinese { font-size: 30px; }
-  .tab-btn { font-size: 12px; padding: 9px 12px; }
-  .flashcard-face .fc-name { font-size: 28px; }
-  .flashcard-face { padding: 36px 20px; }
-  .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
-  .quiz-area { padding: 28px 18px; }
-  .voice-select { max-width: 150px; font-size: 11px; }
-  .season-pill { width: 26px; height: 26px; font-size: 11px; }
-  #cursorGlow, #cursorLeaf { display: none; }
-  body { cursor: auto; }
+  header h1 { font-size:24px; }
+  .container { padding:0 var(--space-md); }
+  .browse-grid { grid-template-columns:repeat(auto-fill, minmax(140px, 1fr)); gap:8px; }
+  .plant-card { padding:11px 13px; border-radius:10px; }
+  .plant-card .cn { font-size:13px; }
+  .plant-card .la { font-size:11px; }
+  .quiz-chinese { font-size:30px; }
+  .tab-btn { font-size:12px; padding:9px 12px; }
+  .flashcard-face .fc-name { font-size:28px; }
+  .flashcard-face { padding:36px 20px; }
+  .gallery-grid { grid-template-columns:repeat(2, 1fr); gap:8px; }
+  .quiz-area { padding:28px 18px; }
+  .voice-select { max-width:150px; font-size:11px; }
+  .season-pill { width:26px; height:26px; font-size:11px; }
+  #cursorGlow, #cursorLeaf { display:none; }
+  body { cursor:auto; background-attachment:scroll; }
+  .progress-wrap { flex-wrap:wrap; gap:6px; }
+  .progress-text { font-size:11px; }
+  .progress-bar-outer { width:180px; }
+  .review-toggle { flex-wrap:wrap; border-radius:14px; }
+  .review-toggle button { padding:5px 10px; font-size:11px; }
+  .btn-mastery { padding:9px 16px; font-size:13px; }
+  .btn { padding:10px 16px; font-size:13px; min-height:40px; }
+  .flashcard-stage { perspective:800px; }
 }
+
+/* ── 8. DESKTOP ONLY: backdrop-filter (GPU-heavy, disable on mobile to avoid layer explosion) ── */
+@media (min-width: 641px) {
+  .voice-select, .season-pills, .back-to-top, .help-btn, .help-overlay,
+  .tabs, .plant-card, .flashcard-face, .quiz-area, .lightbox { backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); }
+  .help-overlay { backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px); }
+  .plant-card, .back-to-top { backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); }
+  .help-btn { backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); }
+  .lightbox { backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); }
+  .tabs, .quiz-area { backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); }
+  .flashcard-face { backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); }
+  [data-tooltip]::after { backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); }
+}
+
+/* Global smooth color transitions — enabled only after initial paint */
+html.theme-ready *,
+html.theme-ready *::before,
+html.theme-ready *::after {
+  transition-property: background-color, color, border-color, box-shadow, text-shadow;
+  transition-duration: 0.45s;
+  transition-timing-function: ease;
+}
+/* Exclude canvas/cursor to avoid re-paint overhead */
+html.theme-ready #natureCanvas,
+html.theme-ready #cursorGlow,
+html.theme-ready #cursorLeaf { transition-property: none; }
 </style>
 </head>
 <body>
 
-<!-- Custom cursor -->
-<div id="cursorGlow"></div>
-<div id="cursorLeaf"></div>
+<!-- Custom cursor (desktop only) -->
+<div id="cursorGlow" aria-hidden="true"></div>
+<div id="cursorLeaf" aria-hidden="true"></div>
 
 <!-- Particle canvas -->
 <canvas id="natureCanvas" aria-hidden="true"></canvas>
 
 <!-- Season transition overlay -->
-<div class="season-overlay" id="seasonOverlay"></div>
+<div class="season-overlay" id="seasonOverlay" aria-hidden="true"></div>
 
 <!-- Lightbox -->
-<div class="lightbox" id="lightbox" onclick="closeLightbox()">
-  <span class="close-hint">&times;</span>
+<div class="lightbox" id="lightbox" role="dialog" aria-label="图片放大查看" onclick="closeLightbox()">
+  <span class="close-hint" aria-label="关闭">&times;</span>
   <img id="lightboxImg" src="" alt="">
 </div>
 
 <!-- Help modal -->
-<div class="help-overlay" id="helpOverlay" onclick="closeHelp(event)">
+<div class="help-overlay" id="helpOverlay" role="dialog" aria-label="功能指南" onclick="closeHelp(event)">
   <div class="help-panel" onclick="event.stopPropagation()">
-    <button class="help-close" onclick="closeHelp()">&times;</button>
-
-    <div class="help-section">
-      <h3>🌿 风之图鉴</h3>
-      <p>浏览 <strong>40 种植物属名</strong>的中文-拉丁文对照卡片。点击卡片查看该属实拍照片，点击 🔊 听取发音。卡片圆点表示掌握度，⭐ 表示已加重点。</p>
-    </div>
-
-    <div class="help-section">
-      <h3>🃏 落叶闪卡</h3>
-      <p>点击卡片翻转查看拉丁文并自动发音，根据记忆情况诚实判定「认识」「不认识」「重点」。系统采用 <strong>Leitner 六级盒子算法</strong>加权随机抽卡：薄弱词更常出现，已掌握词偶尔抽查。支持键盘快捷操作。</p>
-    </div>
-
-    <div class="help-section">
-      <h3>📝 飘叶测验</h3>
-      <p>根据中文提示输入拉丁文学名。支持四种出题模式：全部、薄弱、错题本、重点。输入自动首字母大写，拼写完整自动提交，答对自动下一题。底部实时统计正确率。</p>
-    </div>
-
-    <div class="help-section">
-      <h3>🖼 植物图鉴画廊</h3>
-      <p>选中植物后加载该属实拍照片。鼠标悬停有露珠光效，点击图片可放大查看。标题旁出现 <strong>📖 百科</strong> 链接可跳转百度百科。</p>
-    </div>
-
-    <div class="help-section">
-      <h3>🎨 五季主题</h3>
-      <p>顶部圆点按钮切换 <em>春·夏·秋·冬·暮</em> 五种配色方案。背景粒子随季节变化。自动跟随系统深色/浅色模式，选择自动保存。</p>
-    </div>
-
-    <div class="help-section">
-      <h3>✨ 粒子生态</h3>
-      <p>全屏动态背景包含花粉、落叶、花瓣、萤火虫等八种粒子，受鼠标位置影响风向，随季节自动切换配色营造自然氛围。</p>
-    </div>
-
-    <div class="help-section">
-      <h3>🔊 语音朗读</h3>
-      <p>左上角选择 TTS 语音引擎，推荐意大利语女声。点击 🔊 或揭示答案时自动朗读拉丁文。支持自定义光标（桌面端叶片光标）。</p>
-    </div>
-
-    <div class="help-section">
-      <h3>⌨ 键盘快捷键</h3>
-      <p>闪卡：<code>空格</code>翻面 <code>1</code>不认识 <code>2</code>重点 <code>3</code>认识。测验：<code>Enter</code>提交。全局：<code>Esc</code>关闭弹窗 <code>W</code>返回顶部。点击顶部 <strong>⌨ 按钮</strong>可自定义所有按键。</p>
-    </div>
-
-    <div class="help-section">
-      <h3>📊 进度追踪</h3>
-      <p>标题下方进度条展示掌握百分比和各类别数量。所有学习数据自动保存在浏览器中，关闭页面不丢失。↺ 按钮可重置全部进度。</p>
-    </div>
-
-    <div class="help-section">
-      <h3>💡 提示</h3>
-      <p>首次访问自动弹出此面板。右下角 ▲ 或按 <strong>W</strong> 返回顶部。Esc 关闭弹窗/灯箱。快捷键与按钮均有 0.4 秒冷却防连按误触。</p>
-    </div>
-
-    <div class="help-section" style="border-bottom:none;">
-      <h3 style="text-align:center;color:var(--ink);margin-bottom:8px;">📖 系统功能详解</h3>
-    </div>
-
-    <div class="help-section">
-      <h3>一、学习系统核心逻辑</h3>
-      <p><strong>Herbarium Ventus</strong> 是一款基于 Leitner 间隔重复算法的植物拉丁文学名记忆工具。系统内置 <strong>40 种植物属名</strong>的中文-拉丁文对照词库，每个词条拥有独立的六级掌握度盒子：</p>
-      <ul>
-        <li><strong>Box 0 · 新词（灰色圆点）</strong>：从未接触过的词条，首次在闪卡或测验中遇到时自动升入 Box 1</li>
-        <li><strong>Box 1 · 薄弱（红色圆点）</strong>：刚接触或反复出错的词条，出现权重最高（权重 8），需要频繁复习</li>
-        <li><strong>Box 2 · 初学（黄色圆点）</strong>：有一定印象但仍需巩固，权重适中（权重 4）</li>
-        <li><strong>Box 3 · 熟悉（浅绿圆点）</strong>：基本掌握，权重降低（权重 2），偶尔抽查</li>
-        <li><strong>Box 4 · 已掌握（绿色圆点）</strong>：稳定掌握，权重最低（权重 1），仅偶尔抽查以维持长期记忆</li>
-        <li><strong>Box 5 · 归档（金色圆点）</strong>：已永久记忆，权重极低（权重 0.3），极少出现</li>
-      </ul>
-      <p>每次在闪卡中答对或在测验中输入正确，词条盒子 +1；答错则盒子 -1。此外，标记<strong>星标（⭐）</strong>的词条权重翻倍，无论处于哪个盒子都会被系统优先推送复习。超过 <strong>24 小时</strong>未复习的 Box 3 及以下词条会额外获得 1.5 倍权重加成，确保遗忘曲线中的词条及时被重新激活。</p>
-    </div>
-
-    <div class="help-section">
-      <h3>二、三大学习模式</h3>
-      <p><strong>风之图鉴（浏览）</strong>：知识库入口，展示全部 40 种植物属名的卡片网格。每张卡片显示中文名和拉丁学名，右上角圆点直观反映当前掌握度，⭐ 表示已加重点。点击卡片选中该属后，页面下方画廊加载其实拍照片；点击 🔊 听取发音。<em>浏览模式仅提供信息查阅，不会影响学习进度</em>，因此不会触发盒子状态变更。</p>
-      <p><strong>落叶闪卡（复习）</strong>：核心记忆训练模式。系统通过 Leitner 加权随机算法抽出一张卡片，正面显示中文名，点击卡片（或按空格键）翻转为拉丁文并自动朗读。用户根据实际记忆情况诚实点击「认识」「不认识」或「重点」三个按钮之一，或使用键盘 1/2/3 操作。每次判定后卡片立刻刷新为下一张推荐词条。该模式适合日常复习，薄弱词自动高频出现，已掌握词低频抽查。</p>
-      <p><strong>飘叶测验（考试）</strong>：主动拼写检测模式。系统显示中文名，用户需在输入框中完整拼写对应的拉丁学名。输入时自动将首字母转为大写。当输入长度达到正确答案长度时自动触发判定，也可按 Enter 手动提交。答对后触发庆祝粒子特效，3 秒倒计时自动进入下一题，答错则显示正确答案并自动将该词加入错题本。测验底部实时统计正确数和正确率。支持四种出题范围：全部词条、仅薄弱词、仅错题本、仅星标词。</p>
-    </div>
-
-    <div class="help-section">
-      <h3>三、视觉与氛围系统</h3>
-      <p><strong>五季主题</strong>：点击顶部右侧五个圆点按钮切换配色方案——春·新绿（嫩绿色调）、夏·晴空（天蓝色调）、秋·红叶（暖橙色调）、冬·霜枝（冷灰蓝色调）、暮·萤火（暗夜荧光色调）。每个季节拥有完整独立的色彩系统，覆盖背景渐变、卡片底色、文字色、强调色、边框和阴影。选择自动保存，下次访问沿用。首次访问时若系统为深色模式则自动匹配「暮」主题，系统切换深色/浅色时自动跟随。</p>
-      <p><strong>粒子生态系统</strong>：全屏 Canvas 动画渲染包含花粉微尘、落叶、花瓣、萤火虫、蒲公英种子、星火、云絮、日光束光斑共计八种粒子类型。所有粒子统一受模拟风向影响——鼠标在屏幕左右位置移动可改变风力方向和强度。萤火虫轻微被光标吸引，近距萤火虫之间产生微光连接线。随季节切换，粒子颜色自动适配当前主题调色板。</p>
-      <p><strong>自定义光标</strong>：桌面端鼠标指针替换为叶片形状，带有柔和光晕。悬停于卡片、按钮、输入框等可交互元素上时叶片变为放大的圆形，点击时收缩模拟按压感。触屏设备自动隐藏自定义光标，使用原生触摸交互。</p>
-    </div>
-
-    <div class="help-section">
-      <h3>四、画廊与外部链接</h3>
-      <p>在风之图鉴中点击任意植物卡片选中后，页面下方「植物图鉴」画廊自动加载该属的实拍照片（图片来源：PPBC 中国植物图像库），支持懒加载优化。鼠标在图片上移动时表面产生露珠折射光效。点击图片可灯箱放大查看，按 Esc 或点击遮罩关闭。选中植物后，画廊标题旁出现<strong>📖 百科链接</strong>，点击在新标签页打开该属的百度百科页面查看更多植物学资料。未选中任何植物时百科链接自动隐藏。</p>
-    </div>
-
-    <div class="help-section">
-      <h3>五、语音与音效</h3>
-      <p>系统利用浏览器内置 Web Speech API 实现拉丁文发音。左上角下拉菜单选择 TTS 语音引擎，系统优先推荐<strong>意大利语女声</strong>（Elsa/Alice），因意大利语的元音发音体系最接近古典拉丁文。备选依次为德语男声、英语女声、英语男声，最后还有一个「系统默认」选项不指定语音。以下场景自动触发朗读：翻转闪卡时、测验中点击「揭示答案」时、点击任意 🔊 按钮时。朗读过程中屏幕中央扩散三道音波波纹动画提供视觉反馈。</p>
-    </div>
-
-    <div class="help-section">
-      <h3>六、键盘操作体系</h3>
-      <p>所有核心操作均支持键盘快捷键，无需鼠标即可完成完整学习流程。在落叶闪卡模式下：空格翻面、1 不认识、2 切换重点、3 认识。在飘叶测验模式下：Enter 提交答案。全局快捷键：Esc 按优先级依次关闭（快捷键配置面板 → 帮助面板 → 图片灯箱）、W 返回页面顶部。点击顶部 ⌨ 按钮可打开快捷键配置面板，以可视化方式重新绑定任意按键——点击输入框后按下目标按键即完成修改，按 Esc 取消捕获，所有修改自动持久化保存。</p>
-      <p>快捷键和按钮均内置 <strong>0.4 秒冷却锁定</strong>，防止快速连按或长按导致误操作（如连续翻卡、连续提交）。窗口失去焦点时自动解除锁定，切回后可立即正常使用。</p>
-    </div>
-
-    <div class="help-section">
-      <h3>七、进度与数据管理</h3>
-      <p>标题下方进度条以百分比形式直观展示整体学习进度。状态栏以颜色编码实时显示：🟢 已掌握数量、🟡 学习中的数量、🔴 薄弱词数量、⭐ 星标词数量。所有学习数据——包括每个词条的盒子等级、正确次数、错误次数、见过次数、星标状态、最后复习时间戳——全部存储在浏览器的 localStorage 中，关闭标签页、重启浏览器均不会丢失。系统提供三种重置粒度：重置全部学习进度（↺ 按钮，需要弹窗确认）、仅清零测验成绩计数（飘叶测验面板中的「重置成绩」）、恢复快捷键默认配置（快捷键配置面板中的「恢复默认」）。</p>
-    </div>
-
-    <div class="help-section" style="border-bottom:none;">
-      <h3>八、辅助与提示</h3>
-      <p>首次访问网站时帮助面板自动弹出，之后可随时点击右上角 ? 按钮查看。页面右下角 ▲ 按钮提供一键返回顶部。画廊图片采用滚动驱动渐入动画。答对测验时的庆祝粒子爆散颜色自动匹配当前季节主题。闪卡在翻面后按钮有短暂冷却防止在看清答案前误触。</p>
-    </div>
-  </div>
-</div>
-
-<!-- Shortcuts modal -->
-<div class="help-overlay" id="shortcutsOverlay" onclick="closeShortcuts(event)">
-  <div class="help-panel" onclick="event.stopPropagation()">
-    <button class="help-close" onclick="closeShortcuts()">&times;</button>
-    <div class="help-section">
-      <h3>⌨ 自定义快捷键</h3>
-      <p style="margin-bottom:10px;">点击右侧输入框，然后按下你想要绑定的按键即可修改。修改自动保存。</p>
-    </div>
-    <div id="shortcutsList"></div>
-    <div class="help-section" style="border-bottom:none;margin-top:8px;padding-bottom:0;">
-      <button class="btn btn-outline btn-sm" onclick="resetShortcuts()" style="font-size:12px;">恢复默认</button>
-    </div>
+    <button class="help-close" onclick="closeHelp()" aria-label="关闭帮助">&times;</button>
+    <div class="help-section"><h3>🌿 设计理念</h3><p>风，是植物传播种子与花粉的信使。本工具以<strong>「风」</strong>为设计核心意象——飘落的叶片粒子、呼吸般的季节色彩、流动的界面动效，皆围绕风的主题展开。我们希望用户在使用过程中，能感受到自然界的呼吸节奏：<em>春之轻盈、夏之繁茂、秋之慵懒、冬之静谧、暮之幽玄</em>。</p></div>
+    <div class="help-section"><h3>📖 项目缘起</h3><p>面向植物学爱好者、拉丁文初学者及需要记忆大量属名的相关专业学生。将枯燥的拉丁文学名记忆转化为<strong>多感官交互体验</strong>：视觉（五季主题 + 粒子特效）、听觉（TTS 语音朗读）、触觉（键盘快捷操作 + 鼠标交互），让每个属名成为可看、可听、可触摸的记忆锚点。项目为纯前端实现，无需后端服务器，所有学习数据保存在浏览器本地。</p></div>
+    <div class="help-section"><h3>🌿 风之图鉴</h3><p>浏览 <strong>40 种植物属名</strong>的中文-拉丁文对照卡片。点击卡片查看该属实拍照片，点击 🔊 听取发音。卡片圆点表示掌握度，⭐ 表示已加重点。</p></div>
+    <div class="help-section"><h3>🃏 落叶闪卡</h3><p>点击卡片翻转查看拉丁文并自动发音，根据记忆情况诚实判定「认识」「不认识」「重点」。系统采用 <strong>Leitner 六级盒子算法</strong>加权随机抽卡。</p></div>
+    <div class="help-section"><h3>📝 飘叶测验</h3><p>根据中文提示输入拉丁文学名。支持四种出题模式。输入自动首字母大写，拼写完整自动提交。</p></div>
+    <div class="help-section"><h3>🖼 植物图鉴画廊</h3><p>选中植物后加载该属实拍照片。鼠标悬停有露珠光效，点击图片可放大。</p></div>
+    <div class="help-section"><h3>🎨 五季主题</h3><p>顶部圆点按钮切换 <em>春·夏·秋·冬·暮</em> 五种配色方案。</p></div>
+    <div class="help-section"><h3>🔊 语音朗读</h3><p>左上角选择发音语音。点击 🔊 或揭示答案时自动朗读。</p></div>
+    <div class="help-section"><h3>⌨ 键盘快捷键</h3><p>闪卡：<code>空格</code>翻面 <code>1</code>不认识 <code>2</code>重点 <code>3</code>认识。测验：<code>Enter</code>鉴定 <code>R</code>揭示答案 <code>Q</code>发音 <code>→</code>下一题。按 <code>W</code> 返回顶部。所有快捷键可通过顶部 ⌨ 按钮自定义。</p></div>
+<div class="help-section" style="border-bottom:none;"><h3>✨ 技术特色</h3><p>纯前端实现，无需后端服务器。HTML5 Canvas 驱动粒子渲染，CSS Custom Properties 实现主题切换，Leitner 六级盒子算法结合加权随机抽卡，Web Speech API 提供多语言语音能力，localStorage 持久化学习数据和偏好设置。支持桌面与移动端响应式布局。</p></div>
   </div>
 </div>
 
 <div class="container">
+  <header>
+    <h1>Herbarium Ventus · 风之植物志</h1>
+    <div class="subtitle">NOMINA LATINA PLANTARUM — 植物拉丁文学名</div>
+  </header>
+
   <!-- Top bar -->
   <div class="top-bar">
-    <select class="voice-select" id="voiceSelect" onchange="onVoiceChange()" data-tooltip="选择发音语音">
+    <select class="voice-select" id="voiceSelect" onchange="onVoiceChange()" data-tooltip="选择发音语音" aria-label="选择发音语音">
       <option value="en-US-female">🇬🇧 英语 · 女声</option>
       <option value="en-US-male">🇬🇧 英语 · 男声</option>
       <option value="it-IT">🇮🇹 意大利语</option>
       <option value="de-DE">🇩🇪 德语</option>
     </select>
     <div class="top-bar-right">
-      <button class="help-btn" onclick="openShortcuts()" data-tooltip="自定义键盘快捷键">⌨</button>
-      <button class="help-btn" onclick="openHelp()" data-tooltip="查看完整功能指南">?</button>
-      <div class="season-pills" id="seasonPills">
-        <button class="season-pill" data-season="spring" data-tooltip="春·新绿">&#x1F33F;</button>
-        <button class="season-pill" data-season="summer" data-tooltip="夏·晴空">&#x2600;&#xFE0F;</button>
-        <button class="season-pill" data-season="autumn" data-tooltip="秋·红叶">&#x1F341;</button>
-        <button class="season-pill" data-season="winter" data-tooltip="冬·霜枝">&#x2744;</button>
-        <button class="season-pill" data-season="dusk" data-tooltip="暮·萤火">&#x1F31C;</button>
+      <button class="help-btn" onclick="openShortcuts()" data-tooltip="自定义键盘快捷键" aria-label="自定义键盘快捷键">⌨</button>
+      <button class="help-btn" onclick="openHelp()" data-tooltip="查看完整功能指南" aria-label="查看完整功能指南">?</button>
+      <div class="season-pills" id="seasonPills" role="radiogroup" aria-label="季节主题切换">
+        <button class="season-pill" data-season="spring" data-tooltip="春·新绿" role="radio" aria-checked="false" aria-label="春季主题">🌿</button>
+        <button class="season-pill" data-season="summer" data-tooltip="夏·晴空" role="radio" aria-checked="false" aria-label="夏季主题">☀️</button>
+        <button class="season-pill" data-season="autumn" data-tooltip="秋·红叶" role="radio" aria-checked="false" aria-label="秋季主题">🍁</button>
+        <button class="season-pill" data-season="winter" data-tooltip="冬·霜枝" role="radio" aria-checked="false" aria-label="冬季主题">❄</button>
+        <button class="season-pill" data-season="dusk" data-tooltip="暮·萤火" role="radio" aria-checked="false" aria-label="暮色主题">🌜</button>
       </div>
     </div>
   </div>
 
-  <!-- Header -->
-  <header>
-    <h1>Herbarium Ventus</h1>
-    <div class="subtitle">风之植物志 · 植物属名拉丁文</div>
-    <div class="progress-wrap" id="progressWrap">
-      <span class="progress-text" id="progressDetail">🟢 0 🟡 0 🔴 0 ⭐ 0</span>
-      <div class="progress-bar-outer"><div class="progress-bar-inner" id="progressBar" style="width:0%"></div></div>
-      <span class="progress-text">已掌握 <strong id="masteredCount">0</strong>/40 (<span id="progressPercent">0%</span>)</span>
-      <button class="reset-btn" onclick="resetAllProgress()" data-tooltip="重置全部学习进度"><span class="reset-icon">&#x21BA;</span></button>
-    </div>
-  </header>
+  <!-- Progress -->
+  <div class="progress-wrap">
+    <span class="progress-text">掌握 <strong id="masteredCount">0</strong> / 40</span>
+    <div class="progress-bar-outer"><div class="progress-bar-inner" id="progressBar"></div></div>
+    <span class="progress-text" id="progressPercent">0%</span>
+  </div>
+  <div style="text-align:center;margin-top:6px;font-size:12px;color:var(--ink-dim);">
+    <span id="progressDetail"></span>
+    <button class="reset-btn" onclick="resetAllProgress()" data-tooltip="重置全部学习进度" aria-label="重置学习进度"><span class="reset-icon">↺</span></button>
+  </div>
 
   <!-- Tabs -->
-  <div class="tabs-wrap">
+  <nav class="tabs-wrap" aria-label="主要功能">
     <div class="tabs" id="tabContainer">
       <div class="tab-indicator" id="tabIndicator"></div>
-      <button class="tab-btn active" data-panel="browse" data-tooltip="浏览全部 40 种植物属名">风之图鉴</button>
-      <button class="tab-btn" data-panel="flashcard" data-tooltip="Leitner 盒子加权随机复习">落叶闪卡</button>
-      <button class="tab-btn" data-panel="quiz" data-tooltip="输入拉丁文拼写，答对升级答错入错题本">飘叶测验</button>
+      <button class="tab-btn active" data-panel="browse" data-tooltip="浏览全部 40 种植物属名" aria-selected="true">风之图鉴</button>
+      <button class="tab-btn" data-panel="flashcard" data-tooltip="Leitner 盒子加权随机复习" aria-selected="false">落叶闪卡</button>
+      <button class="tab-btn" data-panel="quiz" data-tooltip="输入拉丁文拼写，答对升级答错入错题本" aria-selected="false">飘叶测验</button>
     </div>
-  </div>
+  </nav>
 
   <!-- Browse Panel -->
-  <div id="browse" class="panel active">
+  <section id="browse" class="panel active" aria-label="植物图鉴浏览">
     <div class="browse-grid" id="browseGrid"></div>
-  </div>
+  </section>
 
   <!-- Flashcard Panel -->
-  <div id="flashcard" class="panel">
+  <section id="flashcard" class="panel" aria-label="落叶闪卡复习">
     <div class="flashcard-area">
       <div class="flashcard-stage">
-        <div class="flashcard-inner" id="flashcardInner" onclick="flipCard()">
+        <div class="flashcard-inner" id="flashcardInner" onclick="flipCard()" role="button" tabindex="0" aria-label="点击翻转闪卡">
           <div class="flashcard-face front">
-            <div class="shine-strip"></div>
-            <div class="flashcard-gloss"></div>
+            <div class="shine-strip" aria-hidden="true"></div>
+            <div class="flashcard-gloss" aria-hidden="true"></div>
             <div class="fc-label" id="fcLabel">中文名</div>
             <div class="fc-name" id="fcName"></div>
-            <div class="fc-hint">轻触翻转卡片</div>
+            <div class="fc-hint" aria-hidden="true">轻触翻转卡片</div>
           </div>
           <div class="flashcard-face back">
-            <div class="shine-strip"></div>
-            <div class="flashcard-gloss"></div>
+            <div class="shine-strip" aria-hidden="true"></div>
+            <div class="flashcard-gloss" aria-hidden="true"></div>
             <div class="fc-label">Nomen Latinum</div>
             <div class="fc-name latin" id="fcNameBack"></div>
           </div>
@@ -1207,30 +598,31 @@ footer {
         Box 1 · 薄弱  |  见过 0 次  |  答对 0 次
       </div>
       <div style="margin-top:8px; display:flex; gap:8px; justify-content:center;">
-        <button class="btn btn-accent btn-sm" onclick="speakFlashcard(this)" data-tooltip="听取拉丁文发音">&#x1F50A; 发音</button>
+        <button class="btn btn-accent btn-sm" onclick="speakFlashcard(this)" data-tooltip="听取拉丁文发音" aria-label="听取拉丁文发音">🔊 发音</button>
       </div>
       <div class="fc-mastery-btns">
-        <button class="btn-mastery again" onclick="markDontKnow()" data-tooltip="没记住，降级并增加出现频率">&#x2753; 不认识</button>
-        <button class="btn-mastery focus-btn" onclick="markFocus()" data-tooltip="标记/取消星标，星标词权重翻倍">&#x2B50; 重点</button>
-        <button class="btn-mastery know" onclick="markKnow()" data-tooltip="记住了，升级盒子并降低出现频率">&#x1F441; 认识</button>
+        <button class="btn-mastery again" onclick="markDontKnow()" data-tooltip="没记住，降级并增加出现频率" aria-label="不认识">❓ 不认识</button>
+        <button class="btn-mastery focus-btn" onclick="markFocus()" data-tooltip="标记/取消星标，星标词权重翻倍" aria-label="切换重点">⭐ 重点</button>
+        <button class="btn-mastery know" onclick="markKnow()" data-tooltip="记住了，升级盒子并降低出现频率" aria-label="认识">👁 认识</button>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- Quiz Panel -->
-  <div id="quiz" class="panel">
+  <section id="quiz" class="panel" aria-label="飘叶测验">
     <div class="quiz-area">
       <div class="quiz-prompt">请输入对应的拉丁文学名</div>
       <div class="quiz-chinese" id="quizChinese"></div>
+      <label for="quizInput" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);">拉丁文学名输入</label>
       <input type="text" class="quiz-input" id="quizInput"
              placeholder="输入拉丁文，如 Pinus" autocomplete="off" autocorrect="off" spellcheck="false"
-             oninput="autoCapitalize(this)">
-      <div class="quiz-feedback" id="quizFeedback"></div>
+             oninput="autoCapitalize(this)" aria-label="输入拉丁文学名">
+      <div class="quiz-feedback" id="quizFeedback" aria-live="polite"></div>
       <div class="quiz-buttons">
-        <button class="btn btn-primary" id="btnCheck" onclick="checkAnswer()" data-tooltip="检查拼写是否正确">鉴定</button>
-        <button class="btn btn-outline" onclick="revealAnswer(this)" data-tooltip="显示正确答案并自动发音">揭示答案</button>
-        <button class="btn btn-outline" onclick="speakCurrent(this)" data-tooltip="听取当前题目的拉丁文发音">&#x1F50A; 听发音</button>
-        <button class="btn btn-accent" onclick="forceNextQuestion()" data-tooltip="跳过当前题目，进入下一题">下一题</button>
+        <button class="btn btn-primary" id="btnCheck" onclick="checkAnswer()" data-tooltip="检查拼写是否正确" aria-label="鉴定">鉴定</button>
+        <button class="btn btn-outline" onclick="revealAnswer(this)" data-tooltip="显示正确答案并自动发音" aria-label="揭示答案">揭示答案</button>
+        <button class="btn btn-outline" onclick="speakCurrent(this)" data-tooltip="听取当前题目的拉丁文发音" aria-label="听发音">🔊 听发音</button>
+        <button class="btn btn-accent" onclick="forceNextQuestion()" data-tooltip="跳过当前题目，进入下一题" aria-label="下一题">下一题</button>
       </div>
       <div class="quiz-score">
         <div>正确 <span id="correctCount">0</span></div>
@@ -1239,46 +631,44 @@ footer {
       </div>
       <div class="review-toggle-wrap">
         <div class="review-toggle" id="reviewToggle">
-          <button class="active" data-mode="all" data-tooltip="从全部 40 种植物中随机出题">全部 40</button>
-          <button data-mode="weak" data-tooltip="只出 Box 1 的薄弱词"><span>薄弱 </span><span id="weakCount">0</span></button>
-          <button data-mode="wrongbook" data-tooltip="只出曾经答错过的词">错题本 <span id="wrongbookCount">0</span></button>
-          <button data-mode="focus" data-tooltip="只出星标词">重点 <span id="focusCount">0</span></button>
+          <button class="active" data-mode="all" data-tooltip="从全部 40 种植物中随机出题" aria-label="全部题目">全部 40</button>
+          <button data-mode="weak" data-tooltip="只出 Box 1 的薄弱词" aria-label="薄弱词"><span>薄弱 </span><span id="weakCount">0</span></button>
+          <button data-mode="wrongbook" data-tooltip="只出曾经答错过的词" aria-label="错题本">错题本 <span id="wrongbookCount">0</span></button>
+          <button data-mode="focus" data-tooltip="只出星标词" aria-label="重点词">重点 <span id="focusCount">0</span></button>
         </div>
       </div>
       <div style="margin-top:10px;">
-        <button class="btn btn-accent btn-sm" onclick="resetScore()" data-tooltip="清零测验正确/错误计数">重置成绩</button>
+        <button class="btn btn-accent btn-sm" onclick="resetScore()" data-tooltip="清零测验正确/错误计数" aria-label="重置成绩">重置成绩</button>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- Gallery -->
-  <div class="gallery-section scroll-reveal" id="gallerySection">
+  <section class="gallery-section" id="gallerySection" aria-label="植物图鉴画廊">
     <div class="gallery-header">
       <h2>植物图鉴</h2>
       <span class="genus-tag" id="galleryGenus"></span>
-      <a class="baike-link" id="baikeLink" href="#" target="_blank" rel="noopener" data-tooltip="在百度百科中查看该属植物的详细资料" style="display:none">📖 百科</a>
+      <a class="baike-link" id="baikeLink" href="#" target="_blank" rel="noopener" data-tooltip="在百度百科中查看该属植物的详细资料" style="display:none" aria-label="百度百科链接">📖 百科</a>
       <span class="baike-hint" id="baikeHint" style="display:none">点击查看百度百科详细介绍</span>
     </div>
     <div class="gallery-grid" id="galleryGrid"></div>
     <div class="gallery-empty" id="galleryEmpty">
-      <div class="icon">&#x1F341;</div>
+      <div class="icon">🍁</div>
       <div>点击植物卡片查看该属典型植物照片</div>
     </div>
-  </div>
+  </section>
 
-  <footer>
-    <span>&#x1F341;</span> 点击 &#x1F50A; 听取拉丁文发音 &nbsp;|&nbsp;
-    植物图片来自 PPBC 中国植物图像库 &nbsp;|&nbsp; Web Speech API
-    <span>&nbsp;&#x1F341;</span>
-  </footer>
+  <footer>🍁 点击 🔊 听取拉丁文发音 &nbsp;|&nbsp; 植物图片来自 PPBC 中国植物图像库 &nbsp;|&nbsp; Web Speech API &nbsp;🍁</footer>
 </div>
 
 <script>
-/* ═══════════════════════════════════════════════════
-   HERBARIUM VENTUS — PREMIUM ENGINE
-   ═══════════════════════════════════════════════════ */
+/*══════════════════════════════════════════════════
+  HERBARIUM VENTUS — OPTIMIZED ENGINE
+  Data → State → Modules → UI → Init
+ ══════════════════════════════════════════════════*/
 
-const PLANTS = [
+/* ── DATA ── */
+var PLANTS = [
   ["松属","Pinus"],["杉木属","Cunninghamia"],["水杉属","Metasequoia"],
   ["红豆杉属","Taxus"],["木兰属","Magnolia"],["含笑属","Michelia"],
   ["樟属","Camphora"],["楠属","Phoebe"],["木姜子属","Litsea"],
@@ -1295,14 +685,13 @@ const PLANTS = [
   ["刚竹属","Phyllostachys"]
 ];
 
-/* ═══════════════════════════════════════════════
-   LEITNER BOX LEARNING SYSTEM
-   Box 0=new 1=weak 2=learning 3=familiar 4=mastered 5=archived
-   ═══════════════════════════════════════════════ */
-var PROGRESS = {};
-var reviewMode = 'all'; // 'all' | 'weak' | 'wrongbook' | 'focus'
+var IMG = {"Acer":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Camellia":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Camphora":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Castanea":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Castanopsis":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Celtis":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Citrus":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Cunninghamia":["01.jpg","02.jpg","03.jpg","04.jpg"],"Diospyros":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Elaeocarpus":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Eucalyptus":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Ficus":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg"],"Ilex":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Juglans":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Liquidambar":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Litsea":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Magnolia":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Malus":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Metasequoia":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Michelia":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Olea":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Ormosia":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Phoebe":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Phyllostachys":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Pinus":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Populus":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Prunus":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Quercus":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Rhododendron":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Rosa":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Schima":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Styrax":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Taxus":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Toona":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Toxicodendron":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Vaccinium":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Vernicia":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Viburnum":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Vitis":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Ziziphus":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"]};
 
-// ── Persistence ──
+/* ── STATE ── */
+var PROGRESS = {};
+var reviewMode = 'all';
+
+/* ── PERSISTENCE ── */
 function loadProgress() {
   try { var raw = localStorage.getItem('herbarium-progress-v2'); if (raw) PROGRESS = JSON.parse(raw); } catch(e) { PROGRESS = {}; }
 }
@@ -1310,1452 +699,568 @@ function saveProgress() {
   try { localStorage.setItem('herbarium-progress-v2', JSON.stringify(PROGRESS)); } catch(e) {}
 }
 
-// ── Entry helpers ──
+/* ── LEITNER ENGINE ── */
 function getEntry(la) {
-  if (!PROGRESS[la]) PROGRESS[la] = { box: 0, correct: 0, wrong: 0, seen: 0, focus: false, lastSeen: 0 };
+  if (!PROGRESS[la]) PROGRESS[la] = { box:0, correct:0, wrong:0, seen:0, focus:false, lastSeen:0 };
   return PROGRESS[la];
 }
-function recordSeen(la) {
-  var e = getEntry(la); e.seen++; e.lastSeen = Date.now();
-  if (e.box === 0) e.box = 1; // new → weak on first sight
-  saveProgress();
-}
-function recordCorrect(la) {
-  var e = getEntry(la); e.correct++;
-  e.box = Math.min(e.box + 1, 5);
-  e.lastSeen = Date.now();
-  saveProgress(); updateProgressBar(); updateCardIndicators();
-}
-function recordWrong(la) {
-  var e = getEntry(la); e.wrong++;
-  e.box = Math.max(e.box - 1, 1); // downgrade but min box 1
-  e.lastSeen = Date.now();
-  saveProgress(); updateProgressBar(); updateCardIndicators();
-}
-function toggleFocus(la) {
-  var e = getEntry(la); e.focus = !e.focus;
-  saveProgress(); updateCardIndicators();
-}
+function recordSeen(la) { var e=getEntry(la); e.seen++; e.lastSeen=Date.now(); if(e.box===0) e.box=1; saveProgress(); }
+function recordCorrect(la) { var e=getEntry(la); e.correct++; e.box=Math.min(e.box+1,5); e.lastSeen=Date.now(); saveProgress(); updateProgressBar(); updateCardIndicators(); }
+function recordWrong(la) { var e=getEntry(la); e.wrong++; e.box=Math.max(e.box-1,1); e.lastSeen=Date.now(); saveProgress(); updateProgressBar(); updateCardIndicators(); }
+function toggleFocus(la) { var e=getEntry(la); e.focus=!e.focus; saveProgress(); updateCardIndicators(); }
 
-// ── Box → mastery label ──
 function getMasteryLabel(la) {
-  var e = getEntry(la);
-  var b = e.box;
-  if (b === 0) return 'new';
-  if (b === 1) return 'weak';
-  if (b === 2) return 'learning';
-  if (b === 3) return 'familiar';
-  if (e.focus && b >= 4) return 'starred';
-  if (b === 5) return 'archived';
+  var e=getEntry(la), b=e.box;
+  if(b===0) return 'new'; if(b===1) return 'weak'; if(b===2) return 'learning';
+  if(b===3) return 'familiar'; if(e.focus&&b>=4) return 'starred'; if(b===5) return 'archived';
   return 'mastered';
 }
-
-// ── Count helpers ──
 function getCounts() {
-  var mastered = 0, learning = 0, weak = 0, focused = 0;
-  for (var i = 0; i < PLANTS.length; i++) {
-    var e = getEntry(PLANTS[i][1]);
-    var b = e.box;
-    if (b >= 4) mastered++;
-    else if (b >= 2) learning++;
-    else if (b === 1) weak++;
-    if (e.focus) focused++;
+  var mastered=0, learning=0, weak=0, focused=0;
+  for(var i=0; i<PLANTS.length; i++) {
+    var e=getEntry(PLANTS[i][1]), b=e.box;
+    if(b>=4) mastered++; else if(b>=2) learning++; else if(b===1) weak++;
+    if(e.focus) focused++;
   }
-  return { mastered: mastered, learning: learning, weak: weak, focused: focused };
+  return {mastered:mastered, learning:learning, weak:weak, focused:focused};
 }
-
 function getFilteredPlants(mode) {
-  var result = [];
-  for (var i = 0; i < PLANTS.length; i++) {
-    var e = getEntry(PLANTS[i][1]);
-    if (mode === 'weak' && e.box === 1) result.push(i);           // box 1 only
-    else if (mode === 'wrongbook' && e.wrong > 0) result.push(i); // ever wrong
-    else if (mode === 'focus' && e.focus) result.push(i);         // starred
-    else if (mode === 'all') result.push(i);
+  var result=[];
+  for(var i=0; i<PLANTS.length; i++) {
+    var e=getEntry(PLANTS[i][1]);
+    if(mode==='weak'&&e.box===1) result.push(i);
+    else if(mode==='wrongbook'&&e.wrong>0) result.push(i);
+    else if(mode==='focus'&&e.focus) result.push(i);
+    else if(mode==='all') result.push(i);
   }
   return result;
 }
-
-// ── Weighted random for flashcard ──
-// Higher weight = more likely to appear
 function getFlashcardWeight(idx) {
-  var e = getEntry(PLANTS[idx][1]);
-  var box = e.box;
-  var weight;
-  switch (box) {
-    case 0: weight = 12; break;  // new — must see
-    case 1: weight = 8; break;   // weak — high priority
-    case 2: weight = 4; break;   // learning
-    case 3: weight = 2; break;   // familiar
-    case 4: weight = 1; break;   // mastered — occasional
-    case 5: weight = 0.3; break; // archived — rare
-    default: weight = 5;
-  }
-  if (e.focus) weight *= 2; // starred = double
-  // Boost cards not seen recently (stale)
-  var hoursSince = (Date.now() - e.lastSeen) / 3600000;
-  if (hoursSince > 24 && box <= 3) weight *= 1.5;
+  var e=getEntry(PLANTS[idx][1]), box=e.box, weight;
+  switch(box) { case 0:weight=12;break; case 1:weight=8;break; case 2:weight=4;break; case 3:weight=2;break; case 4:weight=1;break; case 5:weight=0.3;break; default:weight=5; }
+  if(e.focus) weight*=2;
+  var hoursSince=(Date.now()-e.lastSeen)/3600000;
+  if(hoursSince>24&&box<=3) weight*=1.5;
   return weight;
 }
-
 function pickWeightedCard(candidates) {
-  var total = 0;
-  var weights = [];
-  for (var i = 0; i < candidates.length; i++) {
-    var w = getFlashcardWeight(candidates[i]);
-    weights.push(w); total += w;
-  }
-  var rand = Math.random() * total;
-  var cum = 0;
-  for (var j = 0; j < candidates.length; j++) {
-    cum += weights[j];
-    if (rand <= cum) return j;
-  }
-  return Math.floor(Math.random() * candidates.length);
+  var total=0, weights=[];
+  for(var i=0; i<candidates.length; i++) { var w=getFlashcardWeight(candidates[i]); weights.push(w); total+=w; }
+  var rand=Math.random()*total, cum=0;
+  for(var j=0; j<candidates.length; j++) { cum+=weights[j]; if(rand<=cum) return j; }
+  return Math.floor(Math.random()*candidates.length);
 }
 
-// ── Progress bar ──
+/* ── PROGRESS BAR ── */
 function updateProgressBar() {
-  var c = getCounts();
-  var pct = Math.round(c.mastered / PLANTS.length * 100);
-  var mc = document.getElementById('masteredCount');
-  var pb = document.getElementById('progressBar');
-  var pp = document.getElementById('progressPercent');
-  var detail = document.getElementById('progressDetail');
-  if (mc) mc.textContent = c.mastered;
-  if (pb) pb.style.width = pct + '%';
-  if (pp) pp.textContent = pct + '%';
-  if (detail) detail.innerHTML =
-    '<span class="stat-chip" title="已掌握 Box 4~5">🟢 ' + c.mastered + '</span> ' +
-    '<span class="stat-chip" title="学习中 Box 2~3">🟡 ' + c.learning + '</span> ' +
-    '<span class="stat-chip" title="薄弱 Box 1">🔴 ' + c.weak + '</span> ' +
-    '<span class="stat-chip" title="已星标">⭐ ' + c.focused + '</span>';
+  var c=getCounts(), pct=Math.round(c.mastered/PLANTS.length*100);
+  var mc=document.getElementById('masteredCount'), pb=document.getElementById('progressBar'), pp=document.getElementById('progressPercent'), detail=document.getElementById('progressDetail');
+  if(mc) mc.textContent=c.mastered;
+  if(pb) pb.style.width=pct+'%';
+  if(pp) pp.textContent=pct+'%';
+  if(detail) detail.innerHTML='<span class="stat-chip" title="已掌握">🟢 '+c.mastered+'</span> <span class="stat-chip" title="学习中">🟡 '+c.learning+'</span> <span class="stat-chip" title="薄弱">🔴 '+c.weak+'</span> <span class="stat-chip" title="已星标">⭐ '+c.focused+'</span>';
 }
-
-// ── Card mastery indicators ──
 function updateCardIndicators() {
-  var cards = document.querySelectorAll('.plant-card');
-  for (var i = 0; i < cards.length; i++) {
-    var card = cards[i];
-    var la = card.dataset.la;
-    if (!la) continue;
-    var label = getMasteryLabel(la);
-    var e = getEntry(la);
-    // Remove old
-    var oldDot = card.querySelector('.mastery-dot');
-    if (oldDot) oldDot.remove();
-    var oldStar = card.querySelector('.focus-star');
-    if (oldStar) oldStar.remove();
-    // Add indicator
-    var dot = document.createElement('div');
-    dot.className = 'mastery-dot ' + label;
-    if (label === 'starred') dot.className = 'mastery-dot mastered';
+  var cards=document.querySelectorAll('.plant-card');
+  for(var i=0; i<cards.length; i++) {
+    var card=cards[i], la=card.dataset.la;
+    if(!la) continue;
+    var label=getMasteryLabel(la), e=getEntry(la);
+    var oldDot=card.querySelector('.mastery-dot'); if(oldDot) oldDot.remove();
+    var oldStar=card.querySelector('.focus-star'); if(oldStar) oldStar.remove();
+    var dot=document.createElement('div'); dot.className='mastery-dot '+label; if(label==='starred') dot.className='mastery-dot mastered';
     card.appendChild(dot);
-    // Add star if focused
-    if (e.focus) {
-      var star = document.createElement('div');
-      star.className = 'focus-star';
-      star.textContent = '⭐';
-      card.appendChild(star);
-    }
+    if(e.focus) { var star=document.createElement('div'); star.className='focus-star'; star.textContent='⭐'; card.appendChild(star); }
   }
 }
-
-// ── Update filter counts ──
 function updateFilterCounts() {
-  var wc = document.getElementById('weakCount');
-  var wbc = document.getElementById('wrongbookCount');
-  var fc = document.getElementById('focusCount');
-  if (wc) wc.textContent = getFilteredPlants('weak').length;
-  if (wbc) wbc.textContent = getFilteredPlants('wrongbook').length;
-  if (fc) wc2 = fc.textContent = getFilteredPlants('focus').length;
+  var wc=document.getElementById('weakCount'), wbc=document.getElementById('wrongbookCount'), fc=document.getElementById('focusCount');
+  if(wc) wc.textContent=getFilteredPlants('weak').length;
+  if(wbc) wbc.textContent=getFilteredPlants('wrongbook').length;
+  if(fc) fc.textContent=getFilteredPlants('focus').length;
 }
-
-// ── Reset all progress ──
 function resetAllProgress() {
-  if (!confirm('确定要重置全部学习进度吗？\\n所有掌握度、错题本、星标数据将被清除。')) return;
-  PROGRESS = {};
-  try { localStorage.removeItem('herbarium-progress-v2'); } catch(e) {}
-  loadProgress();
-  updateProgressBar();
-  updateCardIndicators();
-  updateFilterCounts();
-  // Reset flashcard queue
-  fcOrder = [];
-  for (var i = 0; i < PLANTS.length; i++) fcOrder.push(i);
-  fcIndex = 0; fcFlipped = false;
-  renderFlashcard();
-  updateFlashcardImages();
+  if(!confirm('确定要重置全部学习进度吗？\n所有掌握度、错题本、星标数据将被清除。')) return;
+  PROGRESS={}; try{localStorage.removeItem('herbarium-progress-v2')}catch(e){}
+  loadProgress(); updateProgressBar(); updateCardIndicators(); updateFilterCounts();
+  fcOrder=[]; for(var i=0; i<PLANTS.length; i++) fcOrder.push(i); fcIndex=0; fcFlipped=false;
+  renderFlashcard(); updateFlashcardImages();
 }
 
-// ── Init ──
-loadProgress();
-updateFilterCounts();
-
-/* ═══════════════════════════════════════════════
-   MULTI-LAYER PARTICLE ECOLOGY
-   Three particle types sharing one canvas:
-   - Pollen/dust: tiny, slow, glowing motes
-   - Leaves/petals: medium, falling with wind
-   - Fireflies: larger glow, cursor-attracted, pulsing
-   ═══════════════════════════════════════════════ */
-(function(){
-  const canvas = document.getElementById('natureCanvas');
-  const ctx = canvas.getContext('2d');
-  let W, H, particles = [];
-  let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
-  let targetMouseX = mouseX, targetMouseY = mouseY;
-  let windBias = 0, targetWind = 0;
-
-  function resize() {
-    W = canvas.width = window.innerWidth;
-    H = canvas.height = window.innerHeight;
-  }
-  resize();
-  window.addEventListener('resize', resize);
-
-  document.addEventListener('mousemove', function(e) {
-    targetMouseX = e.clientX;
-    targetMouseY = e.clientY;
-    targetWind = ((e.clientX - W / 2) / W) * 0.8;
-  });
-  document.addEventListener('touchmove', function(e) {
-    var t = e.touches[0];
-    targetMouseX = t.clientX;
-    targetMouseY = t.clientY;
-    targetWind = ((t.clientX - W / 2) / W) * 0.8;
-  }, { passive: true });
-
-  function getSeasonColors() {
-    var style = getComputedStyle(document.documentElement);
-    function rgb(v) {
-      var parts = v.split(',').map(function(s) { return parseInt(s.trim()); });
-      return parts.length === 3 ? parts : [90,155,80];
-    }
-    return {
-      pollen: rgb(style.getPropertyValue('--pollen').trim()),
-      leaf1: rgb(style.getPropertyValue('--leaf-1').trim()),
-      leaf2: rgb(style.getPropertyValue('--leaf-2').trim()),
-      petal: rgb(style.getPropertyValue('--petal').trim()),
-      firefly: rgb(style.getPropertyValue('--firefly').trim()),
-      spark: rgb(style.getPropertyValue('--spark').trim())
-    };
-  }
-
-  var seasonColors = getSeasonColors();
-
-  /* Particle types — all drift rightward with wind:
-     0 = pollen mote (tiny, slow drift)
-     1 = leaf (falling with sway)
-     2 = petal (wider, slower fall)
-     3 = firefly (pulsing glow, gentle cursor attraction)
-     4 = dandelion seed (tiny wisp, slow fall)
-     5 = spark (upward drift, glowing dot)
-     6 = cloud wisp (large, upper sky, ethereal white)
-     9 = sunbeam sparkle (warm gold, cross twinkle) */
-
-  function Particle() {
-    this.reset();
-    this.y = Math.random() * H;
-  }
-
-  Particle.prototype.reset = function() {
-    var r = Math.random();
-    this.x = Math.random() * W;
-    this.y = -30;
-    this.age = 0;
-    this.maxAge = Math.random() * 500 + 400;
-
-    if (r < 0.28) {
-      // Pollen mote — tiny floating dust, drifts with wind
-      this.type = 0;
-      this.size = Math.random() * 2.5 + 1;
-      this.vx = Math.random() * 0.2 + 0.08;
-      this.vy = Math.random() * 0.12 + 0.03;
-      this.opacity = Math.random() * 0.5 + 0.1;
-      this.swayPhase = Math.random() * Math.PI * 2;
-      this.swaySpeed = Math.random() * 0.015 + 0.004;
-      this.aspectRatio = 0.7;
-      this.pulseSpeed = 0;
-      this.pulseAmp = 0;
-    } else if (r < 0.56) {
-      // Leaf — falling with sway, carried by wind
-      this.type = 1;
-      this.size = Math.random() * 11 + 5;
-      this.vx = Math.random() * 0.2 + 0.08;
-      this.vy = Math.random() * 0.35 + 0.15;
-      this.opacity = Math.random() * 0.4 + 0.2;
-      this.swayPhase = Math.random() * Math.PI * 2;
-      this.swaySpeed = Math.random() * 0.022 + 0.005;
-      this.aspectRatio = 0.38;
-      this.colorVariant = Math.random() < 0.5 ? 0 : 1;
-      this.pulseSpeed = 0;
-      this.pulseAmp = 0;
-    } else if (r < 0.68) {
-      // Petal — wider, slower fall
-      this.type = 2;
-      this.size = Math.random() * 8 + 4;
-      this.vx = Math.random() * 0.18 + 0.06;
-      this.vy = Math.random() * 0.3 + 0.1;
-      this.opacity = Math.random() * 0.4 + 0.2;
-      this.swayPhase = Math.random() * Math.PI * 2;
-      this.swaySpeed = Math.random() * 0.025 + 0.006;
-      this.aspectRatio = 0.5;
-      this.pulseSpeed = 0;
-      this.pulseAmp = 0;
-    } else if (r < 0.76) {
-      // Firefly — gentle drift with wind, pulsing glow, slightly attracted to cursor
-      this.type = 3;
-      this.size = Math.random() * 3 + 1.5;
-      this.vx = Math.random() * 0.15 + 0.05;
-      this.vy = Math.random() * 0.15 - 0.05;
-      this.opacity = 0;
-      this.swayPhase = Math.random() * Math.PI * 2;
-      this.swaySpeed = Math.random() * 0.03 + 0.01;
-      this.aspectRatio = 1;
-      this.pulseSpeed = Math.random() * 0.06 + 0.03;
-      this.pulseAmp = Math.random() * 0.6 + 0.3;
-    } else if (r < 0.82) {
-      // Dandelion seed — tiny drifting wisp
-      this.type = 4;
-      this.size = Math.random() * 4 + 2;
-      this.vx = Math.random() * 0.2 + 0.06;
-      this.vy = Math.random() * 0.18 + 0.04;
-      this.opacity = Math.random() * 0.35 + 0.15;
-      this.swayPhase = Math.random() * Math.PI * 2;
-      this.swaySpeed = Math.random() * 0.04 + 0.015;
-      this.aspectRatio = 0.18;
-      this.pulseSpeed = 0;
-      this.pulseAmp = 0;
-    } else if (r < 0.89) {
-      // Spark — gentle upward drift with wind
-      this.type = 5;
-      this.size = Math.random() * 1.8 + 0.8;
-      this.vx = Math.random() * 0.12 + 0.04;
-      this.vy = -(Math.random() * 0.3 + 0.08);
-      this.opacity = Math.random() * 0.7 + 0.2;
-      this.swayPhase = Math.random() * Math.PI * 2;
-      this.swaySpeed = Math.random() * 0.02 + 0.01;
-      this.aspectRatio = 0.5;
-      this.pulseSpeed = Math.random() * 0.08 + 0.04;
-      this.pulseAmp = Math.random() * 0.4 + 0.3;
-    } else if (r < 0.97) {
-      // Cloud wisp — large, very slow, upper sky, drifts with wind
-      this.type = 6;
-      this.size = Math.random() * 50 + 30;
-      this.vx = Math.random() * 0.06 + 0.04;
-      this.vy = Math.random() * 0.04 + 0.01;
-      this.opacity = Math.random() * 0.08 + 0.03;
-      this.swayPhase = Math.random() * Math.PI * 2;
-      this.swaySpeed = Math.random() * 0.003 + 0.001;
-      this.aspectRatio = 0.28;
-      this.pulseSpeed = 0;
-      this.pulseAmp = 0;
-    } else {
-      // Sunbeam sparkle — warm golden twinkle, gentle upward drift
-      this.type = 9;
-      this.size = Math.random() * 2.5 + 1.2;
-      this.vx = Math.random() * 0.1 + 0.04;
-      this.vy = -(Math.random() * 0.2 + 0.05);
-      this.opacity = Math.random() * 0.6 + 0.2;
-      this.swayPhase = Math.random() * Math.PI * 2;
-      this.swaySpeed = Math.random() * 0.03 + 0.015;
-      this.aspectRatio = 0.6;
-      this.pulseSpeed = Math.random() * 0.12 + 0.06;
-      this.pulseAmp = Math.random() * 0.5 + 0.3;
-    }
-
-    // All particles start with unified rightward wind direction
-    // Floating types start anywhere on screen
-    if (this.type === 3 || this.type === 5 || this.type === 9) {
-      this.y = Math.random() * H;
-      this.x = Math.random() * W;
-    }
-    // Cloud wisps stay in upper sky
-    if (this.type === 6) {
-      this.y = Math.random() * H * 0.35;
-      this.x = Math.random() * W;
-    }
-  };
-
-  Particle.prototype.update = function() {
-    this.age++;
-    this.swayPhase += this.swaySpeed;
-
-    // Unified wind: all particles drift rightward, modulated by mouse position
-    var breeze = windBias * 0.6 + Math.sin(this.swayPhase) * 0.3;
-
-    if (this.type === 3) {
-      // Firefly — drift with wind, gentle cursor attraction
-      var dx = this.x - mouseX;
-      var dy = this.y - mouseY;
-      var dist = Math.sqrt(dx * dx + dy * dy);
-      if (dist < 200 && dist > 0) {
-        var force = (200 - dist) / 200;
-        this.vx -= (dx / dist) * force * 0.06;
-        this.vy -= (dy / dist) * force * 0.06;
-      }
-      this.vx += breeze * 0.15;
-      this.vx *= 0.995;
-      this.vy *= 0.995;
-      this.x += this.vx;
-      this.y += this.vy;
-      this.opacity = Math.sin(this.age * this.pulseSpeed) * this.pulseAmp + this.pulseAmp + 0.1;
-    } else if (this.type === 5) {
-      // Spark — drifts upward with wind
-      this.vx += breeze * 0.25;
-      this.vx += Math.sin(this.swayPhase) * 0.02;
-      this.vx *= 0.996;
-      this.x += this.vx;
-      this.y += this.vy;
-      this.opacity = Math.abs(Math.sin(this.age * this.pulseSpeed)) * this.pulseAmp + 0.2;
-    } else if (this.type === 6) {
-      // Cloud wisp — very slow rightward drift in upper sky
-      this.vx += Math.sin(this.swayPhase) * 0.015;
-      this.vx += breeze * 0.08;
-      this.vx *= 0.999;
-      this.x += this.vx;
-      this.y += this.vy + Math.sin(this.swayPhase * 0.4) * 0.06;
-      var edgeFade = 1;
-      if (this.y > H * 0.45) edgeFade = Math.max(0, 1 - (this.y - H * 0.45) / 30);
-      this.opacity = 0.055 * edgeFade;
-    } else if (this.type === 9) {
-      // Sunbeam sparkle — gentle upward drift with wind
-      this.vx += breeze * 0.2;
-      this.vx += Math.sin(this.swayPhase) * 0.015;
-      this.vx *= 0.997;
-      this.x += this.vx;
-      this.y += this.vy;
-      this.opacity = Math.abs(Math.sin(this.age * this.pulseSpeed)) * this.pulseAmp + 0.15;
-    } else {
-      // Pollen, leaf, petal, dandelion — fall with unified rightward wind
-      this.x += this.vx + breeze;
-      this.y += this.vy;
-      this.x += Math.sin(this.swayPhase * 1.2) * (this.type === 4 ? 0.4 : 0.2);
-      if (this.type === 4) {
-        this.y += Math.cos(this.swayPhase * 0.7) * 0.06;
-      }
-    }
-
-    // Reset if out of bounds
-    var outOfBounds = this.y > H + 80 || this.y < -80 ||
-        this.x < -120 || this.x > W + 120;
-    if (outOfBounds ||
-        (this.type === 3 && this.age > this.maxAge) ||
-        (this.type === 6 && this.x > W + 150)) {
-      this.reset();
-      if (this.type === 3 || this.type === 5 || this.type === 9) {
-        this.x = -20; this.y = Math.random() * H;
-      }
-      if (this.type === 6) { this.y = Math.random() * H * 0.35; this.x = -80; }
-    }
-  };
-
-  Particle.prototype.draw = function() {
-    ctx.save();
-    ctx.translate(this.x, this.y);
-
-    var c;
-    if (this.type === 0) c = seasonColors.pollen;
-    else if (this.type === 1) c = this.colorVariant ? seasonColors.leaf2 : seasonColors.leaf1;
-    else if (this.type === 2) c = seasonColors.petal;
-    else if (this.type === 3) c = seasonColors.firefly;
-    else if (this.type === 4) c = seasonColors.pollen;
-    else if (this.type === 6) c = [255, 255, 255]; // Cloud: pure white
-    else if (this.type === 9) c = [255, 245, 200]; // Sunbeam: warm gold
-    else c = seasonColors.spark;
-
-    var alpha = this.opacity;
-    var r, g, b;
-    r = c[0]; g = c[1]; b = c[2];
-
-    if (this.type === 3) {
-      // Firefly — soft radial glow
-      var glow = ctx.createRadialGradient(0, 0, 0, 0, 0, this.size * 6);
-      glow.addColorStop(0, 'rgba(' + r + ',' + g + ',' + b + ',' + alpha + ')');
-      glow.addColorStop(0.3, 'rgba(' + r + ',' + g + ',' + b + ',' + alpha * 0.5 + ')');
-      glow.addColorStop(1, 'rgba(' + r + ',' + g + ',' + b + ',0)');
-      ctx.fillStyle = glow;
-      ctx.beginPath();
-      ctx.arc(0, 0, this.size * 6, 0, Math.PI * 2);
-      ctx.fill();
-    } else if (this.type === 5) {
-      // Spark — tiny bright dot with glow
-      ctx.fillStyle = 'rgba(' + r + ',' + g + ',' + b + ',' + alpha + ')';
-      ctx.shadowColor = 'rgba(' + r + ',' + g + ',' + b + ',' + alpha * 0.8 + ')';
-      ctx.shadowBlur = 4;
-      ctx.beginPath();
-      ctx.arc(0, 0, this.size, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.shadowBlur = 0;
-    } else if (this.type === 4) {
-      // Dandelion seed — fuzzy ellipse with wisps
-      ctx.fillStyle = 'rgba(' + r + ',' + g + ',' + b + ',' + alpha + ')';
-      ctx.beginPath();
-      ctx.ellipse(0, 0, this.size * 0.7, this.size * this.aspectRatio, 0, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.strokeStyle = 'rgba(' + r + ',' + g + ',' + b + ',' + alpha * 0.3 + ')';
-      ctx.lineWidth = 0.3;
-      for (var w = 0; w < 5; w++) {
-        var angle = (w / 5) * Math.PI * 2;
-        ctx.beginPath();
-        ctx.moveTo(0, 0);
-        ctx.lineTo(Math.cos(angle) * this.size * 1.4, Math.sin(angle) * this.size * 1.4);
-        ctx.stroke();
-      }
-    } else if (this.type === 6) {
-      // Cloud wisp — large soft translucent ellipse cluster
-      ctx.fillStyle = 'rgba(255,255,255,' + alpha + ')';
-      ctx.beginPath();
-      ctx.ellipse(0, 0, this.size, this.size * this.aspectRatio, 0, 0, Math.PI * 2);
-      ctx.fill();
-      // Secondary smaller blob for fluffy look
-      ctx.fillStyle = 'rgba(255,255,255,' + alpha * 0.7 + ')';
-      ctx.beginPath();
-      ctx.ellipse(this.size * 0.4, -this.size * 0.05, this.size * 0.55, this.size * 0.22, 0.2, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.beginPath();
-      ctx.ellipse(-this.size * 0.35, this.size * 0.03, this.size * 0.5, this.size * 0.2, -0.15, 0, Math.PI * 2);
-      ctx.fill();
-    } else if (this.type === 9) {
-      // Sunbeam sparkle — warm golden glow with cross-shaped twinkle
-      var sunAlpha = alpha;
-      // Core glow
-      var sunGlow = ctx.createRadialGradient(0, 0, 0, 0, 0, this.size * 3);
-      sunGlow.addColorStop(0, 'rgba(255,245,200,' + sunAlpha + ')');
-      sunGlow.addColorStop(0.3, 'rgba(255,240,180,' + sunAlpha * 0.6 + ')');
-      sunGlow.addColorStop(1, 'rgba(255,230,150,0)');
-      ctx.fillStyle = sunGlow;
-      ctx.beginPath();
-      ctx.arc(0, 0, this.size * 3, 0, Math.PI * 2);
-      ctx.fill();
-      // Cross twinkle
-      ctx.strokeStyle = 'rgba(255,245,210,' + sunAlpha * 0.8 + ')';
-      ctx.lineWidth = 0.6;
-      ctx.beginPath();
-      ctx.moveTo(-this.size * 2, 0); ctx.lineTo(this.size * 2, 0);
-      ctx.moveTo(0, -this.size * 2); ctx.lineTo(0, this.size * 2);
-      ctx.stroke();
-      // Diagonal cross
-      ctx.strokeStyle = 'rgba(255,248,220,' + sunAlpha * 0.5 + ')';
-      ctx.beginPath();
-      ctx.moveTo(-this.size * 1.3, -this.size * 1.3); ctx.lineTo(this.size * 1.3, this.size * 1.3);
-      ctx.moveTo(this.size * 1.3, -this.size * 1.3); ctx.lineTo(-this.size * 1.3, this.size * 1.3);
-      ctx.stroke();
-    } else {
-      // Leaf / petal / pollen — ellipse shape
-      var rot = this.type <= 1 ? this.swayPhase * 0.5 : 0;
-      ctx.rotate(rot);
-      ctx.fillStyle = 'rgba(' + r + ',' + g + ',' + b + ',' + alpha + ')';
-      ctx.beginPath();
-      ctx.ellipse(0, 0, this.size, this.size * this.aspectRatio, 0, 0, Math.PI * 2);
-      ctx.fill();
-      // Subtle vein for leaves
-      if (this.type === 1 && this.size > 8) {
-        ctx.strokeStyle = 'rgba(255,255,255,' + alpha * 0.12 + ')';
-        ctx.lineWidth = 0.3;
-        ctx.beginPath();
-        ctx.moveTo(-this.size * 0.65, 0);
-        ctx.lineTo(this.size * 0.65, 0);
-        ctx.stroke();
-      }
-    }
-    ctx.restore();
-  };
-
-  // Create particles
-  var particleCount = window.innerWidth < 640 ? 70 : 140;
-  for (var i = 0; i < particleCount; i++) {
-    particles.push(new Particle());
-  }
-
-  function updateSeasonColors() {
-    seasonColors = getSeasonColors();
-  }
-
-  function animate() {
-    windBias += (targetWind - windBias) * 0.03;
-    mouseX += (targetMouseX - mouseX) * 0.08;
-    mouseY += (targetMouseY - mouseY) * 0.08;
-
-    ctx.clearRect(0, 0, W, H);
-
-    for (var i = 0; i < particles.length; i++) {
-      particles[i].update();
-      particles[i].draw();
-    }
-
-    // Connecting tendrils between nearby fireflies
-    for (var i = 0; i < particles.length; i++) {
-      if (particles[i].type !== 3) continue;
-      for (var j = i + 1; j < particles.length; j++) {
-        if (particles[j].type !== 3) continue;
-        var dx = particles[i].x - particles[j].x;
-        var dy = particles[i].y - particles[j].y;
-        var dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 140) {
-          var alpha = ((140 - dist) / 140) * 0.05;
-          ctx.beginPath();
-          ctx.moveTo(particles[i].x, particles[i].y);
-          ctx.lineTo(particles[j].x, particles[j].y);
-          var fc = seasonColors.firefly;
-          ctx.strokeStyle = 'rgba(' + fc[0] + ',' + fc[1] + ',' + fc[2] + ',' + alpha + ')';
-          ctx.lineWidth = 0.5;
-          ctx.stroke();
-        }
-      }
-    }
-
-    requestAnimationFrame(animate);
-  }
-  animate();
-
-  window._particleUpdateColors = updateSeasonColors;
-})();
-
-/* ═══════════════════════════════════════════════
-   CUSTOM CURSOR
-   ═══════════════════════════════════════════════ */
-(function(){
-  var glow = document.getElementById('cursorGlow');
-  var leaf = document.getElementById('cursorLeaf');
-  var gx = -200, gy = -200;
-  var tgx = -200, tgy = -200;
-  var lx = -200, ly = -200;
-
-  document.addEventListener('mousemove', function(e) {
-    tgx = e.clientX; tgy = e.clientY;
-    lx = e.clientX; ly = e.clientY;
-    glow.style.opacity = '1';
-    leaf.style.opacity = '1';
-  });
-  document.addEventListener('mouseleave', function() {
-    glow.style.opacity = '0';
-    leaf.style.opacity = '0';
-  });
-  document.addEventListener('mousedown', function() {
-    leaf.classList.add('pressing');
-  });
-  document.addEventListener('mouseup', function() {
-    leaf.classList.remove('pressing');
-  });
-
-  // Detect hover over interactive elements
-  document.addEventListener('mouseover', function(e) {
-    var target = e.target;
-    if (target.closest('.plant-card') || target.closest('.gallery-img-wrap') ||
-        target.closest('.flashcard-inner') || target.closest('button') ||
-        target.closest('input') || target.closest('select')) {
-      leaf.classList.add('on-card');
-    }
-  });
-  document.addEventListener('mouseout', function(e) {
-    var target = e.target;
-    if (target.closest('.plant-card') || target.closest('.gallery-img-wrap') ||
-        target.closest('.flashcard-inner') || target.closest('button') ||
-        target.closest('input') || target.closest('select')) {
-      leaf.classList.remove('on-card');
-    }
-  });
-
-  function animCursor() {
-    gx += (tgx - gx) * 0.12;
-    gy += (tgy - gy) * 0.12;
-    glow.style.left = gx + 'px';
-    glow.style.top = gy + 'px';
-    leaf.style.left = lx + 'px';
-    leaf.style.top = ly + 'px';
-    requestAnimationFrame(animCursor);
-  }
-  animCursor();
-})();
-
-/* ═══════════════════════════════════════════════
-   SEASON SYSTEM
-   ═══════════════════════════════════════════════ */
-var currentSeason = 'summer';
-
-function setSeason(season) {
-  if (season === currentSeason) return;
-
-  // Brief overlay flash for transition feel
-  var overlay = document.getElementById('seasonOverlay');
-  overlay.style.opacity = '1';
-  setTimeout(function() { overlay.style.opacity = '0'; }, 400);
-
-  document.documentElement.setAttribute('data-season', season);
-  currentSeason = season;
-  try { localStorage.setItem('herbarium-season', season); } catch(e) {}
-
-  // Update particle colors
-  if (window._particleUpdateColors) {
-    setTimeout(function() { window._particleUpdateColors(); }, 100);
-  }
-
-  // Update season pills
-  document.querySelectorAll('.season-pill').forEach(function(p) {
-    p.classList.toggle('active', p.dataset.season === season);
-  });
-}
-
-// Init season pills
-document.querySelectorAll('.season-pill').forEach(function(pill) {
-  pill.addEventListener('click', function() {
-    setSeason(this.dataset.season);
-  });
-});
-
-// Load saved season, or follow system dark mode, default summer
-try {
-  var saved = localStorage.getItem('herbarium-season');
-  if (saved) {
-    setSeason(saved);
-  } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    setSeason('dusk');
-  } else {
-    document.querySelector('.season-pill[data-season="summer"]').classList.add('active');
-  }
-} catch(e) {
-  document.querySelector('.season-pill[data-season="summer"]').classList.add('active');
-}
-// Listen for system theme changes
-if (window.matchMedia) {
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
-    if (!localStorage.getItem('herbarium-season')) {
-      setSeason(e.matches ? 'dusk' : 'summer');
-    }
-  });
-}
-
-/* ═══════════════════════════════════════════════
-   QUIZ FILTER TOGGLE
-   ═══════════════════════════════════════════════ */
-(function(){
-  var btns = document.querySelectorAll('#reviewToggle button');
-  btns.forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      btns.forEach(function(b) { b.classList.remove('active'); });
-      btn.classList.add('active');
-      reviewMode = btn.dataset.mode;
-      nextQuestion();
-    });
-  });
-})();
-
-/* ═══════════════════════════════════════════════
-   MORPHING TAB INDICATOR
-   ═══════════════════════════════════════════════ */
-(function(){
-  var tabs = document.querySelectorAll('.tab-btn');
-  var indicator = document.getElementById('tabIndicator');
-  var tabContainer = document.getElementById('tabContainer');
-
-  function updateIndicator(activeBtn) {
-    var containerRect = tabContainer.getBoundingClientRect();
-    var btnRect = activeBtn.getBoundingClientRect();
-    indicator.style.left = (btnRect.left - containerRect.left) + 'px';
-    indicator.style.width = btnRect.width + 'px';
-  }
-
-  // Initialize
-  var activeTab = document.querySelector('.tab-btn.active');
-  if (activeTab) {
-    setTimeout(function() { updateIndicator(activeTab); }, 100);
-  }
-
-  tabs.forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      // Deactivate all
-      tabs.forEach(function(b) { b.classList.remove('active'); });
-      btn.classList.add('active');
-
-      // Update indicator
-      updateIndicator(btn);
-
-      // Switch panel with enter animation
-      var panelId = btn.dataset.panel;
-      document.querySelectorAll('.panel').forEach(function(p) {
-        p.classList.remove('active', 'enter');
-      });
-      var panel = document.getElementById(panelId);
-      panel.classList.add('active');
-      // Trigger enter animation
-      requestAnimationFrame(function() {
-        panel.classList.add('enter');
-      });
-
-      // Init quiz or flashcard images
-      if (panelId === 'quiz' && quizIndex < 0) nextQuestion();
-      if (panelId === 'flashcard') updateFlashcardImages();
-    });
-  });
-
-  // Update indicator on resize
-  window.addEventListener('resize', function() {
-    var active = document.querySelector('.tab-btn.active');
-    if (active) updateIndicator(active);
-  });
-})();
-
-/* ═══════════════════════════════════════════════
-   SCROLL-DRIVEN REVEAL (IntersectionObserver fallback)
-   ═══════════════════════════════════════════════ */
-(function(){
-  if ('IntersectionObserver' in window) {
-    var observer = new IntersectionObserver(function(entries) {
-      entries.forEach(function(entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.15 });
-
-    document.querySelectorAll('.scroll-reveal').forEach(function(el) {
-      observer.observe(el);
-    });
-  } else {
-    // Fallback: show all immediately
-    document.querySelectorAll('.scroll-reveal').forEach(function(el) {
-      el.classList.add('visible');
-    });
-  }
-})();
-
-/* ═══════════════════════════════════════════════
-   BACK TO TOP
-   ═══════════════════════════════════════════════ */
-(function(){
-  var btn = document.getElementById('backToTop');
-  window.addEventListener('scroll', function() {
-    if (window.scrollY > 300) {
-      btn.classList.add('show');
-    } else {
-      btn.classList.remove('show');
-    }
-  }, { passive: true });
-  // Show immediately if already scrolled
-  if (window.scrollY > 300) btn.classList.add('show');
-})();
-function scrollToTop() {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-/* ═══════════════════════════════════════════════
-   DEW-DROP GALLERY HOVER (mouse tracking on glossy overlay)
-   ═══════════════════════════════════════════════ */
-(function(){
-  document.addEventListener('mousemove', function(e) {
-    document.querySelectorAll('.gallery-img-wrap:hover .dew-drop').forEach(function(drop) {
-      var rect = drop.parentElement.getBoundingClientRect();
-      var x = ((e.clientX - rect.left) / rect.width) * 100;
-      var y = ((e.clientY - rect.top) / rect.height) * 100;
-      drop.style.background = 'radial-gradient(circle at ' + x + '% ' + y + '%, ' +
-        'rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.08) 25%, transparent 55%)';
-    });
-    // Flashcard gloss
-    document.querySelectorAll('.flashcard-inner:hover .flashcard-gloss').forEach(function(gloss) {
-      var face = gloss.parentElement.querySelector('.flashcard-face:not(.back)') ||
-                  gloss.parentElement.querySelector('.flashcard-face');
-      if (!face) return;
-      var rect = face.getBoundingClientRect();
-      var x = ((e.clientX - rect.left) / rect.width) * 100;
-      var y = ((e.clientY - rect.top) / rect.height) * 100;
-      gloss.style.background = 'radial-gradient(circle at ' + x + '% ' + y + '%, ' +
-        'rgba(255,255,255,0.18) 0%, transparent 55%)';
-    });
-  });
-})();
-
-/* ═══════════════════════════════════════════════
-   SPEECH
-   ═══════════════════════════════════════════════ */
-var speaking = false, selectedLang = 'en-US', selectedGender = 'female';
+/* ── SPEECH ── */
+var speaking=false, selectedLang='en-US', selectedGender='female';
 
 function onVoiceChange() {
-  var sel = document.getElementById('voiceSelect');
-  var val = sel.value;
-  if (val === 'en-US-female')  { selectedLang = 'en-US'; selectedGender = 'female'; }
-  else if (val === 'en-US-male') { selectedLang = 'en-US'; selectedGender = 'male'; }
-  else { selectedLang = val; selectedGender = null; }
+  var sel=document.getElementById('voiceSelect'), val=sel.value;
+  if(val==='en-US-female') { selectedLang='en-US'; selectedGender='female'; }
+  else if(val==='en-US-male') { selectedLang='en-US'; selectedGender='male'; }
+  else { selectedLang=val; selectedGender=null; }
 }
-
-// Match voice by gender — tries getVoices() if available, graceful fallback
 function findVoice(lang, gender) {
-  var voices = window.speechSynthesis.getVoices();
-  if (!voices.length) return null;
-  var isMale = function(nm) {
-    var n = nm.toLowerCase();
-    return n.includes('male') || n.includes('david') || n.includes('mark') || n.includes('guy') || n.includes('stefan') || n.includes('matteo');
-  };
-  var isFemale = function(nm) {
-    var n = nm.toLowerCase();
-    return n.includes('female') || n.includes('zira') || n.includes('samantha') || n.includes('alice') || n.includes('elsa') || n.includes('susan') || n.includes('linda');
-  };
-  for (var i = 0; i < voices.length; i++) {
-    if (!voices[i].lang.startsWith(lang.split('-')[0])) continue;
-    if (gender === 'female' && isFemale(voices[i].name)) return voices[i];
-    if (gender === 'male'   && isMale(voices[i].name))   return voices[i];
-  }
-  // No gender match — fallback to any voice with matching language
-  for (var j = 0; j < voices.length; j++) {
-    if (voices[j].lang.startsWith(lang.split('-')[0])) return voices[j];
-  }
+  var voices=window.speechSynthesis.getVoices();
+  if(!voices.length) return null;
+  function isMale(nm) { var n=nm.toLowerCase(); return n.includes('male')||n.includes('david')||n.includes('mark')||n.includes('guy'); }
+  function isFemale(nm) { var n=nm.toLowerCase(); return n.includes('female')||n.includes('zira')||n.includes('samantha')||n.includes('alice')||n.includes('elsa'); }
+  for(var i=0; i<voices.length; i++) { if(!voices[i].lang.startsWith(lang.split('-')[0])) continue; if(gender==='female'&&isFemale(voices[i].name)) return voices[i]; if(gender==='male'&&isMale(voices[i].name)) return voices[i]; }
+  for(var j=0; j<voices.length; j++) { if(voices[j].lang.startsWith(lang.split('-')[0])) return voices[j]; }
   return null;
 }
-
-var speakTimer = null, speechReady = false;
-
-// Pre-warm: initialise TTS engine on first user tap (avoids 500ms+ cold-start delay)
+var speakTimer=null, speechReady=false;
 function warmUpSpeech() {
-  if (speechReady) return;
-  speechReady = true;
-  var u = new SpeechSynthesisUtterance('');
-  u.volume = 0; u.rate = 1;
+  if(speechReady) return; speechReady=true;
+  var u=new SpeechSynthesisUtterance(''); u.volume=0; u.rate=1;
   window.speechSynthesis.speak(u);
-  document.removeEventListener('click', warmUpSpeech);
-  document.removeEventListener('touchstart', warmUpSpeech);
+  document.removeEventListener('click',warmUpSpeech); document.removeEventListener('touchstart',warmUpSpeech);
 }
-document.addEventListener('click', warmUpSpeech);
-document.addEventListener('touchstart', warmUpSpeech);
-
+document.addEventListener('click',warmUpSpeech); document.addEventListener('touchstart',warmUpSpeech);
 function speak(text, sourceEl) {
-  // Only cancel if something is actually playing
-  if (speaking) { window.speechSynthesis.cancel(); speaking = false; }
-  // Debounce: rapid clicks reset timer, only last one fires
+  if(speaking) { window.speechSynthesis.cancel(); speaking=false; }
   clearTimeout(speakTimer);
-  speakTimer = setTimeout(function() {
-    var u = new SpeechSynthesisUtterance(text);
-    u.lang = selectedLang;
-    // Try to pick a gender-matched voice (best-effort, graceful fallback)
-    if (selectedGender) {
-      var voice = findVoice(selectedLang, selectedGender);
-      if (voice) u.voice = voice;
-    }
-    u.rate = 0.85; u.volume = 1.0;
-    u.onstart = function() {
-      speaking = true;
-      emitSoundRings(sourceEl);
-    };
-    u.onend = function() { speaking = false; };
-    u.onerror = function() { speaking = false; };
+  speakTimer=setTimeout(function() {
+    var u=new SpeechSynthesisUtterance(text);
+    u.lang=selectedLang;
+    if(selectedGender) { var voice=findVoice(selectedLang,selectedGender); if(voice) u.voice=voice; }
+    u.rate=0.85; u.volume=1.0;
+    u.onstart=function(){ speaking=true; emitSoundRings(sourceEl); };
+    u.onend=function(){ speaking=false; };
+    u.onerror=function(){ speaking=false; };
     window.speechSynthesis.speak(u);
   }, 80);
 }
-
-/* Sound wave rings — originate from source element or screen center */
 function emitSoundRings(sourceEl) {
   var cx, cy;
-  if (sourceEl) {
-    var rect = sourceEl.getBoundingClientRect();
-    cx = rect.left + rect.width / 2;
-    cy = rect.top + rect.height / 2;
-  } else {
-    cx = window.innerWidth / 2;
-    cy = window.innerHeight / 2;
-  }
-  var count = 0;
-  var interval = setInterval(function() {
-    if (count >= 3 || !speaking) { clearInterval(interval); return; }
-    var ring = document.createElement('div');
-    ring.className = 'sound-ring';
-    ring.style.left = cx + 'px';
-    ring.style.top = cy + 'px';
-    document.body.appendChild(ring);
-    setTimeout(function() { ring.remove(); }, 1300);
+  if(sourceEl) { var rect=sourceEl.getBoundingClientRect(); cx=rect.left+rect.width/2; cy=rect.top+rect.height/2; }
+  else { cx=window.innerWidth/2; cy=window.innerHeight/2; }
+  var count=0;
+  var interval=setInterval(function() {
+    if(count>=3||!speaking) { clearInterval(interval); return; }
+    var ring=document.createElement('div'); ring.className='sound-ring';
+    ring.style.left=cx+'px'; ring.style.top=cy+'px';
+    document.body.appendChild(ring); setTimeout(function(){ ring.remove(); },1300);
     count++;
   }, 300);
 }
 
-/* ═══════════════════════════════════════════════
-   IMAGES
-   ═══════════════════════════════════════════════ */
-var IMG = {"Acer":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Camellia":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Camphora":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Castanea":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Castanopsis":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Celtis":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Citrus":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Cunninghamia":["01.jpg","02.jpg","03.jpg","04.jpg"],"Diospyros":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Elaeocarpus":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Eucalyptus":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Ficus":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg"],"Ilex":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Juglans":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Liquidambar":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Litsea":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Magnolia":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Malus":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Metasequoia":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Michelia":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Olea":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Ormosia":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Phoebe":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Phyllostachys":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Pinus":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Populus":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Prunus":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Quercus":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Rhododendron":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Rosa":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Schima":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Styrax":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Taxus":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Toona":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Toxicodendron":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Vaccinium":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Vernicia":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Viburnum":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Vitis":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Ziziphus":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"]};
-
-function loadImages(genusName) {
-  var grid = document.getElementById('galleryGrid');
-  var empty = document.getElementById('galleryEmpty');
-  var genusTag = document.getElementById('galleryGenus');
-  // Lookup Chinese name
-  var cnName = genusName;
-  for (var pi = 0; pi < PLANTS.length; pi++) {
-    if (PLANTS[pi][1] === genusName) { cnName = PLANTS[pi][0]; break; }
-  }
-  genusTag.textContent = cnName + ' ' + genusName;
-  // Update Baidu Baike link
-  var baikeLink = document.getElementById('baikeLink');
-  var baikeHint = document.getElementById('baikeHint');
-  if (baikeLink) {
-    baikeLink.href = 'https://baike.baidu.com/item/' + encodeURIComponent(cnName);
-    baikeLink.style.display = '';
-  }
-  if (baikeHint) baikeHint.style.display = '';
-  grid.innerHTML = '';
-  empty.style.display = 'none';
-  if (IMG[genusName] && IMG[genusName].length > 0) {
-    IMG[genusName].forEach(function(filename, i) {
-      var path = 'plant-images-webp/' + genusName + '/' + filename.replace(/\.jpg$/, '.webp');
-      var wrap = document.createElement('div');
-      wrap.className = 'gallery-img-wrap scroll-reveal';
-      wrap.style.transitionDelay = (i * 0.04) + 's';
-      wrap.innerHTML =
-        '<div class="dew-drop"></div>' +
-        '<img src="' + path + '" alt="' + genusName + ' - ' + (i + 1) + '" loading="lazy">' +
-        '<div class="img-caption">' + filename.replace(/\.[^.]+$/, '').replace(/[_-]/g, ' ') + '</div>';
-      wrap.addEventListener('click', function() { openLightbox(path); });
-      grid.appendChild(wrap);
-      // Trigger reveal after append
-      requestAnimationFrame(function() {
-        wrap.classList.add('visible');
-      });
-    });
-  } else {
-    empty.style.display = 'block';
-    empty.innerHTML = '<div class="icon">&#x1F341;</div><div>「' + genusName + '」暂无本地图片</div>';
-  }
-}
-
-function openLightbox(url) {
-  document.getElementById('lightboxImg').src = url;
-  document.getElementById('lightbox').classList.add('show');
-  document.body.style.overflow = 'hidden';
-}
-function closeLightbox() {
-  document.getElementById('lightbox').classList.remove('show');
-  document.body.style.overflow = '';
-}
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') {
-    if (document.getElementById('shortcutsOverlay').classList.contains('show')) closeShortcuts();
-    else if (document.getElementById('helpOverlay').classList.contains('show')) closeHelp();
-    else closeLightbox();
-  }
-});
-
-/* ═══════════════════════════════════════════════
-   HELP MODAL
-   ═══════════════════════════════════════════════ */
-function openHelp() {
-  document.getElementById('helpOverlay').classList.add('show');
-  document.body.style.overflow = 'hidden';
-}
-function closeHelp(e) {
-  if (e && e.target !== document.getElementById('helpOverlay')) return;
-  document.getElementById('helpOverlay').classList.remove('show');
-  document.body.style.overflow = '';
-}
-// First-time auto-show (once per browser)
+/* ── PARTICLES (Page Visibility aware) ── */
 (function(){
-  try {
-    if (!localStorage.getItem('herbarium-help-shown')) {
-      setTimeout(function() { openHelp(); }, 800);
-      localStorage.setItem('herbarium-help-shown', '1');
+  var canvas=document.getElementById('natureCanvas'), ctx=canvas.getContext('2d');
+  var W, H, particles=[], mouseX=innerWidth/2, mouseY=innerHeight/2;
+  var targetMouseX=mouseX, targetMouseY=mouseY, windBias=0, targetWind=0;
+  var pageVisible=true;
+
+  function resize() { W=canvas.width=innerWidth; H=canvas.height=innerHeight; }
+  resize(); window.addEventListener('resize',resize);
+  document.addEventListener('mousemove',function(e){ targetMouseX=e.clientX; targetMouseY=e.clientY; targetWind=((e.clientX-W/2)/W)*0.8; });
+  document.addEventListener('touchmove',function(e){ var t=e.touches[0]; targetMouseX=t.clientX; targetMouseY=t.clientY; targetWind=((t.clientX-W/2)/W)*0.8; },{passive:true});
+  document.addEventListener('visibilitychange',function(){ pageVisible=!document.hidden; });
+
+  function getSeasonColors() {
+    var style=getComputedStyle(document.documentElement);
+    function rgb(v) { var parts=v.split(',').map(function(s){ return parseInt(s.trim()); }); return parts.length===3?parts:[90,155,80]; }
+    return { pollen:rgb(style.getPropertyValue('--pollen').trim()), leaf1:rgb(style.getPropertyValue('--leaf-1').trim()), leaf2:rgb(style.getPropertyValue('--leaf-2').trim()), petal:rgb(style.getPropertyValue('--petal').trim()), firefly:rgb(style.getPropertyValue('--firefly').trim()), spark:rgb(style.getPropertyValue('--spark').trim()) };
+  }
+  var seasonColors=getSeasonColors();
+
+  function Particle() { this.reset(); }
+  Particle.prototype.reset=function() {
+    var r=Math.random(); this.x=Math.random()*W; this.age=0; this.maxAge=Math.random()*500+400;
+    // Fireflies: spawn strictly from bottom edge, drift upward
+    if(r<0.06){ this.type=7; this.x=Math.random()*W; this.y=H+5; this.size=Math.random()*7+2; this.vx=(Math.random()-0.5)*0.25; this.vy=-(Math.random()*0.15+0.03); this.opacity=0; this.targetOpacity=Math.random()*0.5+0.25; this.fadePhase=Math.random()*Math.PI*2; this.fadeSpeed=Math.random()*0.012+0.004; this.pulseSpeed=Math.random()*0.03+0.015; this.pulseAmp=Math.random()*0.35+0.2; this.baseSize=this.size; this.aspectRatio=1; this.lifePhase=0; }
+    else if(r<0.12){ this.type=3; this.x=Math.random()*W; this.y=H+5; this.size=Math.random()*3+2.5; this.vx=(Math.random()-0.5)*0.3; this.vy=-(Math.random()*0.15+0.03); this.opacity=0.6; this.pulseSpeed=Math.random()*0.05+0.02; this.pulseAmp=Math.random()*0.3+0.2; this.baseSize=this.size; this.aspectRatio=1; }
+    // Top particles: smaller, from top edge, drift down through upper quarter
+    else if(r<0.45){ this.type=0; this.y=-5; this.size=Math.random()*1.8+0.8; this.vx=Math.random()*0.2+0.08; this.vy=Math.random()*0.12+0.03; this.opacity=Math.random()*0.5+0.15; this.swayPhase=Math.random()*Math.PI*2; this.swaySpeed=Math.random()*0.015+0.004; this.aspectRatio=0.7; }
+    else if(r<0.68){ this.type=1; this.y=-5; this.size=Math.random()*6+3; this.vx=Math.random()*0.35+0.15; this.vy=Math.random()*0.3+0.15; this.opacity=Math.random()*0.2+0.2; this.swayPhase=Math.random()*Math.PI*2; this.swaySpeed=Math.random()*0.02+0.008; this.aspectRatio=Math.random()*0.2+0.3; }
+    else if(r<0.85){ this.type=2; this.y=-5; this.size=Math.random()*5+3; this.vx=Math.random()*0.25+0.1; this.vy=Math.random()*0.2+0.1; this.opacity=Math.random()*0.2+0.2; this.swayPhase=Math.random()*Math.PI*2; this.swaySpeed=Math.random()*0.018+0.006; this.aspectRatio=Math.random()*0.3+0.5; }
+    else if(r<0.94){ this.type=4; this.y=-5; this.size=Math.random()*1.2+0.3; this.vx=Math.random()*0.1+0.03; this.vy=Math.random()*0.06+0.02; this.opacity=Math.random()*0.35+0.15; this.swayPhase=Math.random()*Math.PI*2; this.swaySpeed=Math.random()*0.01+0.003; this.aspectRatio=0.3; }
+    else { this.type=5; this.y=-5; this.size=Math.random()*1.5+0.8; this.vx=Math.random()*0.15+0.05; this.vy=Math.random()*0.15+0.05; this.opacity=Math.random()*0.5+0.35; this.pulseSpeed=Math.random()*0.03+0.01; this.pulseAmp=Math.random()*0.4+0.2; }
+    this.swayAmp=Math.random()*25+8;
+  };
+  Particle.prototype.update=function() {
+    this.age++; if(this.age>this.maxAge) this.reset();
+    var wind=windBias*(0.5+this.size/20), topQ=H*0.25, botQ=H*0.75, isFirefly=this.type===3||this.type===7;
+    this.x+=this.vx+wind; this.y+=this.vy;
+    // Fireflies: gentle cursor attraction, stay in bottom 25%
+    if(this.type===3){ var dx=targetMouseX-this.x, dy=targetMouseY-this.y, dist=Math.sqrt(dx*dx+dy*dy); if(dist<200){ this.x+=dx*0.008; this.y+=dy*0.008; } }
+    if(this.type===7){ this.lifePhase+=this.fadeSpeed; this.opacity=this.targetOpacity*(0.4+0.6*Math.abs(Math.sin(this.lifePhase))); }
+    // Firefly: reset if floats above bottom 25% (allow entering from below screen)
+    if(isFirefly) { if(this.y<botQ-20) this.reset(); if(this.x<-10) this.x=W; if(this.x>W+10) this.x=0; }
+    // Other: reset if sinks below top 25% (allow entering from above screen)
+    else { if(this.y>topQ+20) this.reset(); if(this.x<-40) this.x=W+40; if(this.x>W+40) this.x=-40; }
+  };
+  Particle.prototype.draw=function() {
+    // Life-cycle fade: gentle birth, long fade-out toward end of life
+    var lifeFadeIn=Math.min(1,this.age/120);
+    var lifeFadeOut=Math.min(1,(this.maxAge-this.age)/200);
+    var lifeFade=Math.min(lifeFadeIn,lifeFadeOut);
+
+    var isFirefly=this.type===3||this.type===7;
+    var baseAlpha=isFirefly?this.opacity:this.opacity;
+    // Fireflies have their own pulse; others use life-cycle fade as primary alpha driver
+    var alpha=isFirefly?baseAlpha:baseAlpha*lifeFade;
+
+    // Zone boundary fade: wide, smooth transition at zone edges
+    var topQ=H*0.25, botQ=H*0.75, zoneFade=1, margin=80;
+    if(isFirefly) {
+      // Enter from screen bottom — fade in
+      if(this.y>H-margin) { zoneFade=(H-this.y)/margin; }
+      // Approach upper zone limit — fade out
+      else if(this.y<botQ+margin) { zoneFade=(this.y-botQ)/margin; }
+    } else {
+      // Enter from screen top — fade in
+      if(this.y<margin) { zoneFade=this.y/margin; }
+      // Approach lower zone limit — fade out over extended range
+      else if(this.y>topQ-margin) { zoneFade=(topQ+20-this.y)/(margin+20); }
     }
-  } catch(e) {}
+    if(zoneFade<0) zoneFade=0; if(zoneFade>1) zoneFade=1;
+    // Multiply zone fade with firefly pulse for type 3
+    if(this.type===3) alpha=this.opacity*(0.6+this.pulseAmp*Math.sin(this.age*this.pulseSpeed));
+    alpha*=zoneFade;
+    if(alpha<0.002) return;
+    var sc=this.type<=2?seasonColors.leaf1:this.type===3||this.type===7?seasonColors.firefly:this.type===4?seasonColors.pollen:seasonColors.spark;
+    ctx.save(); ctx.translate(this.x,this.y);
+    if(this.type===0){ ctx.rotate(this.swayPhase); ctx.fillStyle='rgba('+sc[0]+','+sc[1]+','+sc[2]+','+alpha+')'; ctx.beginPath(); ctx.ellipse(0,0,this.size,this.size*this.aspectRatio,0,0,Math.PI*2); ctx.fill(); }
+    else if(this.type===1||this.type===2){ ctx.rotate(this.swayPhase*0.5); ctx.fillStyle='rgba('+sc[0]+','+sc[1]+','+sc[2]+','+alpha+')'; ctx.beginPath(); ctx.ellipse(0,0,this.size,this.size*this.aspectRatio,0,0,Math.PI*2); ctx.fill(); if(this.type===1&&this.size>8){ ctx.strokeStyle='rgba(255,255,255,'+alpha*0.12+')'; ctx.lineWidth=0.3; ctx.beginPath(); ctx.moveTo(-this.size*0.65,0); ctx.lineTo(this.size*0.65,0); ctx.stroke(); } }
+    else if(this.type===3||this.type===7){ var glow=ctx.createRadialGradient(0,0,0,0,0,this.size*(this.type===7?2.5:2)); glow.addColorStop(0,'rgba('+sc[0]+','+sc[1]+','+sc[2]+','+alpha+')'); glow.addColorStop(0.5,'rgba('+sc[0]+','+sc[1]+','+sc[2]+','+alpha*0.3+')'); glow.addColorStop(1,'rgba('+sc[0]+','+sc[1]+','+sc[2]+',0)'); ctx.fillStyle=glow; ctx.beginPath(); ctx.arc(0,0,this.size*(this.type===7?2.5:2),0,Math.PI*2); ctx.fill(); }
+    else if(this.type===4){ ctx.fillStyle='rgba('+sc[0]+','+sc[1]+','+sc[2]+','+alpha+')'; ctx.beginPath(); ctx.ellipse(0,0,this.size,this.size*0.3,0,0,Math.PI*2); ctx.fill(); }
+    else if(this.type===5){ ctx.fillStyle='rgba('+sc[0]+','+sc[1]+','+sc[2]+','+alpha+')'; ctx.beginPath(); ctx.arc(0,0,this.size,0,Math.PI*2); ctx.fill(); }
+    ctx.restore();
+  };
+
+  var particleCount=innerWidth<640?65:210;
+  for(var i=0; i<particleCount; i++) particles.push(new Particle());
+
+  function updateSeasonColors() { seasonColors=getSeasonColors(); }
+  var animFrameSkip=innerWidth<640?2:1, animFrameCount=0;
+
+  function animate() {
+    animFrameCount++;
+    if(animFrameCount%animFrameSkip!==0||!pageVisible) { requestAnimationFrame(animate); return; }
+    windBias+=(targetWind-windBias)*0.03;
+    mouseX+=(targetMouseX-mouseX)*0.08; mouseY+=(targetMouseY-mouseY)*0.08;
+    ctx.clearRect(0,0,W,H);
+    for(var i=0; i<particles.length; i++) { particles[i].update(); particles[i].draw(); }
+    // Connecting tendrils
+    for(var i=0; i<particles.length; i++) {
+      if(particles[i].type!==3) continue;
+      for(var j=i+1; j<particles.length; j++) {
+        if(particles[j].type!==3) continue;
+        var dx=particles[i].x-particles[j].x, dy=particles[i].y-particles[j].y, dist=Math.sqrt(dx*dx+dy*dy);
+        if(dist<140) { var alpha=((140-dist)/140)*0.05, fc=seasonColors.firefly; ctx.beginPath(); ctx.moveTo(particles[i].x,particles[i].y); ctx.lineTo(particles[j].x,particles[j].y); ctx.strokeStyle='rgba('+fc[0]+','+fc[1]+','+fc[2]+','+alpha+')'; ctx.lineWidth=0.5; ctx.stroke(); }
+      }
+    }
+    requestAnimationFrame(animate);
+  }
+  animate();
+  window._particleUpdateColors=updateSeasonColors;
 })();
 
-/* ═══════════════════════════════════════════════
-   BROWSE
-   ═══════════════════════════════════════════════ */
-function selectGenus(cn, la) {
-  document.querySelectorAll('.plant-card').forEach(function(c) { c.classList.remove('selected'); });
-  document.querySelectorAll('.plant-card').forEach(function(c) {
-    if (c.querySelector('.cn').textContent === cn) c.classList.add('selected');
-  });
-  loadImages(la);
-  updateCardIndicators();
-  // Scroll gallery into view
-  document.getElementById('gallerySection').scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
+/* ── CUSTOM CURSOR ── */
+(function(){
+  var glow=document.getElementById('cursorGlow'), leaf=document.getElementById('cursorLeaf');
+  var gx=-200, gy=-200, tgx=-200, tgy=-200, lx=-200, ly=-200;
+  document.addEventListener('mousemove',function(e){ tgx=e.clientX; tgy=e.clientY; lx=e.clientX; ly=e.clientY; glow.style.opacity='1'; leaf.style.opacity='1'; });
+  document.addEventListener('mouseleave',function(){ glow.style.opacity='0'; leaf.style.opacity='0'; });
+  document.addEventListener('mousedown',function(){ leaf.classList.add('pressing'); });
+  document.addEventListener('mouseup',function(){ leaf.classList.remove('pressing'); });
+  document.addEventListener('mouseover',function(e){ var t=e.target; if(t.closest('.plant-card')||t.closest('.gallery-img-wrap')||t.closest('.flashcard-inner')||t.closest('button')||t.closest('input')||t.closest('select')) leaf.classList.add('on-card'); });
+  document.addEventListener('mouseout',function(e){ var t=e.target; if(t.closest('.plant-card')||t.closest('.gallery-img-wrap')||t.closest('.flashcard-inner')||t.closest('button')||t.closest('input')||t.closest('select')) leaf.classList.remove('on-card'); });
+  (function animCursor(){ gx+=(tgx-gx)*0.12; gy+=(tgy-gy)*0.12; glow.style.left=gx+'px'; glow.style.top=gy+'px'; leaf.style.left=lx+'px'; leaf.style.top=ly+'px'; requestAnimationFrame(animCursor); })();
+})();
 
+/* ── SEASON SYSTEM ── */
+var currentSeason='summer';
+function setSeason(season) {
+  if(season===currentSeason) return;
+  currentSeason=season;
+  try{localStorage.setItem('herbarium-season',season)}catch(e){}
+
+  function doSwitch(){
+    document.documentElement.setAttribute('data-season',season);
+    document.querySelectorAll('.season-pill').forEach(function(p){ p.classList.toggle('active',p.dataset.season===season); p.setAttribute('aria-checked',p.dataset.season===season?'true':'false'); });
+  }
+
+  if(document.startViewTransition){
+    // Native crossfade: browser captures old/new snapshots and blends them
+    document.startViewTransition(function(){ doSwitch(); });
+  } else {
+    // Fallback: barely-there overlay to soften the cut
+    var overlay=document.getElementById('seasonOverlay');
+    overlay.style.transition='none';
+    overlay.style.opacity='0.12';
+    doSwitch();
+    requestAnimationFrame(function(){
+      overlay.style.transition='opacity 0.5s ease-out';
+      overlay.style.opacity='0';
+    });
+  }
+
+  if(window._particleUpdateColors) setTimeout(function(){ window._particleUpdateColors(); },100);
+}
+document.querySelectorAll('.season-pill').forEach(function(pill){ pill.addEventListener('click',function(){ setSeason(this.dataset.season); }); });
+try {
+  var saved=localStorage.getItem('herbarium-season');
+  if(saved) setSeason(saved);
+  else if(window.matchMedia&&window.matchMedia('(prefers-color-scheme:dark)').matches) setSeason('dusk');
+  else document.querySelector('.season-pill[data-season="summer"]').classList.add('active');
+} catch(e) {}
+
+/* ── TAB INDICATOR ── */
+(function(){
+  var tabs=document.querySelectorAll('.tab-btn'), indicator=document.getElementById('tabIndicator'), tabContainer=document.getElementById('tabContainer');
+  function updateIndicator(activeBtn) { var cr=tabContainer.getBoundingClientRect(), br=activeBtn.getBoundingClientRect(); indicator.style.left=(br.left-cr.left)+'px'; indicator.style.width=br.width+'px'; }
+  var activeTab=document.querySelector('.tab-btn.active');
+  if(activeTab) setTimeout(function(){ updateIndicator(activeTab); },100);
+  tabs.forEach(function(btn){
+    btn.addEventListener('click',function(){
+      tabs.forEach(function(b){ b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
+      btn.classList.add('active'); btn.setAttribute('aria-selected','true');
+      updateIndicator(btn);
+      var panelId=btn.dataset.panel;
+      document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active','enter'); });
+      var panel=document.getElementById(panelId); panel.classList.add('active');
+      requestAnimationFrame(function(){ panel.classList.add('enter'); });
+      if(panelId==='quiz'&&quizIndex<0) nextQuestion();
+      if(panelId==='flashcard') updateFlashcardImages();
+    });
+  });
+  window.addEventListener('resize',function(){ var active=document.querySelector('.tab-btn.active'); if(active) updateIndicator(active); });
+})();
+
+/* ── SCROLL REVEAL ── */
+(function(){
+  if('IntersectionObserver' in window) {
+    var observer=new IntersectionObserver(function(entries){ entries.forEach(function(entry){ if(entry.isIntersecting){ entry.target.classList.add('visible'); observer.unobserve(entry.target); } }); },{threshold:0.15});
+    document.querySelectorAll('.scroll-reveal').forEach(function(el){ observer.observe(el); });
+  } else { document.querySelectorAll('.scroll-reveal').forEach(function(el){ el.classList.add('visible'); }); }
+})();
+
+/* ── BACK TO TOP ── */
+(function(){
+  var btn=document.getElementById('backToTop');
+  window.addEventListener('scroll',function(){ if(window.scrollY>300) btn.classList.add('show'); else btn.classList.remove('show'); },{passive:true});
+  if(window.scrollY>300) btn.classList.add('show');
+})();
+function scrollToTop() { window.scrollTo({top:0,behavior:'smooth'}); }
+
+/* ── DEW-DROP / GLOSS HOVER ── */
+(function(){
+  document.addEventListener('mousemove',function(e){
+    document.querySelectorAll('.gallery-img-wrap:hover .dew-drop').forEach(function(drop){
+      var rect=drop.parentElement.getBoundingClientRect(), x=((e.clientX-rect.left)/rect.width)*100, y=((e.clientY-rect.top)/rect.height)*100;
+      drop.style.background='radial-gradient(circle at '+x+'% '+y+'%, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.08) 25%, transparent 55%)';
+    });
+    document.querySelectorAll('.flashcard-inner:hover .flashcard-gloss').forEach(function(gloss){
+      var face=gloss.parentElement.querySelector('.flashcard-face:not(.back)')||gloss.parentElement.querySelector('.flashcard-face');
+      if(!face) return;
+      var rect=face.getBoundingClientRect(), x=((e.clientX-rect.left)/rect.width)*100, y=((e.clientY-rect.top)/rect.height)*100;
+      gloss.style.background='radial-gradient(circle at '+x+'% '+y+'%, rgba(255,255,255,0.18) 0%, transparent 55%)';
+    });
+  });
+})();
+
+/* ── GALLERY / IMAGES ── */
+function loadImages(genusName) {
+  var grid=document.getElementById('galleryGrid'), empty=document.getElementById('galleryEmpty'), genusTag=document.getElementById('galleryGenus');
+  var cnName=genusName;
+  for(var pi=0; pi<PLANTS.length; pi++) { if(PLANTS[pi][1]===genusName) { cnName=PLANTS[pi][0]; break; } }
+  genusTag.textContent=cnName+' '+genusName;
+  var baikeLink=document.getElementById('baikeLink'), baikeHint=document.getElementById('baikeHint');
+  if(baikeLink) { baikeLink.href='https://baike.baidu.com/item/'+encodeURIComponent(cnName); baikeLink.style.display=''; }
+  if(baikeHint) baikeHint.style.display='';
+  grid.innerHTML=''; empty.style.display='none';
+  if(IMG[genusName]&&IMG[genusName].length>0) {
+    IMG[genusName].forEach(function(filename,i){
+      var path='plant-images-webp/'+genusName+'/'+filename.replace(/\.jpg$/,'.webp');
+      var wrap=document.createElement('div'); wrap.className='gallery-img-wrap';
+      wrap.style.transitionDelay=(i*0.04)+'s';
+      wrap.innerHTML='<div class="dew-drop"></div><img src="'+path+'" alt="'+cnName+' '+genusName+' - '+(i+1)+'" loading="lazy"><div class="img-caption">'+filename.replace(/\.[^.]+$/,'').replace(/[_-]/g,' ')+'</div>';
+      wrap.addEventListener('click',function(){ openLightbox(path); });
+      grid.appendChild(wrap);
+    });
+  } else { empty.style.display='block'; empty.innerHTML='<div class="icon">🍁</div><div>「'+genusName+'」暂无本地图片</div>'; }
+}
+function openLightbox(url) {
+  document.getElementById('lightboxImg').src=url; document.getElementById('lightbox').classList.add('show'); document.body.style.overflow='hidden';
+}
+function closeLightbox() { document.getElementById('lightbox').classList.remove('show'); document.body.style.overflow=''; }
+document.addEventListener('keydown',function(e){ if(e.key==='Escape'){ if(document.getElementById('shortcutsOverlay')&&document.getElementById('shortcutsOverlay').classList.contains('show')) closeShortcuts(); else if(document.getElementById('helpOverlay').classList.contains('show')) closeHelp(); else closeLightbox(); } });
+
+/* ── HELP MODAL ── */
+function openHelp() { document.getElementById('helpOverlay').classList.add('show'); document.body.style.overflow='hidden'; }
+function closeHelp(e) { if(e&&e.target!==document.getElementById('helpOverlay')) return; document.getElementById('helpOverlay').classList.remove('show'); document.body.style.overflow=''; }
+(function(){ try{ if(!localStorage.getItem('herbarium-help-shown')){ setTimeout(function(){ openHelp(); },800); localStorage.setItem('herbarium-help-shown','1'); } }catch(e){} })();
+
+/* ── BROWSE ── */
+function selectGenus(cn, la) {
+  document.querySelectorAll('.plant-card').forEach(function(c){ c.classList.remove('selected'); });
+  document.querySelectorAll('.plant-card').forEach(function(c){ if(c.querySelector('.cn').textContent===cn) c.classList.add('selected'); });
+  loadImages(la); updateCardIndicators();
+  document.getElementById('gallerySection').scrollIntoView({behavior:'smooth',block:'start'});
+}
 function buildBrowseGrid() {
-  var grid = document.getElementById('browseGrid');
-  grid.innerHTML = '';
-  PLANTS.forEach(function(item, idx) {
-    var cn = item[0], la = item[1];
-    var card = document.createElement('div');
-    card.className = 'plant-card animate-in';
-    card.style.animationDelay = (idx * 0.02) + 's';
-    card.dataset.la = la;
-    card.innerHTML =
-      '<div><div class="cn">' + cn + '</div><div class="la">' + la + '</div></div>' +
-      '<button class="speak-btn" data-tooltip="听取发音">&#x1F50A;</button>';
-    card.addEventListener('click', function(e) {
-      if (!e.target.closest('.speak-btn')) selectGenus(cn, la);
-    });
-    card.querySelector('.speak-btn').addEventListener('click', function(e) {
-      e.stopPropagation(); speak(la, e.currentTarget);
-    });
+  var grid=document.getElementById('browseGrid'); grid.innerHTML='';
+  PLANTS.forEach(function(item,idx){
+    var cn=item[0], la=item[1];
+    var card=document.createElement('div'); card.className='plant-card animate-in';
+    card.style.animationDelay=(idx*0.02)+'s'; card.dataset.la=la;
+    card.setAttribute('tabindex','0'); card.setAttribute('role','button');
+    card.setAttribute('aria-label',cn+' '+la);
+    card.innerHTML='<div><div class="cn">'+cn+'</div><div class="la">'+la+'</div></div><button class="speak-btn" data-tooltip="听取发音" aria-label="听取 '+cn+' 发音">🔊</button>';
+    card.addEventListener('click',function(e){ if(!e.target.closest('.speak-btn')) selectGenus(cn,la); });
+    card.addEventListener('keydown',function(e){ if(e.key==='Enter'&&!e.target.closest('.speak-btn')) selectGenus(cn,la); });
+    card.querySelector('.speak-btn').addEventListener('click',function(e){ e.stopPropagation(); speak(la,e.currentTarget); });
     grid.appendChild(card);
   });
 }
 
-/* ═══════════════════════════════════════════════
-   FLASHCARD
-   ═══════════════════════════════════════════════ */
-var fcIndex = 0, fcOrder = [], fcFlipped = false;
-for (var i = 0; i < PLANTS.length; i++) fcOrder.push(i);
+/* ── FLASHCARD ── */
+var fcIndex=0, fcOrder=[], fcFlipped=false;
+for(var i=0; i<PLANTS.length; i++) fcOrder.push(i);
 
 function renderFlashcard() {
-  var cn = PLANTS[fcOrder[fcIndex]][0];
-  var la = PLANTS[fcOrder[fcIndex]][1];
-  document.getElementById('fcName').textContent = cn;
-  document.getElementById('fcNameBack').textContent = la;
-  document.getElementById('fcLabel').textContent = fcFlipped ? 'Nomen Latinum' : '中文名';
-  document.getElementById('flashcardInner').classList.toggle('flipped', fcFlipped);
-  // Update learning status
-  var e = getEntry(la);
-  var boxNames = ['新词', '薄弱', '初学', '熟悉', '已掌握', '归档'];
-  var statusEl = document.getElementById('fcStatus');
-  if (statusEl) {
-    statusEl.textContent = 'Box ' + e.box + ' · ' + (boxNames[e.box] || '') +
-      '  |  见过 ' + e.seen + ' 次  |  答对 ' + e.correct + ' 次' +
-      (e.focus ? '  |  ⭐ 重点' : '');
-  }
+  var cn=PLANTS[fcOrder[fcIndex]][0], la=PLANTS[fcOrder[fcIndex]][1];
+  document.getElementById('fcName').textContent=cn;
+  document.getElementById('fcNameBack').textContent=la;
+  document.getElementById('fcLabel').textContent=fcFlipped?'Nomen Latinum':'中文名';
+  document.getElementById('flashcardInner').classList.toggle('flipped',fcFlipped);
+  var e=getEntry(la), boxNames=['新词','薄弱','初学','熟悉','已掌握','归档'];
+  var statusEl=document.getElementById('fcStatus');
+  if(statusEl) statusEl.textContent='Box '+e.box+' · '+(boxNames[e.box]||'')+'  |  见过 '+e.seen+' 次  |  答对 '+e.correct+' 次'+(e.focus?'  |  ⭐ 重点':'');
 }
 function updateFlashcardImages() { loadImages(PLANTS[fcOrder[fcIndex]][1]); }
-function speakFlashcard(btn) { speak(PLANTS[fcOrder[fcIndex]][1], btn); }
+function speakFlashcard(btn) { speak(PLANTS[fcOrder[fcIndex]][1],btn); }
 function flipCard() {
-  fcFlipped = !fcFlipped;
-  document.getElementById('flashcardInner').classList.toggle('flipped', fcFlipped);
-  document.getElementById('fcLabel').textContent = fcFlipped ? 'Nomen Latinum' : '中文名';
-  if (fcFlipped) { recordSeen(PLANTS[fcOrder[fcIndex]][1]); speak(PLANTS[fcOrder[fcIndex]][1], document.getElementById('flashcardInner')); updateFlashcardImages(); }
-  // Lock buttons briefly to avoid misclick before seeing answer
+  fcFlipped=!fcFlipped;
+  document.getElementById('flashcardInner').classList.toggle('flipped',fcFlipped);
+  document.getElementById('fcLabel').textContent=fcFlipped?'Nomen Latinum':'中文名';
+  if(fcFlipped) { recordSeen(PLANTS[fcOrder[fcIndex]][1]); speak(PLANTS[fcOrder[fcIndex]][1],document.getElementById('flashcardInner')); updateFlashcardImages(); }
   lockFcButtons();
 }
-// ── Flashcard: 认识 (know it) ──
 function lockFcButtons() {
-  var btns = document.querySelectorAll('.fc-mastery-btns .btn-mastery');
-  btns.forEach(function(b) { b.disabled = true; });
-  clearTimeout(window._fcLockTimer);
-  window._fcLockTimer = setTimeout(function() {
-    btns.forEach(function(b) { b.disabled = false; });
-  }, 400);
+  var btns=document.querySelectorAll('.fc-mastery-btns .btn-mastery'); btns.forEach(function(b){ b.disabled=true; });
+  clearTimeout(window._fcLockTimer); window._fcLockTimer=setTimeout(function(){ btns.forEach(function(b){ b.disabled=false; }); },400);
 }
 function markKnow() {
-  lockFcButtons();
-  var la = PLANTS[fcOrder[fcIndex]][1];
-  recordSeen(la);
-  recordCorrect(la);
-  updateFilterCounts();
-  if (fcOrder.length <= 1) {
-    for (var i = 0; i < PLANTS.length; i++) fcOrder.push(i);
-  }
-  var nextIdx = pickWeightedCard(fcOrder);
-  // Avoid showing the same card twice in a row
-  var retries = 0;
-  while (nextIdx === fcIndex && fcOrder.length > 1 && retries < 20) {
-    nextIdx = pickWeightedCard(fcOrder); retries++;
-  }
-  fcIndex = nextIdx;
-  fcFlipped = false; renderFlashcard(); updateFlashcardImages();
-  updateProgressBar(); updateCardIndicators();
+  lockFcButtons(); var la=PLANTS[fcOrder[fcIndex]][1]; recordSeen(la); recordCorrect(la); updateFilterCounts();
+  if(fcOrder.length<=1) { for(var i=0; i<PLANTS.length; i++) fcOrder.push(i); }
+  var nextIdx=pickWeightedCard(fcOrder), retries=0;
+  while(nextIdx===fcIndex&&fcOrder.length>1&&retries<20) { nextIdx=pickWeightedCard(fcOrder); retries++; }
+  fcIndex=nextIdx; fcFlipped=false; renderFlashcard(); updateFlashcardImages(); updateProgressBar(); updateCardIndicators();
 }
-// ── Flashcard: 不认识 (don't know) ──
 function markDontKnow() {
-  lockFcButtons();
-  var la = PLANTS[fcOrder[fcIndex]][1];
-  recordSeen(la);
-  recordWrong(la);
-  updateFilterCounts();
-  var nextIdx = pickWeightedCard(fcOrder);
-  // Avoid showing the same card twice in a row
-  var retries = 0;
-  while (nextIdx === fcIndex && fcOrder.length > 1 && retries < 20) {
-    nextIdx = pickWeightedCard(fcOrder); retries++;
-  }
-  fcIndex = nextIdx;
-  fcFlipped = false; renderFlashcard(); updateFlashcardImages();
+  lockFcButtons(); var la=PLANTS[fcOrder[fcIndex]][1]; recordSeen(la); recordWrong(la); updateFilterCounts();
+  var nextIdx=pickWeightedCard(fcOrder), retries=0;
+  while(nextIdx===fcIndex&&fcOrder.length>1&&retries<20) { nextIdx=pickWeightedCard(fcOrder); retries++; }
+  fcIndex=nextIdx; fcFlipped=false; renderFlashcard(); updateFlashcardImages();
 }
-// ── Flashcard: 重点 (toggle star) ──
-function markFocus() {
-  var la = PLANTS[fcOrder[fcIndex]][1];
-  toggleFocus(la);
-  updateCardIndicators();
-  updateFilterCounts();
-  updateProgressBar();
-}
+function markFocus() { var la=PLANTS[fcOrder[fcIndex]][1]; toggleFocus(la); updateCardIndicators(); updateFilterCounts(); updateProgressBar(); }
 
-/* ═══════════════════════════════════════════════
-   QUIZ
-   ═══════════════════════════════════════════════ */
-var quizIndex = -1, correctTotal = 0, wrongTotal = 0, currentAnswer = '', autoNextTimer = null;
+/* ── QUIZ ── */
+var quizIndex=-1, correctTotal=0, wrongTotal=0, currentAnswer='', autoNextTimer=null;
 
 function nextQuestion() {
-  clearAutoNext();
-  var pool = getFilteredPlants(reviewMode);
-  if (pool.length === 0) pool = getFilteredPlants('all');
-  // Avoid showing the same question twice in a row
-  var newIdx = quizIndex;
-  while (newIdx === quizIndex && pool.length > 1) {
-    newIdx = pool[Math.floor(Math.random() * pool.length)];
-  }
-  quizIndex = newIdx;
-  currentAnswer = PLANTS[quizIndex][1];
-  document.getElementById('quizChinese').textContent = PLANTS[quizIndex][0];
-  var inp = document.getElementById('quizInput');
-  inp.value = ''; inp.className = 'quiz-input';
-  document.getElementById('quizFeedback').innerHTML = '';
-  document.getElementById('btnCheck').disabled = false; inp.disabled = false;
+  clearAutoNext(); var pool=getFilteredPlants(reviewMode); if(pool.length===0) pool=getFilteredPlants('all');
+  var newIdx=quizIndex;
+  while(newIdx===quizIndex&&pool.length>1) { newIdx=pool[Math.floor(Math.random()*pool.length)]; }
+  quizIndex=newIdx; currentAnswer=PLANTS[quizIndex][1];
+  document.getElementById('quizChinese').textContent=PLANTS[quizIndex][0];
+  var inp=document.getElementById('quizInput'); inp.value=''; inp.className='quiz-input';
+  document.getElementById('quizFeedback').innerHTML='';
+  document.getElementById('btnCheck').disabled=false; inp.disabled=false;
   inp.focus(); loadImages(currentAnswer);
 }
 function forceNextQuestion() { clearAutoNext(); nextQuestion(); }
-function clearAutoNext() { if (autoNextTimer) { clearInterval(autoNextTimer); autoNextTimer = null; } }
+function clearAutoNext() { if(autoNextTimer) { clearInterval(autoNextTimer); autoNextTimer=null; } }
 
 function checkAnswer() {
-  var input = document.getElementById('quizInput').value.trim();
-  if (!input) return;
-  var fb = document.getElementById('quizFeedback'), inp = document.getElementById('quizInput');
-  if (input.toLowerCase() === currentAnswer.toLowerCase()) {
-    correctTotal++;
-    recordCorrect(currentAnswer);
-    inp.className = 'quiz-input correct locked'; inp.disabled = true;
-    document.getElementById('btnCheck').disabled = true;
-    var cd = 3;
-    fb.innerHTML = '<span class="correct-text">&#x2713; 鉴定正确！</span><div class="countdown" id="countdownText">' + cd + ' 秒后自动下一题...</div>';
+  var input=document.getElementById('quizInput').value.trim(); if(!input) return;
+  var fb=document.getElementById('quizFeedback'), inp=document.getElementById('quizInput');
+  if(input.toLowerCase()===currentAnswer.toLowerCase()) {
+    correctTotal++; recordCorrect(currentAnswer);
+    inp.className='quiz-input correct locked'; inp.disabled=true; document.getElementById('btnCheck').disabled=true;
+    var cd=3; fb.innerHTML='<span class="correct-text">✓ 鉴定正确！</span><div class="countdown" id="countdownText">'+cd+' 秒后自动下一题...</div>';
     updateScore(); clearAutoNext();
-    autoNextTimer = setInterval(function() {
-      cd--;
-      if (cd <= 0) { clearAutoNext(); nextQuestion(); }
-      else { document.getElementById('countdownText').textContent = cd + ' 秒后自动下一题...'; }
-    }, 1000);
-    // Celebration burst
-    var rect = inp.getBoundingClientRect();
-    burst(rect.left + rect.width / 2, rect.top + rect.height / 2, 40);
+    autoNextTimer=setInterval(function(){ cd--; if(cd<=0){ clearAutoNext(); nextQuestion(); } else { document.getElementById('countdownText').textContent=cd+' 秒后自动下一题...'; } },1000);
+    var rect=inp.getBoundingClientRect(); burst(rect.left+rect.width/2,rect.top+rect.height/2,40);
   } else {
-    wrongTotal++;
-    recordWrong(currentAnswer);
-    updateFilterCounts();
-    inp.className = 'quiz-input wrong';
-    fb.innerHTML = '<span class="wrong-text">&#x2717; 不正确</span>&nbsp;&nbsp;正确答案：<span class="answer">' + currentAnswer + '</span>';
-    updateScore();
-    setTimeout(function() { if (inp.className.indexOf('wrong') >= 0) inp.className = 'quiz-input'; }, 1500);
+    wrongTotal++; recordWrong(currentAnswer); updateFilterCounts();
+    inp.className='quiz-input wrong'; fb.innerHTML='<span class="wrong-text">✗ 不正确</span>&nbsp;&nbsp;正确答案：<span class="answer">'+currentAnswer+'</span>';
+    updateScore(); setTimeout(function(){ if(inp.className.indexOf('wrong')>=0) inp.className='quiz-input'; },1500);
   }
 }
-
-function revealAnswer(btn) {
-  clearAutoNext();
-  document.getElementById('quizInput').value = currentAnswer;
-  document.getElementById('quizFeedback').innerHTML = '正确答案：<span class="answer">' + currentAnswer + '</span>';
-  if (quizIndex >= 0) speak(currentAnswer, btn);
-}
-function speakCurrent(btn) { if (quizIndex >= 0) speak(currentAnswer, btn); }
-function autoCapitalize(input) {
-  if (input.value.length > 0) {
-    input.value = input.value.charAt(0).toUpperCase() + input.value.slice(1);
-  }
-}
-function resetScore() { correctTotal = 0; wrongTotal = 0; updateScore(); }
+function revealAnswer(btn) { clearAutoNext(); document.getElementById('quizInput').value=currentAnswer; document.getElementById('quizFeedback').innerHTML='正确答案：<span class="answer">'+currentAnswer+'</span>'; if(quizIndex>=0) speak(currentAnswer,btn); }
+function speakCurrent(btn) { if(quizIndex>=0) speak(currentAnswer,btn); }
+function autoCapitalize(input) { if(input.value.length>0) input.value=input.value.charAt(0).toUpperCase()+input.value.slice(1); }
+function resetScore() { correctTotal=0; wrongTotal=0; updateScore(); }
 function updateScore() {
-  document.getElementById('correctCount').textContent = correctTotal;
-  document.getElementById('wrongCount').textContent = wrongTotal;
-  var t = correctTotal + wrongTotal;
-  document.getElementById('accuracy').textContent = t > 0 ? Math.round(correctTotal / t * 100) + '%' : '-';
+  document.getElementById('correctCount').textContent=correctTotal; document.getElementById('wrongCount').textContent=wrongTotal;
+  var t=correctTotal+wrongTotal; document.getElementById('accuracy').textContent=t>0?Math.round(correctTotal/t*100)+'%':'-';
 }
-document.getElementById('quizInput').addEventListener('input', function() {
-  if (this.value.trim().length === currentAnswer.length) checkAnswer();
-});
+document.getElementById('quizInput').addEventListener('input',function(){ if(this.value.trim().length===currentAnswer.length) checkAnswer(); });
 
-/* ═══════════════════════════════════════════════
-   CELEBRATION BURST
-   ═══════════════════════════════════════════════ */
+/* ── REVIEW TOGGLE ── */
+document.querySelectorAll('#reviewToggle button').forEach(function(btn){ btn.addEventListener('click',function(){ document.querySelectorAll('#reviewToggle button').forEach(function(b){ b.classList.remove('active'); }); this.classList.add('active'); reviewMode=this.dataset.mode; updateFilterCounts(); nextQuestion(); }); });
+
+/* ── CELEBRATION BURST ── */
 function burst(x, y, count) {
-  count = count || 30;
-  var colors = [];
-  var style = getComputedStyle(document.documentElement);
-  var accent = style.getPropertyValue('--accent').trim();
-  var accent2 = style.getPropertyValue('--accent-2').trim();
-  var spark = style.getPropertyValue('--spark').trim();
-  colors = [accent, accent2, spark, '#ffffff'];
-  for (var i = 0; i < count; i++) {
-    var p = document.createElement('div');
-    p.className = 'burst-particle';
-    var angle = Math.random() * Math.PI * 2;
-    var dist = Math.random() * 70 + 25;
-    var size = Math.random() * 5 + 2;
-    var isCircle = Math.random() < 0.3;
-    p.style.cssText =
-      'left:' + x + 'px;top:' + y + 'px;' +
-      'width:' + size + 'px;height:' + size + 'px;' +
-      'background:' + colors[Math.floor(Math.random() * colors.length)] + ';' +
-      'border-radius:' + (isCircle ? '50%' : '2px') + ';' +
-      '--bx:' + Math.cos(angle) * dist + 'px;' +
-      '--by:' + Math.sin(angle) * dist + 'px;' +
-      '--br:' + (Math.random() * 720 - 360) + 'deg;';
-    document.body.appendChild(p);
-    setTimeout(function() { p.remove(); }, 1050);
+  count=count||30; var colors=[], style=getComputedStyle(document.documentElement);
+  var accent=style.getPropertyValue('--accent').trim(), accent2=style.getPropertyValue('--accent-2').trim(), spark=style.getPropertyValue('--spark').trim();
+  colors=[accent,accent2,spark,'#ffffff'];
+  for(var i=0; i<count; i++) {
+    var p=document.createElement('div'); p.className='burst-particle';
+    var angle=Math.random()*Math.PI*2, dist=Math.random()*70+25, size=Math.random()*5+2, isCircle=Math.random()<0.3;
+    p.style.cssText='left:'+x+'px;top:'+y+'px;width:'+size+'px;height:'+size+'px;background:'+colors[Math.floor(Math.random()*colors.length)]+';border-radius:'+(isCircle?'50%':'2px')+';--bx:'+Math.cos(angle)*dist+'px;--by:'+Math.sin(angle)*dist+'px;--br:'+(Math.random()*720-360)+'deg;';
+    document.body.appendChild(p); setTimeout(function(){ p.remove(); },1050);
   }
 }
 
-/* ═══════════════════════════════════════════════
-   KEYBOARD SHORTCUTS — 点击顶部 ⌨ 按钮可视化自定义
-   ═══════════════════════════════════════════════ */
-var SHORTCUT_DEFAULTS = {
-  flip:       { key: ' ',        label: '闪卡翻面',      desc: '落叶闪卡模式', keyDisplay: 'Space' },
-  dontKnow:   { key: '1',        label: '不认识',        desc: '落叶闪卡模式', keyDisplay: '1' },
-  focus:      { key: '2',        label: '切换重点',      desc: '落叶闪卡模式', keyDisplay: '2' },
-  know:       { key: '3',        label: '认识',          desc: '落叶闪卡模式', keyDisplay: '3' },
-  submit:     { key: 'Enter',    label: '提交答案',      desc: '飘叶测验模式', keyDisplay: 'Enter' },
-  backToTop:  { key: 'w',        label: '返回顶部',      desc: '全局',          keyDisplay: 'W' }
-};
+/* ── KEYBOARD SHORTCUTS ── */
+var SHORTCUT_DEFAULTS={flip:{key:' ',label:'闪卡翻面',keyDisplay:'Space'},dontKnow:{key:'1',label:'不认识',keyDisplay:'1'},focus:{key:'2',label:'切换重点',keyDisplay:'2'},know:{key:'3',label:'认识',keyDisplay:'3'},submit:{key:'Enter',label:'鉴定',keyDisplay:'Enter'},revealAnswer:{key:'r',label:'揭示答案',keyDisplay:'R'},speakQuiz:{key:'q',label:'测验发音',keyDisplay:'Q'},skipQuiz:{key:'ArrowRight',label:'下一题',keyDisplay:'→'},backToTop:{key:'w',label:'返回顶部',keyDisplay:'W'}};
+var SHORTCUTS={};
+try{ var raw=localStorage.getItem('herbarium-shortcuts-v1'); if(raw) SHORTCUTS=JSON.parse(raw); }catch(e){}
+function getShortcut(id){ return SHORTCUTS[id]||SHORTCUT_DEFAULTS[id]; }
+function getShortcutKey(id){ return getShortcut(id).key; }
+function saveShortcuts(){ try{localStorage.setItem('herbarium-shortcuts-v1',JSON.stringify(SHORTCUTS))}catch(e){} }
+function resetShortcuts(){ SHORTCUTS={}; saveShortcuts(); buildShortcutsList(); }
+function buildShortcutsList() {
+  var container=document.getElementById('shortcutsList'); if(!container) return; container.innerHTML='';
+  Object.keys(SHORTCUT_DEFAULTS).forEach(function(id){ var sc=getShortcut(id); var row=document.createElement('div'); row.className='shortcut-row'; row.innerHTML='<div class="sc-label"><strong>'+sc.label+'</strong>'+sc.keyDisplay+'</div><input class="shortcut-key-input" value="'+sc.keyDisplay+'" data-id="'+id+'" readonly>'; container.appendChild(row); });
+  document.querySelectorAll('.shortcut-key-input').forEach(function(inp){ inp.addEventListener('click',function(){ var self=this; self.classList.add('listening'); self.value='...'; function listen(e){ e.preventDefault(); var id=self.dataset.id; SHORTCUTS[id]={key:e.key,label:SHORTCUT_DEFAULTS[id].label,keyDisplay:e.key===' '?'Space':e.key}; saveShortcuts(); buildShortcutsList(); document.removeEventListener('keydown',listen); } document.addEventListener('keydown',listen); setTimeout(function(){ if(self.classList.contains('listening')){ self.classList.remove('listening'); self.value=getShortcut(self.dataset.id).keyDisplay; document.removeEventListener('keydown',listen); } },3000); }); });
+}
+buildShortcutsList();
 
-var SHORTCUTS = {};
+/* ── SHORTCUT OVERLAY ── */
+function openShortcuts() { document.getElementById('shortcutsOverlay')||(function(){ var overlay=document.createElement('div'); overlay.className='shortcuts-overlay'; overlay.id='shortcutsOverlay'; overlay.addEventListener('click',function(e){ if(e.target===overlay) closeShortcuts(); }); var panel=document.createElement('div'); panel.className='shortcuts-panel'; panel.innerHTML='<button class="shortcuts-close" onclick="closeShortcuts()" aria-label="关闭快捷键设置">&times;</button><div class="help-section"><h3>⌨ 自定义快捷键</h3><p>点击右侧输入框，按下按键即可修改。（修改后自动保存）</p></div><div id="shortcutsListOverlay"></div><div class="help-section" style="border-bottom:none;margin-top:8px;padding-bottom:0;"><button class="btn btn-outline btn-sm" onclick="resetShortcuts(); buildShortcutsListOverlay();" style="font-size:12px;">恢复默认</button></div>'; overlay.appendChild(panel); document.body.appendChild(overlay); function buildShortcutsListOverlay() { var container=document.getElementById('shortcutsListOverlay'); container.innerHTML=''; Object.keys(SHORTCUT_DEFAULTS).forEach(function(id){ var sc=getShortcut(id); var row=document.createElement('div'); row.className='shortcut-row'; row.innerHTML='<div class="sc-label"><strong>'+sc.label+'</strong>'+sc.keyDisplay+'</div><input class="shortcut-key-input" value="'+sc.keyDisplay+'" data-id="'+id+'" readonly>'; container.appendChild(row); }); document.querySelectorAll('#shortcutsListOverlay .shortcut-key-input').forEach(function(inp){ inp.addEventListener('click',function(){ var self=this; self.classList.add('listening'); self.value='...'; function listen(e){ e.preventDefault(); var id=self.dataset.id; SHORTCUTS[id]={key:e.key,label:SHORTCUT_DEFAULTS[id].label,keyDisplay:e.key===' '?'Space':e.key}; saveShortcuts(); buildShortcutsList(); buildShortcutsListOverlay(); document.removeEventListener('keydown',listen); } document.addEventListener('keydown',listen); setTimeout(function(){ if(self.classList.contains('listening')){ self.classList.remove('listening'); self.value=getShortcut(self.dataset.id).keyDisplay; document.removeEventListener('keydown',listen); } },3000); }); }); } buildShortcutsListOverlay(); window.buildShortcutsListOverlay=buildShortcutsListOverlay; })(); document.getElementById('shortcutsOverlay').classList.add('show'); document.body.style.overflow='hidden'; }
+function closeShortcuts() { document.getElementById('shortcutsOverlay').classList.remove('show'); document.body.style.overflow=''; }
 
-function loadShortcuts() {
-  try {
-    var raw = localStorage.getItem('herbarium-shortcuts');
-    if (raw) {
-      var saved = JSON.parse(raw);
-      for (var k in SHORTCUT_DEFAULTS) {
-        SHORTCUTS[k] = (saved[k] !== undefined) ? saved[k] : SHORTCUT_DEFAULTS[k].key;
-      }
-    } else {
-      for (var k in SHORTCUT_DEFAULTS) { SHORTCUTS[k] = SHORTCUT_DEFAULTS[k].key; }
-    }
-  } catch(e) {
-    for (var k in SHORTCUT_DEFAULTS) { SHORTCUTS[k] = SHORTCUT_DEFAULTS[k].key; }
+/* ── GLOBAL KEYDOWN ── */
+var shortcutLockUntil=0;
+document.addEventListener('keydown',function(e){
+  var now=Date.now(); if(now<shortcutLockUntil) return;
+  var isInput=e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA'||e.target.isContentEditable;
+  var locked=false;
+  if(!isInput) {
+    if(e.key===getShortcutKey('flip')){ e.preventDefault(); if(!locked){ flipCard(); shortcutLockUntil=now+400; } }
+    if(e.key===getShortcutKey('dontKnow')){ e.preventDefault(); if(!locked){ markDontKnow(); shortcutLockUntil=now+400; } }
+    if(e.key===getShortcutKey('focus')){ e.preventDefault(); if(!locked){ markFocus(); shortcutLockUntil=now+400; } }
+    if(e.key===getShortcutKey('know')){ e.preventDefault(); if(!locked){ markKnow(); shortcutLockUntil=now+400; } }
+    if(e.key===getShortcutKey('backToTop')){ e.preventDefault(); if(!locked){ scrollToTop(); shortcutLockUntil=now+400; } }
   }
-}
-function saveShortcuts() {
-  try { localStorage.setItem('herbarium-shortcuts', JSON.stringify(SHORTCUTS)); } catch(e) {}
-}
-loadShortcuts();
-
-// ── Render shortcut config rows ──
-function renderShortcutRows() {
-  var container = document.getElementById('shortcutsList');
-  if (!container) return;
-  container.innerHTML = '';
-  var keys = Object.keys(SHORTCUT_DEFAULTS);
-  for (var i = 0; i < keys.length; i++) {
-    var id = keys[i];
-    var def = SHORTCUT_DEFAULTS[id];
-    var currentKey = SHORTCUTS[id];
-    var display = currentKey === ' ' ? 'Space' : currentKey;
-    var row = document.createElement('div');
-    row.className = 'shortcut-row';
-    row.innerHTML =
-      '<span class="sc-label"><strong>' + def.label + '</strong> <span style="opacity:0.6;font-size:11px;">' + def.desc + '</span></span>' +
-      '<input class="shortcut-key-input" data-sc-id="' + id + '" value="' + display + '" readonly>';
-    container.appendChild(row);
+  if(e.key===getShortcutKey('submit')&&(document.getElementById('quiz').classList.contains('active'))){ e.preventDefault(); if(!locked){ checkAnswer(); shortcutLockUntil=now+400; } }
+  var inQuiz=document.getElementById('quiz').classList.contains('active');
+  if(inQuiz) {
+    if(e.key===getShortcutKey('revealAnswer')){ e.preventDefault(); revealAnswer(); shortcutLockUntil=now+400; }
+    if(e.key===getShortcutKey('speakQuiz')){ e.preventDefault(); speakCurrent(); shortcutLockUntil=now+400; }
+    if(e.key===getShortcutKey('skipQuiz')){ e.preventDefault(); forceNextQuestion(); shortcutLockUntil=now+400; }
   }
-  // Bind listeners
-  var inputs = container.querySelectorAll('.shortcut-key-input');
-  for (var j = 0; j < inputs.length; j++) {
-    inputs[j].addEventListener('click', function() { startKeyCapture(this); });
-    inputs[j].addEventListener('keydown', function(e) { captureKey(e, this); });
-  }
-}
-
-// ── Key capture ──
-var capturingInput = null;
-function startKeyCapture(input) {
-  if (capturingInput && capturingInput !== input) {
-    capturingInput.classList.remove('listening');
-  }
-  capturingInput = input;
-  input.classList.add('listening');
-  input.value = '...';
-  input.focus();
-}
-function captureKey(e, input) {
-  if (!capturingInput) return;
-  e.preventDefault();
-  e.stopPropagation();
-  var key = e.key;
-  if (key === 'Escape') {
-    // Cancel capture, restore
-    var id = input.dataset.scId;
-    var current = SHORTCUTS[id];
-    input.value = current === ' ' ? 'Space' : current;
-    input.classList.remove('listening');
-    capturingInput = null;
-    input.blur();
-    return;
-  }
-  if (key === 'Tab') return; // Allow tabbing
-  SHORTCUTS[input.dataset.scId] = key;
-  input.value = key === ' ' ? 'Space' : key;
-  input.classList.remove('listening');
-  capturingInput = null;
-  input.blur();
-  saveShortcuts();
-}
-// Cancel capture on click outside
-document.addEventListener('click', function(e) {
-  if (capturingInput && !e.target.closest('.shortcut-key-input')) {
-    var id = capturingInput.dataset.scId;
-    var current = SHORTCUTS[id];
-    capturingInput.value = current === ' ' ? 'Space' : current;
-    capturingInput.classList.remove('listening');
-    capturingInput = null;
-  }
+  if(!isInput&&e.key===getShortcutKey('backToTop')){ e.preventDefault(); if(!locked){ scrollToTop(); shortcutLockUntil=now+400; } }
 });
+window.addEventListener('blur',function(){ shortcutLockUntil=0; });
 
-function resetShortcuts() {
-  for (var k in SHORTCUT_DEFAULTS) { SHORTCUTS[k] = SHORTCUT_DEFAULTS[k].key; }
-  saveShortcuts();
-  renderShortcutRows();
-}
-
-// ── Shortcuts modal ──
-function openShortcuts() {
-  renderShortcutRows();
-  document.getElementById('shortcutsOverlay').classList.add('show');
-  document.body.style.overflow = 'hidden';
-}
-function closeShortcuts(e) {
-  if (e && e.target !== document.getElementById('shortcutsOverlay')) return;
-  if (capturingInput) {
-    var id = capturingInput.dataset.scId;
-    capturingInput.value = SHORTCUTS[id] === ' ' ? 'Space' : SHORTCUTS[id];
-    capturingInput.classList.remove('listening');
-    capturingInput = null;
-  }
-  document.getElementById('shortcutsOverlay').classList.remove('show');
-  document.body.style.overflow = '';
-}
-
-// ── Event listener ──
-var shortcutLockUntil = 0;
-document.addEventListener('keydown', function(e) {
-  // Don't intercept when capturing a shortcut key
-  if (capturingInput) return;
-
-  var tag = e.target.tagName;
-  var isInput = (tag === 'INPUT' || tag === 'TEXTAREA');
-  var isQuizInput = (e.target.id === 'quizInput');
-
-  var fcActive = document.getElementById('flashcard').classList.contains('active');
-  var qzActive = document.getElementById('quiz').classList.contains('active');
-
-  var now = Date.now();
-  var locked = now < shortcutLockUntil;
-
-  if (fcActive && !isInput) {
-    if (e.key === SHORTCUTS.flip) { e.preventDefault(); if (!locked) { flipCard(); shortcutLockUntil = now + 400; } }
-    if (e.key === SHORTCUTS.dontKnow) { e.preventDefault(); if (!locked) { markDontKnow(); shortcutLockUntil = now + 400; } }
-    if (e.key === SHORTCUTS.focus) { e.preventDefault(); if (!locked) { markFocus(); shortcutLockUntil = now + 400; } }
-    if (e.key === SHORTCUTS.know) { e.preventDefault(); if (!locked) { markKnow(); shortcutLockUntil = now + 400; } }
-  }
-  if (qzActive && isQuizInput && e.key === SHORTCUTS.submit) {
-    e.preventDefault(); if (!locked) { checkAnswer(); shortcutLockUntil = now + 400; }
-  }
-  if (!isInput && e.key === SHORTCUTS.backToTop) {
-    e.preventDefault(); if (!locked) { scrollToTop(); shortcutLockUntil = now + 400; }
-  }
-});
-// Clear lock on blur so returning user can immediately use shortcuts
-window.addEventListener('blur', function() { shortcutLockUntil = 0; });
-
-/* ═══════════════════════════════════════════════
-   INIT
-   ═══════════════════════════════════════════════ */
-buildBrowseGrid();
-renderFlashcard();
-updateProgressBar();
-updateCardIndicators();
+/* ── INIT ── */
+loadProgress(); updateFilterCounts();
+buildBrowseGrid(); renderFlashcard(); updateProgressBar(); updateCardIndicators();
 </script>
-<button id="backToTop" onclick="scrollToTop()" style="position:fixed;bottom:32px;right:28px;z-index:99999;width:44px;height:44px;border-radius:50%;border:2px solid #5a9858;background:rgba(255,255,255,0.9);color:#5a9858;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 12px rgba(0,0,0,0.15);" title="返回顶部">&#9650;</button>
+<button id="backToTop" onclick="scrollToTop()" style="position:fixed;bottom:32px;right:28px;z-index:99999;width:44px;height:44px;border-radius:50%;border:2px solid var(--accent);background:var(--surface);color:var(--accent);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-md);" title="返回顶部" aria-label="返回顶部">▲</button>
 </body>
 </html>
