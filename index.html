@@ -2176,19 +2176,25 @@ function onVoiceChange() {
   selectedLang = sel.value;
 }
 
+var speakTimer = null;
 function speak(text, sourceEl) {
-  if (speaking) { window.speechSynthesis.cancel(); speaking = false; return; }
-  var u = new SpeechSynthesisUtterance(text);
-  u.lang = selectedLang;
-  u.rate = 0.85; u.volume = 1.0;
-  u.onstart = function() {
-    speaking = true;
-    emitSoundRings(sourceEl);
-  };
-  u.onend = function() { speaking = false; };
-  u.onerror = function() { speaking = false; };
+  // Always cancel any in-flight speech immediately
   window.speechSynthesis.cancel();
-  window.speechSynthesis.speak(u);
+  speaking = false;
+  // Debounce: clear pending timer so rapid clicks don't queue up
+  clearTimeout(speakTimer);
+  speakTimer = setTimeout(function() {
+    var u = new SpeechSynthesisUtterance(text);
+    u.lang = selectedLang;
+    u.rate = 0.85; u.volume = 1.0;
+    u.onstart = function() {
+      speaking = true;
+      emitSoundRings(sourceEl);
+    };
+    u.onend = function() { speaking = false; };
+    u.onerror = function() { speaking = false; };
+    window.speechSynthesis.speak(u);
+  }, 120);
 }
 
 /* Sound wave rings — originate from source element or screen center */
