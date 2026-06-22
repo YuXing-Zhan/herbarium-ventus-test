@@ -1283,6 +1283,8 @@ const PLANTS = [
   ["刚竹属","Phyllostachys"]
 ];
 
+var IS_EDGE_ANDROID = /edga?\//i.test(navigator.userAgent) && /android/i.test(navigator.userAgent);
+
 /* ═══════════════════════════════════════════════
    LEITNER BOX LEARNING SYSTEM
    Box 0=new 1=weak 2=learning 3=familiar 4=mastered 5=archived
@@ -2161,8 +2163,14 @@ function scrollToTop() {
 var speaking = false, selectedVoice = null;
 
 function populateVoices() {
-  var voices = window.speechSynthesis.getVoices();
   var select = document.getElementById('voiceSelect');
+  // Edge Android: getVoices() breaks the API permanently if called before
+  // the browser's native TTS engine initialises. Skip voice enumeration entirely.
+  if (IS_EDGE_ANDROID) {
+    select.innerHTML = '<option value="">🔊 系统默认 (Edge)</option>';
+    return;
+  }
+  var voices = window.speechSynthesis.getVoices();
   if (!voices.length) { select.innerHTML = '<option value="">无可用语音</option>'; return; }
 
   // Gender helpers: check voice name for gender hints
@@ -2316,7 +2324,11 @@ setTimeout(populateVoices, 200);
 function speak(text) {
   if (speaking) { window.speechSynthesis.cancel(); speaking = false; return; }
   var u = new SpeechSynthesisUtterance(text);
-  if (selectedVoice) {
+  // Edge Android: don't set voice (getVoices() would break the API).
+  // Just set lang and let the browser pick its default voice.
+  if (IS_EDGE_ANDROID) {
+    u.lang = 'it-IT';
+  } else if (selectedVoice) {
     u.voice = selectedVoice;
     u.lang = selectedVoice.lang;
   } else {
