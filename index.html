@@ -1137,10 +1137,11 @@ footer {
 <div class="container">
   <!-- Top bar -->
   <div class="top-bar">
-    <select class="voice-select" id="voiceSelect" onchange="onVoiceChange()" data-tooltip="选择发音语言，推荐意大利语">
+    <select class="voice-select" id="voiceSelect" onchange="onVoiceChange()" data-tooltip="选择发音语音">
+      <option value="en-US-female">🇬🇧 英语 · 女声</option>
+      <option value="en-US-male">🇬🇧 英语 · 男声</option>
       <option value="it-IT">🇮🇹 意大利语</option>
-      <option value="de-DE">🇩🇪 德语（拉丁替代）</option>
-      <option value="en-US">🇬🇧 英语</option>
+      <option value="de-DE">🇩🇪 德语</option>
     </select>
     <div class="top-bar-right">
       <button class="help-btn" onclick="openShortcuts()" data-tooltip="自定义键盘快捷键">⌨</button>
@@ -2169,11 +2170,38 @@ function scrollToTop() {
 /* ═══════════════════════════════════════════════
    SPEECH
    ═══════════════════════════════════════════════ */
-var speaking = false, selectedLang = 'it-IT';
+var speaking = false, selectedLang = 'en-US', selectedGender = 'female';
 
 function onVoiceChange() {
   var sel = document.getElementById('voiceSelect');
-  selectedLang = sel.value;
+  var val = sel.value;
+  if (val === 'en-US-female')  { selectedLang = 'en-US'; selectedGender = 'female'; }
+  else if (val === 'en-US-male') { selectedLang = 'en-US'; selectedGender = 'male'; }
+  else { selectedLang = val; selectedGender = null; }
+}
+
+// Match voice by gender — tries getVoices() if available, graceful fallback
+function findVoice(lang, gender) {
+  var voices = window.speechSynthesis.getVoices();
+  if (!voices.length) return null;
+  var isMale = function(nm) {
+    var n = nm.toLowerCase();
+    return n.includes('male') || n.includes('david') || n.includes('mark') || n.includes('guy') || n.includes('stefan') || n.includes('matteo');
+  };
+  var isFemale = function(nm) {
+    var n = nm.toLowerCase();
+    return n.includes('female') || n.includes('zira') || n.includes('samantha') || n.includes('alice') || n.includes('elsa') || n.includes('susan') || n.includes('linda');
+  };
+  for (var i = 0; i < voices.length; i++) {
+    if (!voices[i].lang.startsWith(lang.split('-')[0])) continue;
+    if (gender === 'female' && isFemale(voices[i].name)) return voices[i];
+    if (gender === 'male'   && isMale(voices[i].name))   return voices[i];
+  }
+  // No gender match — fallback to any voice with matching language
+  for (var j = 0; j < voices.length; j++) {
+    if (voices[j].lang.startsWith(lang.split('-')[0])) return voices[j];
+  }
+  return null;
 }
 
 var speakTimer = null, speechReady = false;
@@ -2199,6 +2227,11 @@ function speak(text, sourceEl) {
   speakTimer = setTimeout(function() {
     var u = new SpeechSynthesisUtterance(text);
     u.lang = selectedLang;
+    // Try to pick a gender-matched voice (best-effort, graceful fallback)
+    if (selectedGender) {
+      var voice = findVoice(selectedLang, selectedGender);
+      if (voice) u.voice = voice;
+    }
     u.rate = 0.85; u.volume = 1.0;
     u.onstart = function() {
       speaking = true;
