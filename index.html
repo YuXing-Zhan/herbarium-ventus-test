@@ -905,7 +905,8 @@ footer {
   font-size: 11px; font-weight: 400; font-family: inherit;
   padding: 5px 10px; border-radius: 6px;
   border: 1px solid var(--border);
-  white-space: nowrap; pointer-events: none;
+  white-space: nowrap; max-width: 220px; overflow: hidden; text-overflow: ellipsis;
+  pointer-events: none;
   z-index: 9990; opacity: 0;
   backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
   box-shadow: var(--shadow-md);
@@ -926,17 +927,25 @@ footer {
 [data-tooltip]:hover::before {
   opacity: 1; transform: translateX(-50%) translateY(0);
 }
-/* Tooltip reposition for right-edge elements */
-.top-bar-right [data-tooltip]::after {
-  left: auto; right: 0; transform: translateX(0) translateY(4px);
+/* Tooltip reposition for right-edge / top-bar elements — show below so they don't clip off-screen */
+.top-bar-right [data-tooltip]::after,
+.top-bar [data-tooltip]::after {
+  top: calc(100% + 8px); bottom: auto;
+  left: auto; right: 0; transform: translateX(0) translateY(-4px);
 }
-.top-bar-right [data-tooltip]:hover::after {
+.top-bar-right [data-tooltip]:hover::after,
+.top-bar [data-tooltip]:hover::after {
   transform: translateX(0) translateY(0);
 }
-.top-bar-right [data-tooltip]::before {
+/* Flip arrow to point upward */
+.top-bar-right [data-tooltip]::before,
+.top-bar [data-tooltip]::before {
+  top: calc(100% - 3px); bottom: auto;
   left: auto; right: 10px;
+  border-top-color: transparent; border-bottom-color: var(--border);
 }
-.top-bar-right [data-tooltip]:hover::before {
+.top-bar-right [data-tooltip]:hover::before,
+.top-bar [data-tooltip]:hover::before {
   transform: translateX(0) translateY(0);
 }
 
