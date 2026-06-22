@@ -333,7 +333,7 @@ footer { text-align: center; color: var(--ink-faint); font-size: 12px; padding: 
 .lightbox .close-hint:hover { color:#fff; }
 
 /* 4k. Help & Shortcuts Overlays */
-.help-overlay, .shortcuts-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.15); z-index:10000; align-items:center; justify-content:center; }
+.help-overlay, .shortcuts-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.15); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); z-index:10000; align-items:center; justify-content:center; }
 .help-overlay.show, .shortcuts-overlay.show { display:flex; }
 .help-panel, .shortcuts-panel {
   position:relative; background:var(--surface-elevated); border-radius:var(--radius-lg);
