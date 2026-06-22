@@ -1,0 +1,2793 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-season="summer">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Herbarium Ventus · 风之植物志</title>
+<style>
+/* ═══════════════════════════════════════════════════
+   HERBARIUM VENTUS — PREMIUM
+   Multi-season · Multi-particle ecology · Glassmorphism
+   ═══════════════════════════════════════════════════ */
+
+/* ── SEASONAL DESIGN TOKENS ── */
+:root {
+  /* Spring — Fresh green (default fallback) */
+  --sky-0: #d8e8d0;
+  --sky-1: #c8dcc0;
+  --sky-2: #c0d8b8;
+  --sky-3: #b0d0a8;
+  --sky-4: #a0c898;
+  --surface: rgba(248,252,248,0.72);
+  --surface-hover: rgba(248,252,248,0.9);
+  --surface-elevated: rgba(250,255,250,0.82);
+  --ink: #1a2818;
+  --ink-dim: #4a6048;
+  --ink-faint: #7a9078;
+  --accent: #5a9858;
+  --accent-bright: #70b868;
+  --accent-glow: rgba(90,152,88,0.2);
+  --accent-2: #70b878;
+  --accent-2-glow: rgba(112,184,120,0.15);
+  --border: rgba(80,130,70,0.12);
+  --border-glow: rgba(90,152,88,0.32);
+  --shadow-sm: 0 1px 4px rgba(0,0,0,0.03);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.06);
+  --shadow-lg: 0 12px 40px rgba(0,0,0,0.1);
+  --correct: #5a9858;
+  --wrong: #e06850;
+  --radius-sm: 8px;
+  --radius: 14px;
+  --radius-lg: 22px;
+  --radius-xl: 30px;
+  --tab-bg: rgba(248,252,248,0.6);
+  --gallery-bg: rgba(248,252,248,0.5);
+
+  /* Particle palette */
+  --pollen: 230,220,170;
+  --leaf-1: 75,140,65;
+  --leaf-2: 100,165,80;
+  --petal: 220,180,175;
+  --firefly: 180,240,150;
+  --spark: 255,245,200;
+
+  /* Timing tokens */
+  --dur-fast: 150ms;
+  --dur-normal: 300ms;
+  --dur-slow: 500ms;
+  --ease-out: cubic-bezier(0,0,0.2,1);
+  --ease-spring: cubic-bezier(0.34,1.56,0.64,1);
+
+  /* Cursor */
+  --cursor-size: 20px;
+  --cursor-glow-size: 180px;
+}
+
+[data-season="spring"] {
+  --sky-0: #d8e8d0; --sky-1: #c8dcc0; --sky-2: #c0d8b8; --sky-3: #b0d0a8; --sky-4: #a0c898;
+  --surface: rgba(248,252,248,0.72); --surface-hover: rgba(248,252,248,0.9);
+  --surface-elevated: rgba(250,255,250,0.82);
+  --ink: #1a2818; --ink-dim: #4a6048; --ink-faint: #7a9078;
+  --accent: #5a9858; --accent-bright: #70b868; --accent-glow: rgba(90,152,88,0.2);
+  --accent-2: #70b878; --accent-2-glow: rgba(112,184,120,0.15);
+  --border: rgba(80,130,70,0.12); --border-glow: rgba(90,152,88,0.32);
+  --shadow-sm: 0 1px 4px rgba(0,0,0,0.03); --shadow-md: 0 4px 16px rgba(0,0,0,0.06); --shadow-lg: 0 12px 40px rgba(0,0,0,0.1);
+  --correct: #5a9858; --wrong: #e06850;
+  --tab-bg: rgba(248,252,248,0.6); --gallery-bg: rgba(248,252,248,0.5);
+  --pollen: 230,220,170; --leaf-1: 75,140,65; --leaf-2: 100,165,80;
+  --petal: 220,180,175; --firefly: 180,240,150; --spark: 255,245,200;
+}
+
+[data-season="summer"] {
+  --sky-0: #87ceeb; --sky-1: #98d4e8; --sky-2: #b0dcd8; --sky-3: #c8e4d8; --sky-4: #e0f0e8;
+  --surface: rgba(255,255,255,0.72); --surface-hover: rgba(255,255,255,0.9);
+  --surface-elevated: rgba(252,255,252,0.82);
+  --ink: #2a3028; --ink-dim: #6a7a68; --ink-faint: #98a898;
+  --accent: #5a9858; --accent-bright: #70b868; --accent-glow: rgba(90,152,88,0.18);
+  --accent-2: #5090c8; --accent-2-glow: rgba(80,144,200,0.12);
+  --border: rgba(100,140,100,0.13); --border-glow: rgba(90,152,88,0.28);
+  --shadow-sm: 0 1px 4px rgba(0,0,0,0.03); --shadow-md: 0 4px 16px rgba(0,0,0,0.06); --shadow-lg: 0 12px 40px rgba(0,0,0,0.1);
+  --correct: #5a9858; --wrong: #e06850;
+  --tab-bg: rgba(255,255,255,0.6); --gallery-bg: rgba(255,255,255,0.5);
+  --pollen: 240,225,170; --leaf-1: 75,140,65; --leaf-2: 100,165,80;
+  --petal: 220,150,170; --firefly: 180,235,150; --spark: 255,245,200;
+}
+
+[data-season="autumn"] {
+  --sky-0: #f0d8b8; --sky-1: #e8c8a0; --sky-2: #e0c898; --sky-3: #d8b890; --sky-4: #c8a880;
+  --surface: rgba(255,250,242,0.72); --surface-hover: rgba(255,250,242,0.9);
+  --surface-elevated: rgba(255,252,248,0.82);
+  --ink: #2a2018; --ink-dim: #6a5040; --ink-faint: #a08870;
+  --accent: #c89850; --accent-bright: #e0b068; --accent-glow: rgba(200,152,80,0.2);
+  --accent-2: #d07050; --accent-2-glow: rgba(208,112,80,0.15);
+  --border: rgba(160,120,70,0.14); --border-glow: rgba(200,152,80,0.32);
+  --shadow-sm: 0 1px 4px rgba(0,0,0,0.04); --shadow-md: 0 4px 16px rgba(0,0,0,0.08); --shadow-lg: 0 12px 40px rgba(0,0,0,0.12);
+  --correct: #8a9850; --wrong: #c86040;
+  --tab-bg: rgba(255,250,242,0.6); --gallery-bg: rgba(255,250,242,0.5);
+  --pollen: 240,210,160; --leaf-1: 180,120,50; --leaf-2: 200,140,70;
+  --petal: 220,140,100; --firefly: 240,200,130; --spark: 255,220,170;
+}
+
+[data-season="winter"] {
+  --sky-0: #d8dce8; --sky-1: #c8d0e0; --sky-2: #d0d8d8; --sky-3: #c0c8d0; --sky-4: #b0b8c0;
+  --surface: rgba(248,250,252,0.72); --surface-hover: rgba(248,250,252,0.9);
+  --surface-elevated: rgba(252,252,255,0.82);
+  --ink: #1a2028; --ink-dim: #505868; --ink-faint: #889098;
+  --accent: #7898a8; --accent-bright: #90b0c0; --accent-glow: rgba(120,152,168,0.15);
+  --accent-2: #8890b0; --accent-2-glow: rgba(136,144,176,0.12);
+  --border: rgba(120,140,160,0.12); --border-glow: rgba(120,152,168,0.25);
+  --shadow-sm: 0 1px 4px rgba(0,0,0,0.04); --shadow-md: 0 4px 16px rgba(0,0,0,0.06); --shadow-lg: 0 12px 40px rgba(0,0,0,0.08);
+  --correct: #689888; --wrong: #c86858;
+  --tab-bg: rgba(248,250,252,0.6); --gallery-bg: rgba(248,250,252,0.5);
+  --pollen: 220,225,235; --leaf-1: 100,120,130; --leaf-2: 120,140,150;
+  --petal: 200,200,215; --firefly: 180,200,230; --spark: 235,240,248;
+}
+
+[data-season="dusk"] {
+  --sky-0: #2a2a3a; --sky-1: #1e2838; --sky-2: #1a2828; --sky-3: #162018; --sky-4: #121a14;
+  --surface: rgba(18,24,20,0.78); --surface-hover: rgba(22,30,24,0.9);
+  --surface-elevated: rgba(24,32,26,0.85);
+  --ink: #d0dcd0; --ink-dim: #7a8a78; --ink-faint: #4a5a48;
+  --accent: #70b868; --accent-bright: #88d878; --accent-glow: rgba(112,184,104,0.22);
+  --accent-2: #b898e0; --accent-2-glow: rgba(184,152,224,0.12);
+  --border: rgba(100,150,100,0.1); --border-glow: rgba(112,184,104,0.25);
+  --shadow-sm: 0 1px 4px rgba(0,0,0,0.15); --shadow-md: 0 4px 16px rgba(0,0,0,0.25); --shadow-lg: 0 12px 40px rgba(0,0,0,0.35);
+  --correct: #70b868; --wrong: #e06850;
+  --tab-bg: rgba(18,24,20,0.6); --gallery-bg: rgba(18,24,20,0.55);
+  --pollen: 160,190,120; --leaf-1: 70,130,60; --leaf-2: 90,155,75;
+  --petal: 180,140,200; --firefly: 160,220,120; --spark: 200,220,160;
+}
+
+/* ── RESET & BASE ── */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  color: var(--ink);
+  background: linear-gradient(180deg,
+    var(--sky-0) 0%, var(--sky-1) 15%, var(--sky-2) 40%,
+    var(--sky-3) 70%, var(--sky-4) 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  transition: background 0.8s var(--ease-out), color 0.8s var(--ease-out);
+  cursor: none;
+}
+@media (pointer: coarse) { body { cursor: auto; } }
+
+/* ── CUSTOM CURSOR ── */
+#cursorGlow {
+  position: fixed; pointer-events: none; z-index: 10001;
+  width: var(--cursor-glow-size); height: var(--cursor-glow-size);
+  border-radius: 50%;
+  background: radial-gradient(circle,
+    rgba(var(--firefly), 0.1) 0%,
+    rgba(var(--firefly), 0.04) 35%,
+    transparent 70%);
+  transform: translate(-50%, -50%);
+  transition: opacity 0.4s;
+}
+#cursorLeaf {
+  position: fixed; pointer-events: none; z-index: 10002;
+  width: var(--cursor-size); height: var(--cursor-size);
+  transform: translate(-50%, -50%);
+  transition: width 0.2s, height 0.2s;
+}
+#cursorLeaf::after {
+  content: '';
+  display: block;
+  width: 100%; height: 100%;
+  border-radius: 50% 0 50% 50%;
+  background: var(--accent);
+  opacity: 0.85;
+  transform: rotate(-30deg);
+  box-shadow: 0 0 8px var(--accent-glow), 0 0 20px rgba(var(--firefly), 0.3);
+  transition: all 0.2s var(--ease-out);
+}
+#cursorLeaf.pressing::after {
+  transform: rotate(-30deg) scale(0.7);
+  opacity: 0.5;
+  border-radius: 50%;
+}
+#cursorLeaf.on-card::after {
+  border-radius: 50%;
+  transform: rotate(0) scale(1.4);
+  background: var(--accent-bright);
+  opacity: 0.6;
+  box-shadow: 0 0 16px var(--accent-glow), 0 0 40px rgba(var(--firefly), 0.5);
+}
+
+/* ── PARTICLE CANVAS ── */
+#natureCanvas {
+  position: fixed; inset: 0; z-index: 0;
+  pointer-events: none;
+}
+
+/* ── LAYOUT ── */
+.container { max-width: 960px; margin: 0 auto; padding: 0 28px; position: relative; z-index: 1; }
+
+/* ── TOP BAR ── */
+.top-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 0 0; gap: 12px;
+  position: relative; z-index: 2;
+}
+.voice-select {
+  padding: 8px 32px 8px 12px; border: 1px solid var(--border);
+  border-radius: var(--radius-sm); background: var(--surface);
+  color: var(--ink); font-size: 12px; font-family: inherit;
+  cursor: pointer; outline: none; max-width: 240px;
+  -webkit-appearance: none; appearance: none;
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12'%3E%3Cpath d='M3 5l3 3 3-3' fill='none' stroke='%236a7a68' stroke-width='1.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 8px center;
+  transition: border-color var(--dur-fast) var(--ease-out);
+}
+.voice-select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+
+.top-bar-right { display: flex; gap: 8px; align-items: center; }
+
+/* Season picker — compact pill buttons */
+.season-pills {
+  display: flex; gap: 3px; padding: 3px;
+  background: var(--tab-bg); border-radius: 20px;
+  border: 1px solid var(--border);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+}
+.season-pill {
+  width: 30px; height: 30px; border-radius: 50%;
+  border: none; cursor: pointer;
+  font-size: 13px; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  background: transparent; color: var(--ink-faint);
+  transition: all var(--dur-normal) var(--ease-spring);
+  position: relative;
+}
+.season-pill:hover { color: var(--ink); transform: scale(1.1); }
+.season-pill.active {
+  background: var(--accent); color: #fff;
+  box-shadow: 0 2px 8px var(--accent-glow);
+}
+
+/* ── BACK TO TOP ── */
+.back-to-top {
+  position: fixed; bottom: 32px; right: 28px; z-index: 9999;
+  width: 40px; height: 40px; border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  color: var(--ink-dim); font-size: 18px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0.7;
+  transition: opacity 0.3s var(--ease-out), transform 0.3s var(--ease-out), border-color 0.3s, color 0.3s, box-shadow 0.3s;
+  box-shadow: var(--shadow-md);
+  line-height: 1; font-family: inherit;
+}
+.back-to-top:hover {
+  opacity: 1;
+  border-color: var(--accent); color: var(--accent);
+  box-shadow: var(--shadow-lg), 0 0 16px var(--accent-glow);
+  transform: translateY(-3px);
+}
+
+/* ── HELP BUTTON ── */
+.help-btn {
+  width: 30px; height: 30px; border: 1px solid var(--border);
+  background: var(--surface); border-radius: 50%; cursor: pointer;
+  font-size: 15px; font-weight: 700; color: var(--ink-dim);
+  font-family: "Times New Roman", serif;
+  display: flex; align-items: center; justify-content: center;
+  transition: all var(--dur-fast) var(--ease-out);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+}
+.help-btn:hover { border-color: var(--accent); color: var(--accent); box-shadow: 0 0 12px var(--accent-glow); }
+
+/* ── HELP BUBBLE ── */
+.help-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.15);
+  backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+  z-index: 10000; align-items: center; justify-content: center;
+}
+.help-overlay.show { display: flex; }
+.help-panel {
+  position: relative;
+  background: var(--surface-elevated);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  padding: 28px 28px 24px;
+  max-width: 420px; width: 88vw; max-height: 72vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 30px rgba(0,0,0,0.06), 0 0 80px rgba(var(--leaf-1), 0.08);
+  animation: bubbleIn 0.35s var(--ease-spring);
+}
+@keyframes bubbleIn {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: scale(1); }
+}
+.help-close {
+  position: sticky; top: -8px; z-index: 10; float: right;
+  width: 28px; height: 28px; margin-right: -12px; margin-bottom: -20px;
+  border-radius: 50%; border: 1px solid rgba(var(--leaf-1), 0.2);
+  background: var(--surface);
+  font-size: 16px; color: var(--ink-faint); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all var(--dur-fast) var(--ease-out);
+  line-height: 1;
+}
+.help-close:hover { color: var(--ink); border-color: var(--accent); box-shadow: 0 0 8px var(--accent-glow); }
+.help-section {
+  margin-bottom: 14px; padding-bottom: 12px;
+  border-bottom: 1px solid rgba(var(--leaf-1), 0.08);
+}
+.help-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.help-section h3 {
+  font-size: 13px; font-weight: 600; color: var(--accent); margin-bottom: 4px;
+}
+.help-section p {
+  font-size: 12px; color: var(--ink-dim); line-height: 1.65; margin: 0;
+}
+.help-section ul {
+  margin: 3px 0 3px 14px; font-size: 12px; color: var(--ink-dim);
+}
+.help-section li { margin-bottom: 1px; }
+.help-section strong { color: var(--ink); }
+.help-section em { color: var(--accent-bright); font-style: normal; }
+
+/* ── SHORTCUT CONFIG ROWS ── */
+.shortcut-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 0; border-bottom: 1px solid rgba(var(--leaf-1), 0.06);
+}
+.shortcut-row:last-child { border-bottom: none; }
+.shortcut-row .sc-label {
+  font-size: 12px; color: var(--ink-dim);
+  display: flex; align-items: center; gap: 6px;
+}
+.shortcut-row .sc-label strong { color: var(--ink); min-width: 44px; }
+.shortcut-key-input {
+  width: 52px; height: 30px; text-align: center;
+  border: 1px solid var(--border); border-radius: 8px;
+  background: var(--surface); color: var(--accent);
+  font-family: monospace; font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: all var(--dur-fast);
+  outline: none;
+}
+.shortcut-key-input:hover { border-color: var(--accent); box-shadow: 0 0 8px var(--accent-glow); }
+.shortcut-key-input:focus {
+  border-color: var(--accent-bright); box-shadow: 0 0 12px var(--accent-glow);
+  background: var(--surface-elevated);
+}
+.shortcut-key-input.listening {
+  animation: pulseInput 0.5s ease-in-out infinite alternate;
+  border-color: var(--accent-bright);
+  color: var(--accent-bright);
+}
+@keyframes pulseInput {
+  from { box-shadow: 0 0 4px var(--accent-glow); }
+  to { box-shadow: 0 0 16px var(--accent-glow); }
+}
+
+/* ── HEADER ── */
+header {
+  text-align: center; padding: 32px 0 4px;
+  position: relative; z-index: 1;
+}
+header h1 {
+  font-family: "Times New Roman", "STSong", "SimSun", serif;
+  font-size: 36px; font-weight: 400; color: var(--ink);
+  letter-spacing: 1px;
+  /* Gradient flowing text */
+  background: linear-gradient(135deg, var(--ink) 0%, var(--accent) 50%, var(--ink) 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: textFlow 8s ease-in-out infinite;
+  position: relative;
+  display: inline-block;
+}
+@keyframes textFlow {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+header .subtitle {
+  color: var(--ink-dim); font-size: 13px; margin-top: 4px;
+  letter-spacing: 2px;
+}
+
+/* ── MORPHING TAB INDICATOR ── */
+.tabs-wrap {
+  display: flex; justify-content: center;
+  margin: 22px 0 28px;
+  position: relative; z-index: 2;
+}
+.tabs {
+  display: flex; gap: 2px;
+  background: var(--tab-bg);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  border-radius: 16px; padding: 4px;
+  border: 1px solid var(--border);
+  position: relative;
+  box-shadow: var(--shadow-sm);
+}
+.tab-btn {
+  flex: 1; padding: 10px 20px; border: none;
+  background: transparent; border-radius: 13px; cursor: pointer;
+  font-size: 14px; font-weight: 500; color: var(--ink-dim);
+  transition: color var(--dur-normal) var(--ease-out);
+  font-family: inherit; white-space: nowrap;
+  position: relative; z-index: 2;
+}
+.tab-btn.active { color: #fff; }
+.tab-btn:hover:not(.active) { color: var(--ink); }
+/* The morphing blob */
+.tab-indicator {
+  position: absolute; top: 4px; height: calc(100% - 8px);
+  background: var(--accent);
+  border-radius: 13px;
+  z-index: 1;
+  transition: left 0.4s var(--ease-spring), width 0.4s var(--ease-spring);
+  box-shadow: 0 2px 12px var(--accent-glow);
+}
+
+.panel { display: none; }
+.panel.active { display: block; }
+.panel.active.enter {
+  animation: panelIn 0.4s var(--ease-out) both;
+}
+@keyframes panelIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── BROWSE GRID — Glassmorphism cards ── */
+.browse-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 10px;
+}
+.plant-card {
+  position: relative;
+  background: var(--surface);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  border-radius: var(--radius);
+  padding: 15px 16px;
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 8px;
+  cursor: pointer;
+  transition: transform var(--dur-fast) var(--ease-out),
+              box-shadow var(--dur-normal) var(--ease-out),
+              border-color var(--dur-normal) var(--ease-out),
+              background var(--dur-normal) var(--ease-out);
+  overflow: visible;
+  /* Breathing animation at rest */
+  animation: cardBreathe 6s ease-in-out infinite;
+  box-shadow: var(--shadow-sm);
+}
+@keyframes cardBreathe {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
+}
+.plant-card:hover {
+  animation-play-state: paused;
+  border-color: var(--border-glow);
+  box-shadow: var(--shadow-lg), 0 0 30px var(--accent-glow);
+  background: var(--surface-hover);
+  transform: translateY(-3px) scale(1.02);
+  z-index: 5;
+}
+/* Leaf vein border — subtle organic pattern on card edge */
+.plant-card::before {
+  content: '';
+  position: absolute; inset: 0; border-radius: var(--radius);
+  background:
+    radial-gradient(ellipse at 20% 80%, var(--accent-glow) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(var(--pollen), 0.2) 0%, transparent 50%);
+  opacity: 0; transition: opacity 0.5s;
+  pointer-events: none; z-index: 0;
+}
+.plant-card:hover::before { opacity: 1; }
+.plant-card .cn { font-size: 15px; font-weight: 550; color: var(--ink); position: relative; z-index: 2; }
+.plant-card .la {
+  font-size: 13px; color: var(--accent);
+  font-family: "Times New Roman", "STSong", serif;
+  font-style: italic; font-weight: 450;
+  position: relative; z-index: 2;
+}
+.plant-card.selected {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-glow), var(--shadow-md);
+  background: rgba(var(--leaf-1), 0.06);
+}
+
+.speak-btn {
+  width: 32px; height: 32px; border: 1px solid var(--border);
+  background: var(--surface); border-radius: 50%; cursor: pointer;
+  font-size: 13px; color: var(--accent);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: all var(--dur-fast) var(--ease-out);
+  position: relative; z-index: 3;
+}
+.speak-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); transform: scale(1.12); }
+.speak-btn:active { transform: scale(0.92); }
+
+/* Entrance stagger */
+.plant-card.animate-in {
+  opacity: 0; transform: translateY(20px);
+  animation: cardEnter 0.45s var(--ease-out) forwards;
+}
+@keyframes cardEnter {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── FLASHCARD — 3D with dew-drop highlight ── */
+.flashcard-area { max-width: 480px; margin: 0 auto; text-align: center; }
+.flashcard-stage { perspective: 1200px; margin-bottom: 14px; }
+.flashcard-inner {
+  position: relative; min-height: 250px;
+  transition: transform 0.7s cubic-bezier(0.4,0,0.2,1);
+  transform-style: preserve-3d; cursor: pointer;
+}
+.flashcard-inner.flipped { transform: rotateY(180deg); }
+.flashcard-face {
+  position: absolute; inset: 0;
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 44px 28px;
+  overflow: hidden;
+  user-select: none;
+}
+.flashcard-face.back { transform: rotateY(180deg); }
+.flashcard-face .fc-label {
+  font-size: 11px; color: var(--ink-faint); letter-spacing: 3px;
+  text-transform: uppercase; margin-bottom: 14px; font-weight: 500;
+}
+.flashcard-face .fc-name {
+  font-family: "Times New Roman", "STSong", serif;
+  font-size: 40px; font-weight: 400; color: var(--ink);
+  letter-spacing: 0.5px;
+}
+.flashcard-face .fc-name.latin { font-style: italic; color: var(--accent); }
+.flashcard-face .fc-hint {
+  color: var(--ink-faint); font-size: 14px;
+  margin-top: 22px; animation: breathe 3s ease-in-out infinite;
+}
+@keyframes breathe { 0%,100%{opacity:0.3} 50%{opacity:0.85} }
+
+/* Dew-drop glossy highlight that tracks mouse */
+.flashcard-gloss {
+  position: absolute; inset: 0; border-radius: var(--radius-lg);
+  pointer-events: none; z-index: 5;
+  background: radial-gradient(circle at 50% 50%,
+    rgba(255,255,255,0.15) 0%, transparent 60%);
+  opacity: 0; transition: opacity 0.3s;
+}
+.flashcard-inner:hover .flashcard-gloss { opacity: 1; }
+
+.flashcard-face .shine-strip {
+  position: absolute; top: -80%; left: -20%;
+  width: 40%; height: 260%;
+  background: linear-gradient(105deg,
+    transparent 35%, rgba(255,255,255,0.1) 45%,
+    rgba(255,255,255,0.25) 50%, rgba(255,255,255,0.1) 55%,
+    transparent 65%);
+  transform: rotate(25deg);
+  pointer-events: none; z-index: 4;
+  animation: shineSweep 4s ease-in-out infinite;
+}
+@keyframes shineSweep {
+  0%, 100% { left: -20%; opacity: 0; }
+  40% { opacity: 1; }
+  60% { opacity: 1; }
+  80%, 100% { left: 120%; opacity: 0; }
+}
+
+.flashcard-nav {
+  display: flex; justify-content: center; align-items: center;
+  gap: 16px; margin-top: 6px;
+}
+.flashcard-nav .counter { font-size: 14px; color: var(--ink-dim); font-weight: 500; }
+
+/* ── GALLERY — Dew-drop hover ── */
+.gallery-section { margin-top: 34px; padding-top: 20px; border-top: 1px solid var(--border); }
+.gallery-header { display: flex; align-items: baseline; gap: 10px; margin-bottom: 14px; }
+.gallery-header h2 {
+  font-family: "Times New Roman", "STSong", serif;
+  font-size: 19px; font-weight: 400; color: var(--ink);
+}
+.gallery-header .genus-tag {
+  font-family: "Times New Roman", "STSong", serif;
+  font-style: italic; font-size: 15px; color: var(--accent); font-weight: 500;
+}
+.gallery-header .baike-link {
+  font-family: "Times New Roman", "STSong", serif;
+  font-style: italic; font-size: 14px; color: var(--ink-faint);
+  text-decoration: none;
+  transition: color var(--dur-fast);
+}
+.gallery-header .baike-link:hover {
+  color: var(--accent);
+}
+.gallery-header .baike-hint {
+  font-size: 11px; color: var(--ink-faint);
+  opacity: 0.55;
+}
+.gallery-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.gallery-img-wrap {
+  position: relative; border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--gallery-bg);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  aspect-ratio: 4/3;
+  transition: transform var(--dur-fast) var(--ease-out),
+              box-shadow var(--dur-normal) var(--ease-out),
+              border-color var(--dur-normal) var(--ease-out);
+  box-shadow: var(--shadow-sm);
+}
+.gallery-img-wrap:hover {
+  border-color: var(--border-glow);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
+}
+.gallery-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* Dew-drop glossy overlay on gallery images */
+.gallery-img-wrap .dew-drop {
+  position: absolute; inset: 0; pointer-events: none; z-index: 2;
+  background: radial-gradient(circle at 50% 50%,
+    rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.06) 30%, transparent 60%);
+  opacity: 0; transition: opacity 0.3s;
+}
+.gallery-img-wrap:hover .dew-drop { opacity: 1; }
+
+.gallery-img-wrap .img-caption {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 8px 12px; font-size: 11px; color: rgba(255,255,255,0.9);
+  background: linear-gradient(transparent, rgba(0,0,0,0.65));
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  z-index: 3;
+}
+.gallery-empty {
+  text-align: center; color: var(--ink-faint);
+  font-size: 14px; padding: 34px 0;
+}
+.gallery-empty .icon { font-size: 38px; margin-bottom: 8px; opacity: 0.25; }
+
+/* Scroll-driven reveal (with JS fallback class) */
+.scroll-reveal {
+  opacity: 0; transform: translateY(20px);
+  transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out);
+}
+.scroll-reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ── QUIZ ── */
+.quiz-area {
+  background: var(--surface);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  border-radius: var(--radius-lg);
+  padding: 42px 30px;
+  border: 1px solid var(--border);
+  text-align: center;
+  max-width: 520px; margin: 0 auto;
+  box-shadow: var(--shadow-md);
+}
+.quiz-prompt { font-size: 13px; color: var(--ink-dim); margin-bottom: 10px; letter-spacing: 0.5px; }
+.quiz-chinese {
+  font-family: "Times New Roman", "STSong", serif;
+  font-size: 44px; font-weight: 400; margin-bottom: 26px; color: var(--ink);
+}
+.quiz-input {
+  width: 100%; max-width: 370px; padding: 14px 18px; font-size: 17px;
+  border: 2px solid var(--border); border-radius: var(--radius);
+  text-align: center; outline: none;
+  background: rgba(255,255,255,0.4);
+  transition: all var(--dur-fast) var(--ease-out);
+  font-family: "Times New Roman", "STSong", serif;
+  font-style: italic; color: var(--ink);
+}
+.quiz-input:focus { border-color: var(--accent); box-shadow: 0 0 24px var(--accent-glow); }
+.quiz-input.wrong { border-color: var(--wrong); animation: shiver 0.45s ease; }
+.quiz-input.correct { border-color: var(--correct); box-shadow: 0 0 24px var(--accent-glow); }
+.quiz-input.locked { pointer-events: none; opacity: 0.85; }
+@keyframes shiver {
+  0%,100% { transform: translateX(0) rotate(0); }
+  20% { transform: translateX(-5px) rotate(-1deg); }
+  40% { transform: translateX(5px) rotate(1deg); }
+  60% { transform: translateX(-3px) rotate(-0.5deg); }
+  80% { transform: translateX(3px) rotate(0.5deg); }
+}
+.quiz-feedback { margin-top: 14px; min-height: 44px; font-size: 15px; transition: all var(--dur-fast) var(--ease-out); }
+.correct-text { color: var(--correct); font-weight: 550; }
+.wrong-text { color: var(--wrong); font-weight: 550; }
+.answer { color: var(--accent); font-style: italic; font-weight: 550; }
+.countdown { color: var(--ink-dim); font-size: 13px; margin-top: 4px; }
+.quiz-buttons { display: flex; gap: 10px; justify-content: center; margin-top: 18px; flex-wrap: wrap; }
+
+/* Buttons with press feedback */
+.btn {
+  padding: 9px 22px; border-radius: 22px;
+  font-size: 13px; cursor: pointer; font-family: inherit;
+  transition: all var(--dur-fast) var(--ease-out); font-weight: 500;
+  border: 1px solid var(--border);
+  position: relative; overflow: hidden;
+}
+.btn:active { transform: scale(0.96); }
+.btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+.btn-primary:hover { background: var(--accent-bright); box-shadow: 0 4px 16px var(--accent-glow); }
+.btn-outline { background: transparent; color: var(--accent); }
+.btn-outline:hover { background: rgba(var(--leaf-1), 0.06); border-color: var(--accent); }
+.btn-accent { background: rgba(var(--leaf-1), 0.05); color: var(--ink-dim); }
+.btn-accent:hover { color: var(--accent); border-color: var(--accent); }
+.btn-sm { padding: 6px 15px; font-size: 12px; }
+.btn:disabled { opacity: 0.35; cursor: not-allowed; pointer-events: none; transform: none; }
+
+.quiz-score { display: flex; justify-content: center; gap: 26px; margin-top: 18px; font-size: 14px; color: var(--ink-dim); }
+.quiz-score span { font-weight: 600; color: var(--ink); }
+
+/* ── LIGHTBOX ── */
+.lightbox {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.93);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  z-index: 9999;
+  align-items: center; justify-content: center; cursor: pointer;
+}
+.lightbox.show { display: flex; }
+.lightbox img { max-width: 90vw; max-height: 85vh; border-radius: 10px; }
+.lightbox .close-hint {
+  position: absolute; top: 22px; right: 30px;
+  color: rgba(255,255,255,0.5); font-size: 32px;
+  cursor: pointer; transition: color 0.2s;
+  font-weight: 300; line-height: 1;
+}
+.lightbox .close-hint:hover { color: #fff; }
+
+/* ── CELEBRATION BURST ── */
+.burst-particle {
+  position: fixed; pointer-events: none; z-index: 9990;
+  animation: burstFly 1s ease-out forwards;
+}
+@keyframes burstFly {
+  0% { transform: translate(0,0) scale(1); opacity: 1; }
+  100% { transform: translate(var(--bx),var(--by)) scale(0) rotate(var(--br)); opacity: 0; }
+}
+
+/* Sound wave ring when speaking */
+.sound-ring {
+  position: fixed; pointer-events: none; z-index: 9980;
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  animation: ringExpand 1.2s ease-out forwards;
+  opacity: 0.6;
+}
+@keyframes ringExpand {
+  0% { width: 0; height: 0; opacity: 0.7; }
+  100% { width: 200px; height: 200px; opacity: 0; margin-left: -100px; margin-top: -100px; }
+}
+
+/* ── SEASON TRANSITION OVERLAY ── */
+.season-overlay {
+  position: fixed; inset: 0; z-index: 9995;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 50%, var(--accent-glow) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.8s var(--ease-out);
+}
+
+/* ── PROGRESS BAR ── */
+.progress-wrap {
+  display: flex; align-items: center; justify-content: center;
+  gap: 10px; margin-top: 10px;
+}
+.progress-bar-outer {
+  width: 260px; height: 6px;
+  background: var(--border);
+  border-radius: 3px; overflow: hidden;
+}
+.progress-bar-inner {
+  height: 100%; border-radius: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-bright));
+  transition: width 0.5s var(--ease-spring);
+}
+.progress-text {
+  font-size: 12px; color: var(--ink-dim);
+  white-space: nowrap;
+}
+.progress-text strong { color: var(--accent); }
+.reset-btn {
+  width: 26px; height: 26px; border: 1px solid var(--border);
+  background: transparent; border-radius: 50%; cursor: pointer;
+  font-size: 14px; color: var(--ink-faint);
+  display: flex; align-items: center; justify-content: center;
+  transition: all var(--dur-fast) var(--ease-out);
+  flex-shrink: 0;
+}
+.reset-icon { display: inline-block; transition: transform var(--dur-fast) var(--ease-out); }
+.reset-btn:hover { border-color: var(--wrong); color: var(--wrong); }
+.reset-btn:hover .reset-icon { transform: rotate(180deg); }
+
+/* ── CARD MASTERY INDICATOR ── */
+.plant-card .mastery-dot {
+  position: absolute; top: 8px; right: 8px;
+  width: 8px; height: 8px; border-radius: 50%;
+  z-index: 4;
+  transition: all 0.3s var(--ease-out);
+}
+.plant-card .mastery-dot.new       { background: transparent; border: 1.5px solid var(--border); }
+.plant-card .mastery-dot.weak      { background: rgba(224,104,80,0.5); border: 1.5px solid rgba(224,104,80,0.7); }
+.plant-card .mastery-dot.learning  { background: rgba(var(--pollen), 0.6); border: 1.5px solid rgba(var(--pollen), 0.8); }
+.plant-card .mastery-dot.familiar  { background: rgba(var(--leaf-1), 0.5); border: 1.5px solid rgba(var(--leaf-1), 0.6); }
+.plant-card .mastery-dot.mastered  { background: var(--accent); border: 1.5px solid var(--accent-bright); box-shadow: 0 0 6px var(--accent-glow); }
+.plant-card .mastery-dot.archived  { background: var(--accent-bright); border: 1.5px solid var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
+.plant-card .mastery-dot.starred   { background: var(--accent-bright); border: 1.5px solid gold; box-shadow: 0 0 10px rgba(255,215,0,0.4); }
+
+/* ── REVIEW TOGGLE ── */
+.review-toggle-wrap {
+  display: flex; justify-content: center; margin-top: 14px;
+}
+.review-toggle {
+  display: flex; border-radius: 20px; overflow: hidden;
+  border: 1px solid var(--border); font-size: 12px;
+}
+.review-toggle button {
+  padding: 6px 16px; border: none; cursor: pointer;
+  background: transparent; color: var(--ink-dim);
+  font-family: inherit; font-size: inherit;
+  transition: all var(--dur-fast) var(--ease-out);
+}
+.review-toggle button.active {
+  background: var(--accent); color: #fff;
+}
+.review-toggle button:hover:not(.active) { color: var(--ink); }
+
+/* ── FLASHCARD MASTERY BUTTONS ── */
+.fc-mastery-btns {
+  display: flex; gap: 8px; justify-content: center; margin-top: 8px;
+}
+.btn-mastery {
+  padding: 7px 18px; border-radius: 18px;
+  font-size: 12px; cursor: pointer; font-family: inherit;
+  transition: all var(--dur-fast) var(--ease-out);
+  border: 1px solid var(--border);
+}
+.btn-mastery.know {
+  background: var(--accent); color: #fff; border-color: var(--accent);
+}
+.btn-mastery.know:hover { background: var(--accent-bright); box-shadow: 0 2px 10px var(--accent-glow); }
+.btn-mastery.again {
+  background: transparent; color: var(--ink-dim);
+}
+.btn-mastery.again:hover { border-color: var(--accent-2); color: var(--accent-2); }
+.btn-mastery:disabled { opacity: 0.3; cursor: not-allowed; pointer-events: none; }
+
+.plant-card .focus-star {
+  position: absolute; top: 6px; right: 20px;
+  font-size: 10px; z-index: 4; pointer-events: none;
+  filter: drop-shadow(0 0 3px rgba(255,215,0,0.5));
+}
+.btn-mastery.focus-btn {
+  background: transparent; color: #d4a017; border-color: rgba(212,160,23,0.3);
+}
+.btn-mastery.focus-btn:hover {
+  background: rgba(212,160,23,0.1); border-color: #d4a017;
+  box-shadow: 0 0 10px rgba(255,215,0,0.15);
+}
+
+/* ── FOOTER ── */
+footer {
+  text-align: center; padding: 42px 0 26px;
+  color: var(--ink-faint); font-size: 12px;
+}
+
+/* ── REDUCED MOTION ── */
+
+/* ── GLOBAL TOOLTIP SYSTEM ── */
+[data-tooltip] {
+  position: relative;
+}
+[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute; bottom: calc(100% + 8px); left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: var(--surface-elevated);
+  color: var(--ink);
+  font-size: 11px; font-weight: 400; font-family: inherit;
+  padding: 5px 10px; border-radius: 6px;
+  border: 1px solid var(--border);
+  white-space: nowrap; pointer-events: none;
+  z-index: 9990; opacity: 0;
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-md);
+  transition: opacity 0.15s ease-out 0.3s, transform 0.15s ease-out 0.3s;
+  letter-spacing: 0;
+}
+[data-tooltip]:hover::after {
+  opacity: 1; transform: translateX(-50%) translateY(0);
+}
+/* Arrow */
+[data-tooltip]::before {
+  content: ''; position: absolute; bottom: calc(100% + 2px); left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  border: 5px solid transparent; border-top-color: var(--border);
+  z-index: 9990; opacity: 0; pointer-events: none;
+  transition: opacity 0.15s ease-out 0.3s, transform 0.15s ease-out 0.3s;
+}
+[data-tooltip]:hover::before {
+  opacity: 1; transform: translateX(-50%) translateY(0);
+}
+/* Tooltip reposition for right-edge elements */
+.top-bar-right [data-tooltip]::after {
+  left: auto; right: 0; transform: translateX(0) translateY(4px);
+}
+.top-bar-right [data-tooltip]:hover::after {
+  transform: translateX(0) translateY(0);
+}
+.top-bar-right [data-tooltip]::before {
+  left: auto; right: 10px;
+}
+.top-bar-right [data-tooltip]:hover::before {
+  transform: translateX(0) translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  #natureCanvas { display: none; }
+  body { cursor: auto; }
+  #cursorGlow, #cursorLeaf { display: none; }
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(var(--leaf-1), 0.15); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(var(--leaf-1), 0.3); }
+
+/* ── MOBILE ── */
+@media (max-width: 640px) {
+  header h1 { font-size: 24px; }
+  .browse-grid { grid-template-columns: repeat(auto-fill, minmax(148px, 1fr)); gap: 8px; }
+  .plant-card { padding: 11px 13px; border-radius: 10px; }
+  .plant-card .cn { font-size: 13px; }
+  .plant-card .la { font-size: 11px; }
+  .quiz-chinese { font-size: 30px; }
+  .tab-btn { font-size: 12px; padding: 9px 12px; }
+  .flashcard-face .fc-name { font-size: 28px; }
+  .flashcard-face { padding: 36px 20px; }
+  .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .quiz-area { padding: 28px 18px; }
+  .voice-select { max-width: 150px; font-size: 11px; }
+  .season-pill { width: 26px; height: 26px; font-size: 11px; }
+  #cursorGlow, #cursorLeaf { display: none; }
+  body { cursor: auto; }
+}
+</style>
+</head>
+<body>
+
+<!-- Custom cursor -->
+<div id="cursorGlow"></div>
+<div id="cursorLeaf"></div>
+
+<!-- Particle canvas -->
+<canvas id="natureCanvas" aria-hidden="true"></canvas>
+
+<!-- Season transition overlay -->
+<div class="season-overlay" id="seasonOverlay"></div>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <span class="close-hint">&times;</span>
+  <img id="lightboxImg" src="" alt="">
+</div>
+
+<!-- Help modal -->
+<div class="help-overlay" id="helpOverlay" onclick="closeHelp(event)">
+  <div class="help-panel" onclick="event.stopPropagation()">
+    <button class="help-close" onclick="closeHelp()">&times;</button>
+
+    <div class="help-section">
+      <h3>🌿 风之图鉴</h3>
+      <p>浏览 <strong>40 种植物属名</strong>的中文-拉丁文对照卡片。点击卡片查看该属实拍照片，点击 🔊 听取发音。卡片圆点表示掌握度，⭐ 表示已加重点。</p>
+    </div>
+
+    <div class="help-section">
+      <h3>🃏 落叶闪卡</h3>
+      <p>点击卡片翻转查看拉丁文并自动发音，根据记忆情况诚实判定「认识」「不认识」「重点」。系统采用 <strong>Leitner 六级盒子算法</strong>加权随机抽卡：薄弱词更常出现，已掌握词偶尔抽查。支持键盘快捷操作。</p>
+    </div>
+
+    <div class="help-section">
+      <h3>📝 飘叶测验</h3>
+      <p>根据中文提示输入拉丁文学名。支持四种出题模式：全部、薄弱、错题本、重点。输入自动首字母大写，拼写完整自动提交，答对自动下一题。底部实时统计正确率。</p>
+    </div>
+
+    <div class="help-section">
+      <h3>🖼 植物图鉴画廊</h3>
+      <p>选中植物后加载该属实拍照片。鼠标悬停有露珠光效，点击图片可放大查看。标题旁出现 <strong>📖 百科</strong> 链接可跳转百度百科。</p>
+    </div>
+
+    <div class="help-section">
+      <h3>🎨 五季主题</h3>
+      <p>顶部圆点按钮切换 <em>春·夏·秋·冬·暮</em> 五种配色方案。背景粒子随季节变化。自动跟随系统深色/浅色模式，选择自动保存。</p>
+    </div>
+
+    <div class="help-section">
+      <h3>✨ 粒子生态</h3>
+      <p>全屏动态背景包含花粉、落叶、花瓣、萤火虫等八种粒子，受鼠标位置影响风向，随季节自动切换配色营造自然氛围。</p>
+    </div>
+
+    <div class="help-section">
+      <h3>🔊 语音朗读</h3>
+      <p>左上角选择 TTS 语音引擎，推荐意大利语女声。点击 🔊 或揭示答案时自动朗读拉丁文。支持自定义光标（桌面端叶片光标）。</p>
+    </div>
+
+    <div class="help-section">
+      <h3>⌨ 键盘快捷键</h3>
+      <p>闪卡：<code>空格</code>翻面 <code>1</code>不认识 <code>2</code>重点 <code>3</code>认识。测验：<code>Enter</code>提交。全局：<code>Esc</code>关闭弹窗 <code>W</code>返回顶部。点击顶部 <strong>⌨ 按钮</strong>可自定义所有按键。</p>
+    </div>
+
+    <div class="help-section">
+      <h3>📊 进度追踪</h3>
+      <p>标题下方进度条展示掌握百分比和各类别数量。所有学习数据自动保存在浏览器中，关闭页面不丢失。↺ 按钮可重置全部进度。</p>
+    </div>
+
+    <div class="help-section">
+      <h3>💡 提示</h3>
+      <p>首次访问自动弹出此面板。右下角 ▲ 或按 <strong>W</strong> 返回顶部。Esc 关闭弹窗/灯箱。快捷键与按钮均有 0.4 秒冷却防连按误触。</p>
+    </div>
+
+    <div class="help-section" style="border-bottom:none;">
+      <h3 style="text-align:center;color:var(--ink);margin-bottom:8px;">📖 系统功能详解</h3>
+    </div>
+
+    <div class="help-section">
+      <h3>一、学习系统核心逻辑</h3>
+      <p><strong>Herbarium Ventus</strong> 是一款基于 Leitner 间隔重复算法的植物拉丁文学名记忆工具。系统内置 <strong>40 种植物属名</strong>的中文-拉丁文对照词库，每个词条拥有独立的六级掌握度盒子：</p>
+      <ul>
+        <li><strong>Box 0 · 新词（灰色圆点）</strong>：从未接触过的词条，首次在闪卡或测验中遇到时自动升入 Box 1</li>
+        <li><strong>Box 1 · 薄弱（红色圆点）</strong>：刚接触或反复出错的词条，出现权重最高（权重 8），需要频繁复习</li>
+        <li><strong>Box 2 · 初学（黄色圆点）</strong>：有一定印象但仍需巩固，权重适中（权重 4）</li>
+        <li><strong>Box 3 · 熟悉（浅绿圆点）</strong>：基本掌握，权重降低（权重 2），偶尔抽查</li>
+        <li><strong>Box 4 · 已掌握（绿色圆点）</strong>：稳定掌握，权重最低（权重 1），仅偶尔抽查以维持长期记忆</li>
+        <li><strong>Box 5 · 归档（金色圆点）</strong>：已永久记忆，权重极低（权重 0.3），极少出现</li>
+      </ul>
+      <p>每次在闪卡中答对或在测验中输入正确，词条盒子 +1；答错则盒子 -1。此外，标记<strong>星标（⭐）</strong>的词条权重翻倍，无论处于哪个盒子都会被系统优先推送复习。超过 <strong>24 小时</strong>未复习的 Box 3 及以下词条会额外获得 1.5 倍权重加成，确保遗忘曲线中的词条及时被重新激活。</p>
+    </div>
+
+    <div class="help-section">
+      <h3>二、三大学习模式</h3>
+      <p><strong>风之图鉴（浏览）</strong>：知识库入口，展示全部 40 种植物属名的卡片网格。每张卡片显示中文名和拉丁学名，右上角圆点直观反映当前掌握度，⭐ 表示已加重点。点击卡片选中该属后，页面下方画廊加载其实拍照片；点击 🔊 听取发音。<em>浏览模式仅提供信息查阅，不会影响学习进度</em>，因此不会触发盒子状态变更。</p>
+      <p><strong>落叶闪卡（复习）</strong>：核心记忆训练模式。系统通过 Leitner 加权随机算法抽出一张卡片，正面显示中文名，点击卡片（或按空格键）翻转为拉丁文并自动朗读。用户根据实际记忆情况诚实点击「认识」「不认识」或「重点」三个按钮之一，或使用键盘 1/2/3 操作。每次判定后卡片立刻刷新为下一张推荐词条。该模式适合日常复习，薄弱词自动高频出现，已掌握词低频抽查。</p>
+      <p><strong>飘叶测验（考试）</strong>：主动拼写检测模式。系统显示中文名，用户需在输入框中完整拼写对应的拉丁学名。输入时自动将首字母转为大写。当输入长度达到正确答案长度时自动触发判定，也可按 Enter 手动提交。答对后触发庆祝粒子特效，3 秒倒计时自动进入下一题，答错则显示正确答案并自动将该词加入错题本。测验底部实时统计正确数和正确率。支持四种出题范围：全部词条、仅薄弱词、仅错题本、仅星标词。</p>
+    </div>
+
+    <div class="help-section">
+      <h3>三、视觉与氛围系统</h3>
+      <p><strong>五季主题</strong>：点击顶部右侧五个圆点按钮切换配色方案——春·新绿（嫩绿色调）、夏·晴空（天蓝色调）、秋·红叶（暖橙色调）、冬·霜枝（冷灰蓝色调）、暮·萤火（暗夜荧光色调）。每个季节拥有完整独立的色彩系统，覆盖背景渐变、卡片底色、文字色、强调色、边框和阴影。选择自动保存，下次访问沿用。首次访问时若系统为深色模式则自动匹配「暮」主题，系统切换深色/浅色时自动跟随。</p>
+      <p><strong>粒子生态系统</strong>：全屏 Canvas 动画渲染包含花粉微尘、落叶、花瓣、萤火虫、蒲公英种子、星火、云絮、日光束光斑共计八种粒子类型。所有粒子统一受模拟风向影响——鼠标在屏幕左右位置移动可改变风力方向和强度。萤火虫轻微被光标吸引，近距萤火虫之间产生微光连接线。随季节切换，粒子颜色自动适配当前主题调色板。</p>
+      <p><strong>自定义光标</strong>：桌面端鼠标指针替换为叶片形状，带有柔和光晕。悬停于卡片、按钮、输入框等可交互元素上时叶片变为放大的圆形，点击时收缩模拟按压感。触屏设备自动隐藏自定义光标，使用原生触摸交互。</p>
+    </div>
+
+    <div class="help-section">
+      <h3>四、画廊与外部链接</h3>
+      <p>在风之图鉴中点击任意植物卡片选中后，页面下方「植物图鉴」画廊自动加载该属的实拍照片（图片来源：PPBC 中国植物图像库），支持懒加载优化。鼠标在图片上移动时表面产生露珠折射光效。点击图片可灯箱放大查看，按 Esc 或点击遮罩关闭。选中植物后，画廊标题旁出现<strong>📖 百科链接</strong>，点击在新标签页打开该属的百度百科页面查看更多植物学资料。未选中任何植物时百科链接自动隐藏。</p>
+    </div>
+
+    <div class="help-section">
+      <h3>五、语音与音效</h3>
+      <p>系统利用浏览器内置 Web Speech API 实现拉丁文发音。左上角下拉菜单选择 TTS 语音引擎，系统优先推荐<strong>意大利语女声</strong>（Elsa/Alice），因意大利语的元音发音体系最接近古典拉丁文。备选依次为德语男声、英语女声、英语男声，最后还有一个「系统默认」选项不指定语音。以下场景自动触发朗读：翻转闪卡时、测验中点击「揭示答案」时、点击任意 🔊 按钮时。朗读过程中屏幕中央扩散三道音波波纹动画提供视觉反馈。</p>
+    </div>
+
+    <div class="help-section">
+      <h3>六、键盘操作体系</h3>
+      <p>所有核心操作均支持键盘快捷键，无需鼠标即可完成完整学习流程。在落叶闪卡模式下：空格翻面、1 不认识、2 切换重点、3 认识。在飘叶测验模式下：Enter 提交答案。全局快捷键：Esc 按优先级依次关闭（快捷键配置面板 → 帮助面板 → 图片灯箱）、W 返回页面顶部。点击顶部 ⌨ 按钮可打开快捷键配置面板，以可视化方式重新绑定任意按键——点击输入框后按下目标按键即完成修改，按 Esc 取消捕获，所有修改自动持久化保存。</p>
+      <p>快捷键和按钮均内置 <strong>0.4 秒冷却锁定</strong>，防止快速连按或长按导致误操作（如连续翻卡、连续提交）。窗口失去焦点时自动解除锁定，切回后可立即正常使用。</p>
+    </div>
+
+    <div class="help-section">
+      <h3>七、进度与数据管理</h3>
+      <p>标题下方进度条以百分比形式直观展示整体学习进度。状态栏以颜色编码实时显示：🟢 已掌握数量、🟡 学习中的数量、🔴 薄弱词数量、⭐ 星标词数量。所有学习数据——包括每个词条的盒子等级、正确次数、错误次数、见过次数、星标状态、最后复习时间戳——全部存储在浏览器的 localStorage 中，关闭标签页、重启浏览器均不会丢失。系统提供三种重置粒度：重置全部学习进度（↺ 按钮，需要弹窗确认）、仅清零测验成绩计数（飘叶测验面板中的「重置成绩」）、恢复快捷键默认配置（快捷键配置面板中的「恢复默认」）。</p>
+    </div>
+
+    <div class="help-section" style="border-bottom:none;">
+      <h3>八、辅助与提示</h3>
+      <p>首次访问网站时帮助面板自动弹出，之后可随时点击右上角 ? 按钮查看。页面右下角 ▲ 按钮提供一键返回顶部。画廊图片采用滚动驱动渐入动画。答对测验时的庆祝粒子爆散颜色自动匹配当前季节主题。闪卡在翻面后按钮有短暂冷却防止在看清答案前误触。</p>
+    </div>
+  </div>
+</div>
+
+<!-- Shortcuts modal -->
+<div class="help-overlay" id="shortcutsOverlay" onclick="closeShortcuts(event)">
+  <div class="help-panel" onclick="event.stopPropagation()">
+    <button class="help-close" onclick="closeShortcuts()">&times;</button>
+    <div class="help-section">
+      <h3>⌨ 自定义快捷键</h3>
+      <p style="margin-bottom:10px;">点击右侧输入框，然后按下你想要绑定的按键即可修改。修改自动保存。</p>
+    </div>
+    <div id="shortcutsList"></div>
+    <div class="help-section" style="border-bottom:none;margin-top:8px;padding-bottom:0;">
+      <button class="btn btn-outline btn-sm" onclick="resetShortcuts()" style="font-size:12px;">恢复默认</button>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <!-- Top bar -->
+  <div class="top-bar">
+    <select class="voice-select" id="voiceSelect" onchange="onVoiceChange()" data-tooltip="选择发音语音，推荐意大利语女声">
+      <option value="">加载语音列表中...</option>
+    </select>
+    <div class="top-bar-right">
+      <button class="help-btn" onclick="openShortcuts()" data-tooltip="自定义键盘快捷键">⌨</button>
+      <button class="help-btn" onclick="openHelp()" data-tooltip="查看完整功能指南">?</button>
+      <div class="season-pills" id="seasonPills">
+        <button class="season-pill" data-season="spring" data-tooltip="春·新绿">&#x1F33F;</button>
+        <button class="season-pill" data-season="summer" data-tooltip="夏·晴空">&#x2600;&#xFE0F;</button>
+        <button class="season-pill" data-season="autumn" data-tooltip="秋·红叶">&#x1F341;</button>
+        <button class="season-pill" data-season="winter" data-tooltip="冬·霜枝">&#x2744;</button>
+        <button class="season-pill" data-season="dusk" data-tooltip="暮·萤火">&#x1F31C;</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header>
+    <h1>Herbarium Ventus</h1>
+    <div class="subtitle">风之植物志 · 植物属名拉丁文</div>
+    <div class="progress-wrap" id="progressWrap">
+      <span class="progress-text" id="progressDetail">🟢 0 🟡 0 🔴 0 ⭐ 0</span>
+      <div class="progress-bar-outer"><div class="progress-bar-inner" id="progressBar" style="width:0%"></div></div>
+      <span class="progress-text">已掌握 <strong id="masteredCount">0</strong>/40 (<span id="progressPercent">0%</span>)</span>
+      <button class="reset-btn" onclick="resetAllProgress()" data-tooltip="重置全部学习进度"><span class="reset-icon">&#x21BA;</span></button>
+    </div>
+  </header>
+
+  <!-- Tabs -->
+  <div class="tabs-wrap">
+    <div class="tabs" id="tabContainer">
+      <div class="tab-indicator" id="tabIndicator"></div>
+      <button class="tab-btn active" data-panel="browse" data-tooltip="浏览全部 40 种植物属名">风之图鉴</button>
+      <button class="tab-btn" data-panel="flashcard" data-tooltip="Leitner 盒子加权随机复习">落叶闪卡</button>
+      <button class="tab-btn" data-panel="quiz" data-tooltip="输入拉丁文拼写，答对升级答错入错题本">飘叶测验</button>
+    </div>
+  </div>
+
+  <!-- Browse Panel -->
+  <div id="browse" class="panel active">
+    <div class="browse-grid" id="browseGrid"></div>
+  </div>
+
+  <!-- Flashcard Panel -->
+  <div id="flashcard" class="panel">
+    <div class="flashcard-area">
+      <div class="flashcard-stage">
+        <div class="flashcard-inner" id="flashcardInner" onclick="flipCard()">
+          <div class="flashcard-face front">
+            <div class="shine-strip"></div>
+            <div class="flashcard-gloss"></div>
+            <div class="fc-label" id="fcLabel">中文名</div>
+            <div class="fc-name" id="fcName"></div>
+            <div class="fc-hint">轻触翻转卡片</div>
+          </div>
+          <div class="flashcard-face back">
+            <div class="shine-strip"></div>
+            <div class="flashcard-gloss"></div>
+            <div class="fc-label">Nomen Latinum</div>
+            <div class="fc-name latin" id="fcNameBack"></div>
+          </div>
+        </div>
+      </div>
+      <div class="fc-status" id="fcStatus" style="text-align:center;margin-top:8px;font-size:12px;color:var(--ink-dim);">
+        Box 1 · 薄弱  |  见过 0 次  |  答对 0 次
+      </div>
+      <div style="margin-top:8px; display:flex; gap:8px; justify-content:center;">
+        <button class="btn btn-accent btn-sm" onclick="speakFlashcard()" data-tooltip="听取拉丁文发音">&#x1F50A; 发音</button>
+      </div>
+      <div class="fc-mastery-btns">
+        <button class="btn-mastery again" onclick="markDontKnow()" data-tooltip="没记住，降级并增加出现频率">&#x2753; 不认识</button>
+        <button class="btn-mastery focus-btn" onclick="markFocus()" data-tooltip="标记/取消星标，星标词权重翻倍">&#x2B50; 重点</button>
+        <button class="btn-mastery know" onclick="markKnow()" data-tooltip="记住了，升级盒子并降低出现频率">&#x1F441; 认识</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quiz Panel -->
+  <div id="quiz" class="panel">
+    <div class="quiz-area">
+      <div class="quiz-prompt">请输入对应的拉丁文学名</div>
+      <div class="quiz-chinese" id="quizChinese"></div>
+      <input type="text" class="quiz-input" id="quizInput"
+             placeholder="输入拉丁文，如 Pinus" autocomplete="off" autocorrect="off" spellcheck="false"
+             oninput="autoCapitalize(this)">
+      <div class="quiz-feedback" id="quizFeedback"></div>
+      <div class="quiz-buttons">
+        <button class="btn btn-primary" id="btnCheck" onclick="checkAnswer()" data-tooltip="检查拼写是否正确">鉴定</button>
+        <button class="btn btn-outline" onclick="revealAnswer()" data-tooltip="显示正确答案并自动发音">揭示答案</button>
+        <button class="btn btn-outline" onclick="speakCurrent()" data-tooltip="听取当前题目的拉丁文发音">&#x1F50A; 听发音</button>
+        <button class="btn btn-accent" onclick="forceNextQuestion()" data-tooltip="跳过当前题目，进入下一题">下一题</button>
+      </div>
+      <div class="quiz-score">
+        <div>正确 <span id="correctCount">0</span></div>
+        <div>错误 <span id="wrongCount">0</span></div>
+        <div>正确率 <span id="accuracy">-</span></div>
+      </div>
+      <div class="review-toggle-wrap">
+        <div class="review-toggle" id="reviewToggle">
+          <button class="active" data-mode="all" data-tooltip="从全部 40 种植物中随机出题">全部 40</button>
+          <button data-mode="weak" data-tooltip="只出 Box 1 的薄弱词"><span>薄弱 </span><span id="weakCount">0</span></button>
+          <button data-mode="wrongbook" data-tooltip="只出曾经答错过的词">错题本 <span id="wrongbookCount">0</span></button>
+          <button data-mode="focus" data-tooltip="只出星标词">重点 <span id="focusCount">0</span></button>
+        </div>
+      </div>
+      <div style="margin-top:10px;">
+        <button class="btn btn-accent btn-sm" onclick="resetScore()" data-tooltip="清零测验正确/错误计数">重置成绩</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Gallery -->
+  <div class="gallery-section scroll-reveal" id="gallerySection">
+    <div class="gallery-header">
+      <h2>植物图鉴</h2>
+      <span class="genus-tag" id="galleryGenus"></span>
+      <a class="baike-link" id="baikeLink" href="#" target="_blank" rel="noopener" data-tooltip="在百度百科中查看该属植物的详细资料" style="display:none">📖 百科</a>
+      <span class="baike-hint" id="baikeHint" style="display:none">点击查看百度百科详细介绍</span>
+    </div>
+    <div class="gallery-grid" id="galleryGrid"></div>
+    <div class="gallery-empty" id="galleryEmpty">
+      <div class="icon">&#x1F341;</div>
+      <div>点击植物卡片查看该属典型植物照片</div>
+    </div>
+  </div>
+
+  <footer>
+    <span>&#x1F341;</span> 点击 &#x1F50A; 听取拉丁文发音 &nbsp;|&nbsp;
+    植物图片来自 PPBC 中国植物图像库 &nbsp;|&nbsp; Web Speech API
+    <span>&nbsp;&#x1F341;</span>
+  </footer>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════
+   HERBARIUM VENTUS — PREMIUM ENGINE
+   ═══════════════════════════════════════════════════ */
+
+const PLANTS = [
+  ["松属","Pinus"],["杉木属","Cunninghamia"],["水杉属","Metasequoia"],
+  ["红豆杉属","Taxus"],["木兰属","Magnolia"],["含笑属","Michelia"],
+  ["樟属","Camphora"],["楠属","Phoebe"],["木姜子属","Litsea"],
+  ["李属","Prunus"],["苹果属","Malus"],["蔷薇属","Rosa"],
+  ["红豆树属","Ormosia"],["安息香属","Styrax"],["荚蒾属","Viburnum"],
+  ["枫香属","Liquidambar"],["杨属","Populus"],["栗属","Castanea"],
+  ["栲属/锥属","Castanopsis"],["栎属","Quercus"],["胡桃属","Juglans"],
+  ["朴属","Celtis"],["榕属","Ficus"],["杜英属","Elaeocarpus"],
+  ["油桐属","Vernicia"],["山茶属","Camellia"],["木荷属","Schima"],
+  ["杜鹃花属","Rhododendron"],["越橘属","Vaccinium"],["桉属","Eucalyptus"],
+  ["冬青属","Ilex"],["葡萄属","Vitis"],["柿属","Diospyros"],
+  ["柑橘属","Citrus"],["枣属","Ziziphus"],["香椿属","Toona"],
+  ["槭属","Acer"],["漆树属","Toxicodendron"],["木犀榄属","Olea"],
+  ["刚竹属","Phyllostachys"]
+];
+
+/* ═══════════════════════════════════════════════
+   LEITNER BOX LEARNING SYSTEM
+   Box 0=new 1=weak 2=learning 3=familiar 4=mastered 5=archived
+   ═══════════════════════════════════════════════ */
+var PROGRESS = {};
+var reviewMode = 'all'; // 'all' | 'weak' | 'wrongbook' | 'focus'
+
+// ── Persistence ──
+function loadProgress() {
+  try { var raw = localStorage.getItem('herbarium-progress-v2'); if (raw) PROGRESS = JSON.parse(raw); } catch(e) { PROGRESS = {}; }
+}
+function saveProgress() {
+  try { localStorage.setItem('herbarium-progress-v2', JSON.stringify(PROGRESS)); } catch(e) {}
+}
+
+// ── Entry helpers ──
+function getEntry(la) {
+  if (!PROGRESS[la]) PROGRESS[la] = { box: 0, correct: 0, wrong: 0, seen: 0, focus: false, lastSeen: 0 };
+  return PROGRESS[la];
+}
+function recordSeen(la) {
+  var e = getEntry(la); e.seen++; e.lastSeen = Date.now();
+  if (e.box === 0) e.box = 1; // new → weak on first sight
+  saveProgress();
+}
+function recordCorrect(la) {
+  var e = getEntry(la); e.correct++;
+  e.box = Math.min(e.box + 1, 5);
+  e.lastSeen = Date.now();
+  saveProgress(); updateProgressBar(); updateCardIndicators();
+}
+function recordWrong(la) {
+  var e = getEntry(la); e.wrong++;
+  e.box = Math.max(e.box - 1, 1); // downgrade but min box 1
+  e.lastSeen = Date.now();
+  saveProgress(); updateProgressBar(); updateCardIndicators();
+}
+function toggleFocus(la) {
+  var e = getEntry(la); e.focus = !e.focus;
+  saveProgress(); updateCardIndicators();
+}
+
+// ── Box → mastery label ──
+function getMasteryLabel(la) {
+  var e = getEntry(la);
+  var b = e.box;
+  if (b === 0) return 'new';
+  if (b === 1) return 'weak';
+  if (b === 2) return 'learning';
+  if (b === 3) return 'familiar';
+  if (e.focus && b >= 4) return 'starred';
+  if (b === 5) return 'archived';
+  return 'mastered';
+}
+
+// ── Count helpers ──
+function getCounts() {
+  var mastered = 0, learning = 0, weak = 0, focused = 0;
+  for (var i = 0; i < PLANTS.length; i++) {
+    var e = getEntry(PLANTS[i][1]);
+    var b = e.box;
+    if (b >= 4) mastered++;
+    else if (b >= 2) learning++;
+    else if (b === 1) weak++;
+    if (e.focus) focused++;
+  }
+  return { mastered: mastered, learning: learning, weak: weak, focused: focused };
+}
+
+function getFilteredPlants(mode) {
+  var result = [];
+  for (var i = 0; i < PLANTS.length; i++) {
+    var e = getEntry(PLANTS[i][1]);
+    if (mode === 'weak' && e.box === 1) result.push(i);           // box 1 only
+    else if (mode === 'wrongbook' && e.wrong > 0) result.push(i); // ever wrong
+    else if (mode === 'focus' && e.focus) result.push(i);         // starred
+    else if (mode === 'all') result.push(i);
+  }
+  return result;
+}
+
+// ── Weighted random for flashcard ──
+// Higher weight = more likely to appear
+function getFlashcardWeight(idx) {
+  var e = getEntry(PLANTS[idx][1]);
+  var box = e.box;
+  var weight;
+  switch (box) {
+    case 0: weight = 12; break;  // new — must see
+    case 1: weight = 8; break;   // weak — high priority
+    case 2: weight = 4; break;   // learning
+    case 3: weight = 2; break;   // familiar
+    case 4: weight = 1; break;   // mastered — occasional
+    case 5: weight = 0.3; break; // archived — rare
+    default: weight = 5;
+  }
+  if (e.focus) weight *= 2; // starred = double
+  // Boost cards not seen recently (stale)
+  var hoursSince = (Date.now() - e.lastSeen) / 3600000;
+  if (hoursSince > 24 && box <= 3) weight *= 1.5;
+  return weight;
+}
+
+function pickWeightedCard(candidates) {
+  var total = 0;
+  var weights = [];
+  for (var i = 0; i < candidates.length; i++) {
+    var w = getFlashcardWeight(candidates[i]);
+    weights.push(w); total += w;
+  }
+  var rand = Math.random() * total;
+  var cum = 0;
+  for (var j = 0; j < candidates.length; j++) {
+    cum += weights[j];
+    if (rand <= cum) return j;
+  }
+  return Math.floor(Math.random() * candidates.length);
+}
+
+// ── Progress bar ──
+function updateProgressBar() {
+  var c = getCounts();
+  var pct = Math.round(c.mastered / PLANTS.length * 100);
+  var mc = document.getElementById('masteredCount');
+  var pb = document.getElementById('progressBar');
+  var pp = document.getElementById('progressPercent');
+  var detail = document.getElementById('progressDetail');
+  if (mc) mc.textContent = c.mastered;
+  if (pb) pb.style.width = pct + '%';
+  if (pp) pp.textContent = pct + '%';
+  if (detail) detail.textContent = '🟢 ' + c.mastered + ' 🟡 ' + c.learning + ' 🔴 ' + c.weak + ' ⭐ ' + c.focused;
+}
+
+// ── Card mastery indicators ──
+function updateCardIndicators() {
+  var cards = document.querySelectorAll('.plant-card');
+  for (var i = 0; i < cards.length; i++) {
+    var card = cards[i];
+    var la = card.dataset.la;
+    if (!la) continue;
+    var label = getMasteryLabel(la);
+    var e = getEntry(la);
+    // Remove old
+    var oldDot = card.querySelector('.mastery-dot');
+    if (oldDot) oldDot.remove();
+    var oldStar = card.querySelector('.focus-star');
+    if (oldStar) oldStar.remove();
+    // Add indicator
+    var dot = document.createElement('div');
+    dot.className = 'mastery-dot ' + label;
+    if (label === 'starred') dot.className = 'mastery-dot mastered';
+    card.appendChild(dot);
+    // Add star if focused
+    if (e.focus) {
+      var star = document.createElement('div');
+      star.className = 'focus-star';
+      star.textContent = '⭐';
+      card.appendChild(star);
+    }
+  }
+}
+
+// ── Update filter counts ──
+function updateFilterCounts() {
+  var wc = document.getElementById('weakCount');
+  var wbc = document.getElementById('wrongbookCount');
+  var fc = document.getElementById('focusCount');
+  if (wc) wc.textContent = getFilteredPlants('weak').length;
+  if (wbc) wbc.textContent = getFilteredPlants('wrongbook').length;
+  if (fc) wc2 = fc.textContent = getFilteredPlants('focus').length;
+}
+
+// ── Reset all progress ──
+function resetAllProgress() {
+  if (!confirm('确定要重置全部学习进度吗？\\n所有掌握度、错题本、星标数据将被清除。')) return;
+  PROGRESS = {};
+  try { localStorage.removeItem('herbarium-progress-v2'); } catch(e) {}
+  loadProgress();
+  updateProgressBar();
+  updateCardIndicators();
+  updateFilterCounts();
+  // Reset flashcard queue
+  fcOrder = [];
+  for (var i = 0; i < PLANTS.length; i++) fcOrder.push(i);
+  fcIndex = 0; fcFlipped = false;
+  renderFlashcard();
+  updateFlashcardImages();
+}
+
+// ── Init ──
+loadProgress();
+updateFilterCounts();
+
+/* ═══════════════════════════════════════════════
+   MULTI-LAYER PARTICLE ECOLOGY
+   Three particle types sharing one canvas:
+   - Pollen/dust: tiny, slow, glowing motes
+   - Leaves/petals: medium, falling with wind
+   - Fireflies: larger glow, cursor-attracted, pulsing
+   ═══════════════════════════════════════════════ */
+(function(){
+  const canvas = document.getElementById('natureCanvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [];
+  let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+  let targetMouseX = mouseX, targetMouseY = mouseY;
+  let windBias = 0, targetWind = 0;
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  document.addEventListener('mousemove', function(e) {
+    targetMouseX = e.clientX;
+    targetMouseY = e.clientY;
+    targetWind = ((e.clientX - W / 2) / W) * 0.8;
+  });
+  document.addEventListener('touchmove', function(e) {
+    var t = e.touches[0];
+    targetMouseX = t.clientX;
+    targetMouseY = t.clientY;
+    targetWind = ((t.clientX - W / 2) / W) * 0.8;
+  }, { passive: true });
+
+  function getSeasonColors() {
+    var style = getComputedStyle(document.documentElement);
+    function rgb(v) {
+      var parts = v.split(',').map(function(s) { return parseInt(s.trim()); });
+      return parts.length === 3 ? parts : [90,155,80];
+    }
+    return {
+      pollen: rgb(style.getPropertyValue('--pollen').trim()),
+      leaf1: rgb(style.getPropertyValue('--leaf-1').trim()),
+      leaf2: rgb(style.getPropertyValue('--leaf-2').trim()),
+      petal: rgb(style.getPropertyValue('--petal').trim()),
+      firefly: rgb(style.getPropertyValue('--firefly').trim()),
+      spark: rgb(style.getPropertyValue('--spark').trim())
+    };
+  }
+
+  var seasonColors = getSeasonColors();
+
+  /* Particle types — all drift rightward with wind:
+     0 = pollen mote (tiny, slow drift)
+     1 = leaf (falling with sway)
+     2 = petal (wider, slower fall)
+     3 = firefly (pulsing glow, gentle cursor attraction)
+     4 = dandelion seed (tiny wisp, slow fall)
+     5 = spark (upward drift, glowing dot)
+     6 = cloud wisp (large, upper sky, ethereal white)
+     9 = sunbeam sparkle (warm gold, cross twinkle) */
+
+  function Particle() {
+    this.reset();
+    this.y = Math.random() * H;
+  }
+
+  Particle.prototype.reset = function() {
+    var r = Math.random();
+    this.x = Math.random() * W;
+    this.y = -30;
+    this.age = 0;
+    this.maxAge = Math.random() * 500 + 400;
+
+    if (r < 0.28) {
+      // Pollen mote — tiny floating dust, drifts with wind
+      this.type = 0;
+      this.size = Math.random() * 2.5 + 1;
+      this.vx = Math.random() * 0.2 + 0.08;
+      this.vy = Math.random() * 0.12 + 0.03;
+      this.opacity = Math.random() * 0.5 + 0.1;
+      this.swayPhase = Math.random() * Math.PI * 2;
+      this.swaySpeed = Math.random() * 0.015 + 0.004;
+      this.aspectRatio = 0.7;
+      this.pulseSpeed = 0;
+      this.pulseAmp = 0;
+    } else if (r < 0.56) {
+      // Leaf — falling with sway, carried by wind
+      this.type = 1;
+      this.size = Math.random() * 11 + 5;
+      this.vx = Math.random() * 0.2 + 0.08;
+      this.vy = Math.random() * 0.35 + 0.15;
+      this.opacity = Math.random() * 0.4 + 0.2;
+      this.swayPhase = Math.random() * Math.PI * 2;
+      this.swaySpeed = Math.random() * 0.022 + 0.005;
+      this.aspectRatio = 0.38;
+      this.colorVariant = Math.random() < 0.5 ? 0 : 1;
+      this.pulseSpeed = 0;
+      this.pulseAmp = 0;
+    } else if (r < 0.68) {
+      // Petal — wider, slower fall
+      this.type = 2;
+      this.size = Math.random() * 8 + 4;
+      this.vx = Math.random() * 0.18 + 0.06;
+      this.vy = Math.random() * 0.3 + 0.1;
+      this.opacity = Math.random() * 0.4 + 0.2;
+      this.swayPhase = Math.random() * Math.PI * 2;
+      this.swaySpeed = Math.random() * 0.025 + 0.006;
+      this.aspectRatio = 0.5;
+      this.pulseSpeed = 0;
+      this.pulseAmp = 0;
+    } else if (r < 0.76) {
+      // Firefly — gentle drift with wind, pulsing glow, slightly attracted to cursor
+      this.type = 3;
+      this.size = Math.random() * 3 + 1.5;
+      this.vx = Math.random() * 0.15 + 0.05;
+      this.vy = Math.random() * 0.15 - 0.05;
+      this.opacity = 0;
+      this.swayPhase = Math.random() * Math.PI * 2;
+      this.swaySpeed = Math.random() * 0.03 + 0.01;
+      this.aspectRatio = 1;
+      this.pulseSpeed = Math.random() * 0.06 + 0.03;
+      this.pulseAmp = Math.random() * 0.6 + 0.3;
+    } else if (r < 0.82) {
+      // Dandelion seed — tiny drifting wisp
+      this.type = 4;
+      this.size = Math.random() * 4 + 2;
+      this.vx = Math.random() * 0.2 + 0.06;
+      this.vy = Math.random() * 0.18 + 0.04;
+      this.opacity = Math.random() * 0.35 + 0.15;
+      this.swayPhase = Math.random() * Math.PI * 2;
+      this.swaySpeed = Math.random() * 0.04 + 0.015;
+      this.aspectRatio = 0.18;
+      this.pulseSpeed = 0;
+      this.pulseAmp = 0;
+    } else if (r < 0.89) {
+      // Spark — gentle upward drift with wind
+      this.type = 5;
+      this.size = Math.random() * 1.8 + 0.8;
+      this.vx = Math.random() * 0.12 + 0.04;
+      this.vy = -(Math.random() * 0.3 + 0.08);
+      this.opacity = Math.random() * 0.7 + 0.2;
+      this.swayPhase = Math.random() * Math.PI * 2;
+      this.swaySpeed = Math.random() * 0.02 + 0.01;
+      this.aspectRatio = 0.5;
+      this.pulseSpeed = Math.random() * 0.08 + 0.04;
+      this.pulseAmp = Math.random() * 0.4 + 0.3;
+    } else if (r < 0.97) {
+      // Cloud wisp — large, very slow, upper sky, drifts with wind
+      this.type = 6;
+      this.size = Math.random() * 50 + 30;
+      this.vx = Math.random() * 0.06 + 0.04;
+      this.vy = Math.random() * 0.04 + 0.01;
+      this.opacity = Math.random() * 0.08 + 0.03;
+      this.swayPhase = Math.random() * Math.PI * 2;
+      this.swaySpeed = Math.random() * 0.003 + 0.001;
+      this.aspectRatio = 0.28;
+      this.pulseSpeed = 0;
+      this.pulseAmp = 0;
+    } else {
+      // Sunbeam sparkle — warm golden twinkle, gentle upward drift
+      this.type = 9;
+      this.size = Math.random() * 2.5 + 1.2;
+      this.vx = Math.random() * 0.1 + 0.04;
+      this.vy = -(Math.random() * 0.2 + 0.05);
+      this.opacity = Math.random() * 0.6 + 0.2;
+      this.swayPhase = Math.random() * Math.PI * 2;
+      this.swaySpeed = Math.random() * 0.03 + 0.015;
+      this.aspectRatio = 0.6;
+      this.pulseSpeed = Math.random() * 0.12 + 0.06;
+      this.pulseAmp = Math.random() * 0.5 + 0.3;
+    }
+
+    // All particles start with unified rightward wind direction
+    // Floating types start anywhere on screen
+    if (this.type === 3 || this.type === 5 || this.type === 9) {
+      this.y = Math.random() * H;
+      this.x = Math.random() * W;
+    }
+    // Cloud wisps stay in upper sky
+    if (this.type === 6) {
+      this.y = Math.random() * H * 0.35;
+      this.x = Math.random() * W;
+    }
+  };
+
+  Particle.prototype.update = function() {
+    this.age++;
+    this.swayPhase += this.swaySpeed;
+
+    // Unified wind: all particles drift rightward, modulated by mouse position
+    var breeze = windBias * 0.6 + Math.sin(this.swayPhase) * 0.3;
+
+    if (this.type === 3) {
+      // Firefly — drift with wind, gentle cursor attraction
+      var dx = this.x - mouseX;
+      var dy = this.y - mouseY;
+      var dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < 200 && dist > 0) {
+        var force = (200 - dist) / 200;
+        this.vx -= (dx / dist) * force * 0.06;
+        this.vy -= (dy / dist) * force * 0.06;
+      }
+      this.vx += breeze * 0.15;
+      this.vx *= 0.995;
+      this.vy *= 0.995;
+      this.x += this.vx;
+      this.y += this.vy;
+      this.opacity = Math.sin(this.age * this.pulseSpeed) * this.pulseAmp + this.pulseAmp + 0.1;
+    } else if (this.type === 5) {
+      // Spark — drifts upward with wind
+      this.vx += breeze * 0.25;
+      this.vx += Math.sin(this.swayPhase) * 0.02;
+      this.vx *= 0.996;
+      this.x += this.vx;
+      this.y += this.vy;
+      this.opacity = Math.abs(Math.sin(this.age * this.pulseSpeed)) * this.pulseAmp + 0.2;
+    } else if (this.type === 6) {
+      // Cloud wisp — very slow rightward drift in upper sky
+      this.vx += Math.sin(this.swayPhase) * 0.015;
+      this.vx += breeze * 0.08;
+      this.vx *= 0.999;
+      this.x += this.vx;
+      this.y += this.vy + Math.sin(this.swayPhase * 0.4) * 0.06;
+      var edgeFade = 1;
+      if (this.y > H * 0.45) edgeFade = Math.max(0, 1 - (this.y - H * 0.45) / 30);
+      this.opacity = 0.055 * edgeFade;
+    } else if (this.type === 9) {
+      // Sunbeam sparkle — gentle upward drift with wind
+      this.vx += breeze * 0.2;
+      this.vx += Math.sin(this.swayPhase) * 0.015;
+      this.vx *= 0.997;
+      this.x += this.vx;
+      this.y += this.vy;
+      this.opacity = Math.abs(Math.sin(this.age * this.pulseSpeed)) * this.pulseAmp + 0.15;
+    } else {
+      // Pollen, leaf, petal, dandelion — fall with unified rightward wind
+      this.x += this.vx + breeze;
+      this.y += this.vy;
+      this.x += Math.sin(this.swayPhase * 1.2) * (this.type === 4 ? 0.4 : 0.2);
+      if (this.type === 4) {
+        this.y += Math.cos(this.swayPhase * 0.7) * 0.06;
+      }
+    }
+
+    // Reset if out of bounds
+    var outOfBounds = this.y > H + 80 || this.y < -80 ||
+        this.x < -120 || this.x > W + 120;
+    if (outOfBounds ||
+        (this.type === 3 && this.age > this.maxAge) ||
+        (this.type === 6 && this.x > W + 150)) {
+      this.reset();
+      if (this.type === 3 || this.type === 5 || this.type === 9) {
+        this.x = -20; this.y = Math.random() * H;
+      }
+      if (this.type === 6) { this.y = Math.random() * H * 0.35; this.x = -80; }
+    }
+  };
+
+  Particle.prototype.draw = function() {
+    ctx.save();
+    ctx.translate(this.x, this.y);
+
+    var c;
+    if (this.type === 0) c = seasonColors.pollen;
+    else if (this.type === 1) c = this.colorVariant ? seasonColors.leaf2 : seasonColors.leaf1;
+    else if (this.type === 2) c = seasonColors.petal;
+    else if (this.type === 3) c = seasonColors.firefly;
+    else if (this.type === 4) c = seasonColors.pollen;
+    else if (this.type === 6) c = [255, 255, 255]; // Cloud: pure white
+    else if (this.type === 9) c = [255, 245, 200]; // Sunbeam: warm gold
+    else c = seasonColors.spark;
+
+    var alpha = this.opacity;
+    var r, g, b;
+    r = c[0]; g = c[1]; b = c[2];
+
+    if (this.type === 3) {
+      // Firefly — soft radial glow
+      var glow = ctx.createRadialGradient(0, 0, 0, 0, 0, this.size * 6);
+      glow.addColorStop(0, 'rgba(' + r + ',' + g + ',' + b + ',' + alpha + ')');
+      glow.addColorStop(0.3, 'rgba(' + r + ',' + g + ',' + b + ',' + alpha * 0.5 + ')');
+      glow.addColorStop(1, 'rgba(' + r + ',' + g + ',' + b + ',0)');
+      ctx.fillStyle = glow;
+      ctx.beginPath();
+      ctx.arc(0, 0, this.size * 6, 0, Math.PI * 2);
+      ctx.fill();
+    } else if (this.type === 5) {
+      // Spark — tiny bright dot with glow
+      ctx.fillStyle = 'rgba(' + r + ',' + g + ',' + b + ',' + alpha + ')';
+      ctx.shadowColor = 'rgba(' + r + ',' + g + ',' + b + ',' + alpha * 0.8 + ')';
+      ctx.shadowBlur = 4;
+      ctx.beginPath();
+      ctx.arc(0, 0, this.size, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    } else if (this.type === 4) {
+      // Dandelion seed — fuzzy ellipse with wisps
+      ctx.fillStyle = 'rgba(' + r + ',' + g + ',' + b + ',' + alpha + ')';
+      ctx.beginPath();
+      ctx.ellipse(0, 0, this.size * 0.7, this.size * this.aspectRatio, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(' + r + ',' + g + ',' + b + ',' + alpha * 0.3 + ')';
+      ctx.lineWidth = 0.3;
+      for (var w = 0; w < 5; w++) {
+        var angle = (w / 5) * Math.PI * 2;
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(Math.cos(angle) * this.size * 1.4, Math.sin(angle) * this.size * 1.4);
+        ctx.stroke();
+      }
+    } else if (this.type === 6) {
+      // Cloud wisp — large soft translucent ellipse cluster
+      ctx.fillStyle = 'rgba(255,255,255,' + alpha + ')';
+      ctx.beginPath();
+      ctx.ellipse(0, 0, this.size, this.size * this.aspectRatio, 0, 0, Math.PI * 2);
+      ctx.fill();
+      // Secondary smaller blob for fluffy look
+      ctx.fillStyle = 'rgba(255,255,255,' + alpha * 0.7 + ')';
+      ctx.beginPath();
+      ctx.ellipse(this.size * 0.4, -this.size * 0.05, this.size * 0.55, this.size * 0.22, 0.2, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.ellipse(-this.size * 0.35, this.size * 0.03, this.size * 0.5, this.size * 0.2, -0.15, 0, Math.PI * 2);
+      ctx.fill();
+    } else if (this.type === 9) {
+      // Sunbeam sparkle — warm golden glow with cross-shaped twinkle
+      var sunAlpha = alpha;
+      // Core glow
+      var sunGlow = ctx.createRadialGradient(0, 0, 0, 0, 0, this.size * 3);
+      sunGlow.addColorStop(0, 'rgba(255,245,200,' + sunAlpha + ')');
+      sunGlow.addColorStop(0.3, 'rgba(255,240,180,' + sunAlpha * 0.6 + ')');
+      sunGlow.addColorStop(1, 'rgba(255,230,150,0)');
+      ctx.fillStyle = sunGlow;
+      ctx.beginPath();
+      ctx.arc(0, 0, this.size * 3, 0, Math.PI * 2);
+      ctx.fill();
+      // Cross twinkle
+      ctx.strokeStyle = 'rgba(255,245,210,' + sunAlpha * 0.8 + ')';
+      ctx.lineWidth = 0.6;
+      ctx.beginPath();
+      ctx.moveTo(-this.size * 2, 0); ctx.lineTo(this.size * 2, 0);
+      ctx.moveTo(0, -this.size * 2); ctx.lineTo(0, this.size * 2);
+      ctx.stroke();
+      // Diagonal cross
+      ctx.strokeStyle = 'rgba(255,248,220,' + sunAlpha * 0.5 + ')';
+      ctx.beginPath();
+      ctx.moveTo(-this.size * 1.3, -this.size * 1.3); ctx.lineTo(this.size * 1.3, this.size * 1.3);
+      ctx.moveTo(this.size * 1.3, -this.size * 1.3); ctx.lineTo(-this.size * 1.3, this.size * 1.3);
+      ctx.stroke();
+    } else {
+      // Leaf / petal / pollen — ellipse shape
+      var rot = this.type <= 1 ? this.swayPhase * 0.5 : 0;
+      ctx.rotate(rot);
+      ctx.fillStyle = 'rgba(' + r + ',' + g + ',' + b + ',' + alpha + ')';
+      ctx.beginPath();
+      ctx.ellipse(0, 0, this.size, this.size * this.aspectRatio, 0, 0, Math.PI * 2);
+      ctx.fill();
+      // Subtle vein for leaves
+      if (this.type === 1 && this.size > 8) {
+        ctx.strokeStyle = 'rgba(255,255,255,' + alpha * 0.12 + ')';
+        ctx.lineWidth = 0.3;
+        ctx.beginPath();
+        ctx.moveTo(-this.size * 0.65, 0);
+        ctx.lineTo(this.size * 0.65, 0);
+        ctx.stroke();
+      }
+    }
+    ctx.restore();
+  };
+
+  // Create particles
+  var particleCount = window.innerWidth < 640 ? 70 : 140;
+  for (var i = 0; i < particleCount; i++) {
+    particles.push(new Particle());
+  }
+
+  function updateSeasonColors() {
+    seasonColors = getSeasonColors();
+  }
+
+  function animate() {
+    windBias += (targetWind - windBias) * 0.03;
+    mouseX += (targetMouseX - mouseX) * 0.08;
+    mouseY += (targetMouseY - mouseY) * 0.08;
+
+    ctx.clearRect(0, 0, W, H);
+
+    for (var i = 0; i < particles.length; i++) {
+      particles[i].update();
+      particles[i].draw();
+    }
+
+    // Connecting tendrils between nearby fireflies
+    for (var i = 0; i < particles.length; i++) {
+      if (particles[i].type !== 3) continue;
+      for (var j = i + 1; j < particles.length; j++) {
+        if (particles[j].type !== 3) continue;
+        var dx = particles[i].x - particles[j].x;
+        var dy = particles[i].y - particles[j].y;
+        var dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 140) {
+          var alpha = ((140 - dist) / 140) * 0.05;
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          var fc = seasonColors.firefly;
+          ctx.strokeStyle = 'rgba(' + fc[0] + ',' + fc[1] + ',' + fc[2] + ',' + alpha + ')';
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    }
+
+    requestAnimationFrame(animate);
+  }
+  animate();
+
+  window._particleUpdateColors = updateSeasonColors;
+})();
+
+/* ═══════════════════════════════════════════════
+   CUSTOM CURSOR
+   ═══════════════════════════════════════════════ */
+(function(){
+  var glow = document.getElementById('cursorGlow');
+  var leaf = document.getElementById('cursorLeaf');
+  var gx = -200, gy = -200;
+  var tgx = -200, tgy = -200;
+  var lx = -200, ly = -200;
+
+  document.addEventListener('mousemove', function(e) {
+    tgx = e.clientX; tgy = e.clientY;
+    lx = e.clientX; ly = e.clientY;
+    glow.style.opacity = '1';
+    leaf.style.opacity = '1';
+  });
+  document.addEventListener('mouseleave', function() {
+    glow.style.opacity = '0';
+    leaf.style.opacity = '0';
+  });
+  document.addEventListener('mousedown', function() {
+    leaf.classList.add('pressing');
+  });
+  document.addEventListener('mouseup', function() {
+    leaf.classList.remove('pressing');
+  });
+
+  // Detect hover over interactive elements
+  document.addEventListener('mouseover', function(e) {
+    var target = e.target;
+    if (target.closest('.plant-card') || target.closest('.gallery-img-wrap') ||
+        target.closest('.flashcard-inner') || target.closest('button') ||
+        target.closest('input') || target.closest('select')) {
+      leaf.classList.add('on-card');
+    }
+  });
+  document.addEventListener('mouseout', function(e) {
+    var target = e.target;
+    if (target.closest('.plant-card') || target.closest('.gallery-img-wrap') ||
+        target.closest('.flashcard-inner') || target.closest('button') ||
+        target.closest('input') || target.closest('select')) {
+      leaf.classList.remove('on-card');
+    }
+  });
+
+  function animCursor() {
+    gx += (tgx - gx) * 0.12;
+    gy += (tgy - gy) * 0.12;
+    glow.style.left = gx + 'px';
+    glow.style.top = gy + 'px';
+    leaf.style.left = lx + 'px';
+    leaf.style.top = ly + 'px';
+    requestAnimationFrame(animCursor);
+  }
+  animCursor();
+})();
+
+/* ═══════════════════════════════════════════════
+   SEASON SYSTEM
+   ═══════════════════════════════════════════════ */
+var currentSeason = 'summer';
+
+function setSeason(season) {
+  if (season === currentSeason) return;
+
+  // Brief overlay flash for transition feel
+  var overlay = document.getElementById('seasonOverlay');
+  overlay.style.opacity = '1';
+  setTimeout(function() { overlay.style.opacity = '0'; }, 400);
+
+  document.documentElement.setAttribute('data-season', season);
+  currentSeason = season;
+  try { localStorage.setItem('herbarium-season', season); } catch(e) {}
+
+  // Update particle colors
+  if (window._particleUpdateColors) {
+    setTimeout(function() { window._particleUpdateColors(); }, 100);
+  }
+
+  // Update season pills
+  document.querySelectorAll('.season-pill').forEach(function(p) {
+    p.classList.toggle('active', p.dataset.season === season);
+  });
+}
+
+// Init season pills
+document.querySelectorAll('.season-pill').forEach(function(pill) {
+  pill.addEventListener('click', function() {
+    setSeason(this.dataset.season);
+  });
+});
+
+// Load saved season, or follow system dark mode, default summer
+try {
+  var saved = localStorage.getItem('herbarium-season');
+  if (saved) {
+    setSeason(saved);
+  } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    setSeason('dusk');
+  } else {
+    document.querySelector('.season-pill[data-season="summer"]').classList.add('active');
+  }
+} catch(e) {
+  document.querySelector('.season-pill[data-season="summer"]').classList.add('active');
+}
+// Listen for system theme changes
+if (window.matchMedia) {
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+    if (!localStorage.getItem('herbarium-season')) {
+      setSeason(e.matches ? 'dusk' : 'summer');
+    }
+  });
+}
+
+/* ═══════════════════════════════════════════════
+   QUIZ FILTER TOGGLE
+   ═══════════════════════════════════════════════ */
+(function(){
+  var btns = document.querySelectorAll('#reviewToggle button');
+  btns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      btns.forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      reviewMode = btn.dataset.mode;
+      nextQuestion();
+    });
+  });
+})();
+
+/* ═══════════════════════════════════════════════
+   MORPHING TAB INDICATOR
+   ═══════════════════════════════════════════════ */
+(function(){
+  var tabs = document.querySelectorAll('.tab-btn');
+  var indicator = document.getElementById('tabIndicator');
+  var tabContainer = document.getElementById('tabContainer');
+
+  function updateIndicator(activeBtn) {
+    var containerRect = tabContainer.getBoundingClientRect();
+    var btnRect = activeBtn.getBoundingClientRect();
+    indicator.style.left = (btnRect.left - containerRect.left) + 'px';
+    indicator.style.width = btnRect.width + 'px';
+  }
+
+  // Initialize
+  var activeTab = document.querySelector('.tab-btn.active');
+  if (activeTab) {
+    setTimeout(function() { updateIndicator(activeTab); }, 100);
+  }
+
+  tabs.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      // Deactivate all
+      tabs.forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+
+      // Update indicator
+      updateIndicator(btn);
+
+      // Switch panel with enter animation
+      var panelId = btn.dataset.panel;
+      document.querySelectorAll('.panel').forEach(function(p) {
+        p.classList.remove('active', 'enter');
+      });
+      var panel = document.getElementById(panelId);
+      panel.classList.add('active');
+      // Trigger enter animation
+      requestAnimationFrame(function() {
+        panel.classList.add('enter');
+      });
+
+      // Init quiz or flashcard images
+      if (panelId === 'quiz' && quizIndex < 0) nextQuestion();
+      if (panelId === 'flashcard') updateFlashcardImages();
+    });
+  });
+
+  // Update indicator on resize
+  window.addEventListener('resize', function() {
+    var active = document.querySelector('.tab-btn.active');
+    if (active) updateIndicator(active);
+  });
+})();
+
+/* ═══════════════════════════════════════════════
+   SCROLL-DRIVEN REVEAL (IntersectionObserver fallback)
+   ═══════════════════════════════════════════════ */
+(function(){
+  if ('IntersectionObserver' in window) {
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.scroll-reveal').forEach(function(el) {
+      observer.observe(el);
+    });
+  } else {
+    // Fallback: show all immediately
+    document.querySelectorAll('.scroll-reveal').forEach(function(el) {
+      el.classList.add('visible');
+    });
+  }
+})();
+
+/* ═══════════════════════════════════════════════
+   BACK TO TOP
+   ═══════════════════════════════════════════════ */
+(function(){
+  var btn = document.getElementById('backToTop');
+  window.addEventListener('scroll', function() {
+    if (window.scrollY > 300) {
+      btn.classList.add('show');
+    } else {
+      btn.classList.remove('show');
+    }
+  }, { passive: true });
+  // Show immediately if already scrolled
+  if (window.scrollY > 300) btn.classList.add('show');
+})();
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ═══════════════════════════════════════════════
+   DEW-DROP GALLERY HOVER (mouse tracking on glossy overlay)
+   ═══════════════════════════════════════════════ */
+(function(){
+  document.addEventListener('mousemove', function(e) {
+    document.querySelectorAll('.gallery-img-wrap:hover .dew-drop').forEach(function(drop) {
+      var rect = drop.parentElement.getBoundingClientRect();
+      var x = ((e.clientX - rect.left) / rect.width) * 100;
+      var y = ((e.clientY - rect.top) / rect.height) * 100;
+      drop.style.background = 'radial-gradient(circle at ' + x + '% ' + y + '%, ' +
+        'rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.08) 25%, transparent 55%)';
+    });
+    // Flashcard gloss
+    document.querySelectorAll('.flashcard-inner:hover .flashcard-gloss').forEach(function(gloss) {
+      var face = gloss.parentElement.querySelector('.flashcard-face:not(.back)') ||
+                  gloss.parentElement.querySelector('.flashcard-face');
+      if (!face) return;
+      var rect = face.getBoundingClientRect();
+      var x = ((e.clientX - rect.left) / rect.width) * 100;
+      var y = ((e.clientY - rect.top) / rect.height) * 100;
+      gloss.style.background = 'radial-gradient(circle at ' + x + '% ' + y + '%, ' +
+        'rgba(255,255,255,0.18) 0%, transparent 55%)';
+    });
+  });
+})();
+
+/* ═══════════════════════════════════════════════
+   SPEECH
+   ═══════════════════════════════════════════════ */
+var speaking = false, selectedVoice = null;
+
+function populateVoices() {
+  var voices = window.speechSynthesis.getVoices();
+  var select = document.getElementById('voiceSelect');
+  if (!voices.length) { select.innerHTML = '<option value="">无可用语音</option>'; return; }
+
+  // Gender helpers: check voice name for gender hints
+  function isMale(nm) {
+    var n = nm.toLowerCase();
+    if (n.includes('male')) return true;
+    if (n.includes('david') || n.includes('mark') || n.includes('guy') ||
+        n.includes('stefan') || n.includes('pablo') || n.includes('matteo')) return true;
+    return false;
+  }
+  function isFemale(nm) {
+    var n = nm.toLowerCase();
+    if (n.includes('female')) return true;
+    if (n.includes('elsa') || n.includes('alice') || n.includes('zira') ||
+        n.includes('samantha') || n.includes('catherine') || n.includes('susan') ||
+        n.includes('linda') || n.includes('helena') || n.includes('laura') ||
+        n.includes('maria') || n.includes('elena') || n.includes('francesca')) return true;
+    return false;
+  }
+
+  var itF = null, itM = null, enF = null, enM = null;
+  var usedNames = new Set();
+
+  // --- PASS 1: Known brand-name voices ---
+  for (var v = 0; v < voices.length; v++) {
+    var name = voices[v].name;
+    var lang = voices[v].lang;
+    var key = name + '|' + lang;
+    if (usedNames.has(key)) continue;
+
+    // Italian female: Elsa, Alice (both are female on Windows)
+    if (!itF && (name.includes('Elsa') || name.includes('Alice')) && lang.startsWith('it')) {
+      itF = voices[v]; usedNames.add(key); continue;
+    }
+    // English female: Zira, Samantha, Google US
+    if (!enF && (name.includes('Zira') || name.includes('Samantha')) && lang.startsWith('en')) {
+      enF = voices[v]; usedNames.add(key); continue;
+    }
+    if (!enF && name.includes('Google') && name.includes('US') && lang.startsWith('en')) {
+      enF = voices[v]; usedNames.add(key); continue;
+    }
+    // English male: David, Google UK
+    if (!enM && name.includes('David') && lang.startsWith('en')) {
+      enM = voices[v]; usedNames.add(key); continue;
+    }
+    if (!enM && name.includes('Google') && name.includes('UK') && lang.startsWith('en')) {
+      enM = voices[v]; usedNames.add(key); continue;
+    }
+    // German male (Latin substitute — closest phonetics): Google Deutsch
+    if (!itM && name.includes('Google') && name.includes('Deutsch')) {
+      itM = voices[v]; usedNames.add(key); continue;
+    }
+  }
+
+  // --- PASS 2: Gender detection from voice name ---
+  for (var v2 = 0; v2 < voices.length; v2++) {
+    var n = voices[v2].name, l = voices[v2].lang;
+    var k = n + '|' + l;
+    if (usedNames.has(k)) continue;
+
+    if (!itF && l.startsWith('it') && isFemale(n)) {
+      itF = voices[v2]; usedNames.add(k); continue;
+    }
+    if (!enF && l.startsWith('en') && isFemale(n)) {
+      enF = voices[v2]; usedNames.add(k); continue;
+    }
+    if (!enM && l.startsWith('en') && isMale(n)) {
+      enM = voices[v2]; usedNames.add(k); continue;
+    }
+  }
+
+  // --- PASS 3: Any it/en voice as last resort ---
+  for (var v3 = 0; v3 < voices.length; v3++) {
+    var n2 = voices[v3].name, l2 = voices[v3].lang;
+    var k2 = n2 + '|' + l2;
+    if (usedNames.has(k2)) continue;
+    if (!itF && l2.startsWith('it') && !isMale(n2)) {
+      itF = voices[v3]; usedNames.add(k2); continue;
+    }
+    if (!enF && l2.startsWith('en') && !isMale(n2)) {
+      enF = voices[v3]; usedNames.add(k2); continue;
+    }
+    if (!enM && l2.startsWith('en') && !isFemale(n2)) {
+      enM = voices[v3]; usedNames.add(k2); continue;
+    }
+  }
+
+  select.innerHTML = '';
+  var idx = 0;
+  var firstItalianIdx = -1;
+
+  var optSys = document.createElement('option');
+  optSys.value = '-1'; optSys.textContent = '🌐 系统默认 (不指定语音)';
+  select.appendChild(optSys);
+
+  function addOpt(label, voice) {
+    var o = document.createElement('option');
+    o.value = idx; o.textContent = label + ' — ' + voice.name + ' (' + voice.lang + ')';
+    o._voice = voice;
+    select.appendChild(o);
+    return idx++;
+  }
+
+  // Italian female — best Latin pronunciation
+  if (itF) { firstItalianIdx = idx + 1; addOpt('🇮🇹 意大利语 · 女声', itF); }
+  // German male as Latin substitute (German phonetics closest to Latin)
+  if (itM) addOpt('🇩🇪 德语男声 · 拉丁替代', itM);
+  if (enF) addOpt('🇬🇧 英语 · 女声', enF);
+  if (enM) addOpt('🇬🇧 英语 · 男声', enM);
+
+  // Default to Italian female
+  if (firstItalianIdx > 0) {
+    select.selectedIndex = firstItalianIdx;
+    selectedVoice = select.options[select.selectedIndex]._voice;
+  }
+}
+function onVoiceChange() {
+  var sel = document.getElementById('voiceSelect');
+  var o = sel.options[sel.selectedIndex];
+  selectedVoice = (o && o._voice) ? o._voice : null;
+}
+window.speechSynthesis.onvoiceschanged = populateVoices;
+setTimeout(populateVoices, 200);
+
+function speak(text) {
+  if (speaking) { window.speechSynthesis.cancel(); speaking = false; return; }
+  var u = new SpeechSynthesisUtterance(text);
+  if (selectedVoice) u.voice = selectedVoice;
+  u.lang = 'la'; u.rate = 0.85; u.volume = 1.0;
+  u.onstart = function() {
+    speaking = true;
+    // Emit sound rings
+    emitSoundRings();
+  };
+  u.onend = function() { speaking = false; };
+  u.onerror = function() { speaking = false; };
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(u);
+}
+
+/* Sound wave rings */
+function emitSoundRings() {
+  var cx = window.innerWidth / 2;
+  var cy = window.innerHeight / 2;
+  var count = 0;
+  var interval = setInterval(function() {
+    if (count >= 3 || !speaking) { clearInterval(interval); return; }
+    var ring = document.createElement('div');
+    ring.className = 'sound-ring';
+    ring.style.left = cx + 'px';
+    ring.style.top = cy + 'px';
+    document.body.appendChild(ring);
+    setTimeout(function() { ring.remove(); }, 1300);
+    count++;
+  }, 300);
+}
+
+/* ═══════════════════════════════════════════════
+   IMAGES
+   ═══════════════════════════════════════════════ */
+var IMG = {"Acer":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Camellia":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Camphora":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Castanea":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Castanopsis":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Celtis":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Citrus":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Cunninghamia":["01.jpg","02.jpg","03.jpg","04.jpg"],"Diospyros":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Elaeocarpus":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Eucalyptus":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Ficus":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg"],"Ilex":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Juglans":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Liquidambar":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Litsea":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Magnolia":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Malus":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Metasequoia":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Michelia":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Olea":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Ormosia":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Phoebe":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Phyllostachys":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Pinus":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Populus":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Prunus":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Quercus":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Rhododendron":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Rosa":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Schima":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Styrax":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Taxus":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Toona":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Toxicodendron":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Vaccinium":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Vernicia":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Viburnum":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Vitis":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"],"Ziziphus":["01.jpg","02.jpg","03.jpg","04.jpg","05.jpg","06.jpg","07.jpg","08.jpg","09.jpg","10.jpg"]};
+
+function loadImages(genusName) {
+  var grid = document.getElementById('galleryGrid');
+  var empty = document.getElementById('galleryEmpty');
+  var genusTag = document.getElementById('galleryGenus');
+  // Lookup Chinese name
+  var cnName = genusName;
+  for (var pi = 0; pi < PLANTS.length; pi++) {
+    if (PLANTS[pi][1] === genusName) { cnName = PLANTS[pi][0]; break; }
+  }
+  genusTag.textContent = cnName + ' ' + genusName;
+  // Update Baidu Baike link
+  var baikeLink = document.getElementById('baikeLink');
+  var baikeHint = document.getElementById('baikeHint');
+  if (baikeLink) {
+    baikeLink.href = 'https://baike.baidu.com/item/' + encodeURIComponent(cnName);
+    baikeLink.style.display = '';
+  }
+  if (baikeHint) baikeHint.style.display = '';
+  grid.innerHTML = '';
+  empty.style.display = 'none';
+  if (IMG[genusName] && IMG[genusName].length > 0) {
+    IMG[genusName].forEach(function(filename, i) {
+      var path = 'plant-images-webp/' + genusName + '/' + filename.replace(/\.jpg$/, '.webp');
+      var wrap = document.createElement('div');
+      wrap.className = 'gallery-img-wrap scroll-reveal';
+      wrap.style.transitionDelay = (i * 0.04) + 's';
+      wrap.innerHTML =
+        '<div class="dew-drop"></div>' +
+        '<img src="' + path + '" alt="' + genusName + ' - ' + (i + 1) + '" loading="lazy">' +
+        '<div class="img-caption">' + filename.replace(/\.[^.]+$/, '').replace(/[_-]/g, ' ') + '</div>';
+      wrap.addEventListener('click', function() { openLightbox(path); });
+      grid.appendChild(wrap);
+      // Trigger reveal after append
+      requestAnimationFrame(function() {
+        wrap.classList.add('visible');
+      });
+    });
+  } else {
+    empty.style.display = 'block';
+    empty.innerHTML = '<div class="icon">&#x1F341;</div><div>「' + genusName + '」暂无本地图片</div>';
+  }
+}
+
+function openLightbox(url) {
+  document.getElementById('lightboxImg').src = url;
+  document.getElementById('lightbox').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('show');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    if (document.getElementById('shortcutsOverlay').classList.contains('show')) closeShortcuts();
+    else if (document.getElementById('helpOverlay').classList.contains('show')) closeHelp();
+    else closeLightbox();
+  }
+});
+
+/* ═══════════════════════════════════════════════
+   HELP MODAL
+   ═══════════════════════════════════════════════ */
+function openHelp() {
+  document.getElementById('helpOverlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function closeHelp(e) {
+  if (e && e.target !== document.getElementById('helpOverlay')) return;
+  document.getElementById('helpOverlay').classList.remove('show');
+  document.body.style.overflow = '';
+}
+// First-time auto-show (once per browser)
+(function(){
+  try {
+    if (!localStorage.getItem('herbarium-help-shown')) {
+      setTimeout(function() { openHelp(); }, 800);
+      localStorage.setItem('herbarium-help-shown', '1');
+    }
+  } catch(e) {}
+})();
+
+/* ═══════════════════════════════════════════════
+   BROWSE
+   ═══════════════════════════════════════════════ */
+function selectGenus(cn, la) {
+  document.querySelectorAll('.plant-card').forEach(function(c) { c.classList.remove('selected'); });
+  document.querySelectorAll('.plant-card').forEach(function(c) {
+    if (c.querySelector('.cn').textContent === cn) c.classList.add('selected');
+  });
+  loadImages(la);
+  updateCardIndicators();
+  // Scroll gallery into view
+  document.getElementById('gallerySection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function buildBrowseGrid() {
+  var grid = document.getElementById('browseGrid');
+  grid.innerHTML = '';
+  PLANTS.forEach(function(item, idx) {
+    var cn = item[0], la = item[1];
+    var card = document.createElement('div');
+    card.className = 'plant-card animate-in';
+    card.style.animationDelay = (idx * 0.02) + 's';
+    card.dataset.la = la;
+    card.innerHTML =
+      '<div><div class="cn">' + cn + '</div><div class="la">' + la + '</div></div>' +
+      '<button class="speak-btn" data-tooltip="听取发音">&#x1F50A;</button>';
+    card.addEventListener('click', function(e) {
+      if (!e.target.closest('.speak-btn')) selectGenus(cn, la);
+    });
+    card.querySelector('.speak-btn').addEventListener('click', function(e) {
+      e.stopPropagation(); speak(la);
+    });
+    grid.appendChild(card);
+  });
+}
+
+/* ═══════════════════════════════════════════════
+   FLASHCARD
+   ═══════════════════════════════════════════════ */
+var fcIndex = 0, fcOrder = [], fcFlipped = false;
+for (var i = 0; i < PLANTS.length; i++) fcOrder.push(i);
+
+function renderFlashcard() {
+  var cn = PLANTS[fcOrder[fcIndex]][0];
+  var la = PLANTS[fcOrder[fcIndex]][1];
+  document.getElementById('fcName').textContent = cn;
+  document.getElementById('fcNameBack').textContent = la;
+  document.getElementById('fcLabel').textContent = fcFlipped ? 'Nomen Latinum' : '中文名';
+  document.getElementById('flashcardInner').classList.toggle('flipped', fcFlipped);
+  // Update learning status
+  var e = getEntry(la);
+  var boxNames = ['新词', '薄弱', '初学', '熟悉', '已掌握', '归档'];
+  var statusEl = document.getElementById('fcStatus');
+  if (statusEl) {
+    statusEl.textContent = 'Box ' + e.box + ' · ' + (boxNames[e.box] || '') +
+      '  |  见过 ' + e.seen + ' 次  |  答对 ' + e.correct + ' 次' +
+      (e.focus ? '  |  ⭐ 重点' : '');
+  }
+}
+function updateFlashcardImages() { loadImages(PLANTS[fcOrder[fcIndex]][1]); }
+function speakFlashcard() { speak(PLANTS[fcOrder[fcIndex]][1]); }
+function flipCard() {
+  fcFlipped = !fcFlipped;
+  document.getElementById('flashcardInner').classList.toggle('flipped', fcFlipped);
+  document.getElementById('fcLabel').textContent = fcFlipped ? 'Nomen Latinum' : '中文名';
+  if (fcFlipped) { recordSeen(PLANTS[fcOrder[fcIndex]][1]); speak(PLANTS[fcOrder[fcIndex]][1]); updateFlashcardImages(); }
+  // Lock buttons briefly to avoid misclick before seeing answer
+  lockFcButtons();
+}
+// ── Flashcard: 认识 (know it) ──
+function lockFcButtons() {
+  var btns = document.querySelectorAll('.fc-mastery-btns .btn-mastery');
+  btns.forEach(function(b) { b.disabled = true; });
+  clearTimeout(window._fcLockTimer);
+  window._fcLockTimer = setTimeout(function() {
+    btns.forEach(function(b) { b.disabled = false; });
+  }, 400);
+}
+function markKnow() {
+  lockFcButtons();
+  var la = PLANTS[fcOrder[fcIndex]][1];
+  recordSeen(la);
+  recordCorrect(la);
+  updateFilterCounts();
+  if (fcOrder.length <= 1) {
+    for (var i = 0; i < PLANTS.length; i++) fcOrder.push(i);
+  }
+  var nextIdx = pickWeightedCard(fcOrder);
+  fcIndex = nextIdx;
+  fcFlipped = false; renderFlashcard(); updateFlashcardImages();
+  updateProgressBar(); updateCardIndicators();
+}
+// ── Flashcard: 不认识 (don't know) ──
+function markDontKnow() {
+  lockFcButtons();
+  var la = PLANTS[fcOrder[fcIndex]][1];
+  recordSeen(la);
+  recordWrong(la);
+  updateFilterCounts();
+  var nextIdx = pickWeightedCard(fcOrder);
+  fcIndex = nextIdx;
+  fcFlipped = false; renderFlashcard(); updateFlashcardImages();
+}
+// ── Flashcard: 重点 (toggle star) ──
+function markFocus() {
+  var la = PLANTS[fcOrder[fcIndex]][1];
+  toggleFocus(la);
+  updateCardIndicators();
+  updateFilterCounts();
+  updateProgressBar();
+}
+
+/* ═══════════════════════════════════════════════
+   QUIZ
+   ═══════════════════════════════════════════════ */
+var quizIndex = -1, correctTotal = 0, wrongTotal = 0, currentAnswer = '', autoNextTimer = null;
+
+function nextQuestion() {
+  clearAutoNext();
+  var pool = getFilteredPlants(reviewMode);
+  if (pool.length === 0) pool = getFilteredPlants('all');
+  quizIndex = pool[Math.floor(Math.random() * pool.length)];
+  currentAnswer = PLANTS[quizIndex][1];
+  document.getElementById('quizChinese').textContent = PLANTS[quizIndex][0];
+  var inp = document.getElementById('quizInput');
+  inp.value = ''; inp.className = 'quiz-input';
+  document.getElementById('quizFeedback').innerHTML = '';
+  document.getElementById('btnCheck').disabled = false; inp.disabled = false;
+  inp.focus(); loadImages(currentAnswer);
+}
+function forceNextQuestion() { clearAutoNext(); nextQuestion(); }
+function clearAutoNext() { if (autoNextTimer) { clearInterval(autoNextTimer); autoNextTimer = null; } }
+
+function checkAnswer() {
+  var input = document.getElementById('quizInput').value.trim();
+  if (!input) return;
+  var fb = document.getElementById('quizFeedback'), inp = document.getElementById('quizInput');
+  if (input.toLowerCase() === currentAnswer.toLowerCase()) {
+    correctTotal++;
+    recordCorrect(currentAnswer);
+    inp.className = 'quiz-input correct locked'; inp.disabled = true;
+    document.getElementById('btnCheck').disabled = true;
+    var cd = 3;
+    fb.innerHTML = '<span class="correct-text">&#x2713; 鉴定正确！</span><div class="countdown" id="countdownText">' + cd + ' 秒后自动下一题...</div>';
+    updateScore(); clearAutoNext();
+    autoNextTimer = setInterval(function() {
+      cd--;
+      if (cd <= 0) { clearAutoNext(); nextQuestion(); }
+      else { document.getElementById('countdownText').textContent = cd + ' 秒后自动下一题...'; }
+    }, 1000);
+    // Celebration burst
+    var rect = inp.getBoundingClientRect();
+    burst(rect.left + rect.width / 2, rect.top + rect.height / 2, 40);
+  } else {
+    wrongTotal++;
+    recordWrong(currentAnswer);
+    updateFilterCounts();
+    inp.className = 'quiz-input wrong';
+    fb.innerHTML = '<span class="wrong-text">&#x2717; 不正确</span>&nbsp;&nbsp;正确答案：<span class="answer">' + currentAnswer + '</span>';
+    updateScore();
+    setTimeout(function() { if (inp.className.indexOf('wrong') >= 0) inp.className = 'quiz-input'; }, 1500);
+  }
+}
+
+function revealAnswer() {
+  clearAutoNext();
+  document.getElementById('quizInput').value = currentAnswer;
+  document.getElementById('quizFeedback').innerHTML = '正确答案：<span class="answer">' + currentAnswer + '</span>';
+  if (quizIndex >= 0) speak(currentAnswer);
+}
+function speakCurrent() { if (quizIndex >= 0) speak(currentAnswer); }
+function autoCapitalize(input) {
+  if (input.value.length > 0) {
+    input.value = input.value.charAt(0).toUpperCase() + input.value.slice(1);
+  }
+}
+function resetScore() { correctTotal = 0; wrongTotal = 0; updateScore(); }
+function updateScore() {
+  document.getElementById('correctCount').textContent = correctTotal;
+  document.getElementById('wrongCount').textContent = wrongTotal;
+  var t = correctTotal + wrongTotal;
+  document.getElementById('accuracy').textContent = t > 0 ? Math.round(correctTotal / t * 100) + '%' : '-';
+}
+document.getElementById('quizInput').addEventListener('input', function() {
+  if (this.value.trim().length === currentAnswer.length) checkAnswer();
+});
+
+/* ═══════════════════════════════════════════════
+   CELEBRATION BURST
+   ═══════════════════════════════════════════════ */
+function burst(x, y, count) {
+  count = count || 30;
+  var colors = [];
+  var style = getComputedStyle(document.documentElement);
+  var accent = style.getPropertyValue('--accent').trim();
+  var accent2 = style.getPropertyValue('--accent-2').trim();
+  var spark = style.getPropertyValue('--spark').trim();
+  colors = [accent, accent2, spark, '#ffffff'];
+  for (var i = 0; i < count; i++) {
+    var p = document.createElement('div');
+    p.className = 'burst-particle';
+    var angle = Math.random() * Math.PI * 2;
+    var dist = Math.random() * 70 + 25;
+    var size = Math.random() * 5 + 2;
+    var isCircle = Math.random() < 0.3;
+    p.style.cssText =
+      'left:' + x + 'px;top:' + y + 'px;' +
+      'width:' + size + 'px;height:' + size + 'px;' +
+      'background:' + colors[Math.floor(Math.random() * colors.length)] + ';' +
+      'border-radius:' + (isCircle ? '50%' : '2px') + ';' +
+      '--bx:' + Math.cos(angle) * dist + 'px;' +
+      '--by:' + Math.sin(angle) * dist + 'px;' +
+      '--br:' + (Math.random() * 720 - 360) + 'deg;';
+    document.body.appendChild(p);
+    setTimeout(function() { p.remove(); }, 1050);
+  }
+}
+
+/* ═══════════════════════════════════════════════
+   KEYBOARD SHORTCUTS — 点击顶部 ⌨ 按钮可视化自定义
+   ═══════════════════════════════════════════════ */
+var SHORTCUT_DEFAULTS = {
+  flip:       { key: ' ',        label: '闪卡翻面',      desc: '落叶闪卡模式', keyDisplay: 'Space' },
+  dontKnow:   { key: '1',        label: '不认识',        desc: '落叶闪卡模式', keyDisplay: '1' },
+  focus:      { key: '2',        label: '切换重点',      desc: '落叶闪卡模式', keyDisplay: '2' },
+  know:       { key: '3',        label: '认识',          desc: '落叶闪卡模式', keyDisplay: '3' },
+  submit:     { key: 'Enter',    label: '提交答案',      desc: '飘叶测验模式', keyDisplay: 'Enter' },
+  backToTop:  { key: 'w',        label: '返回顶部',      desc: '全局',          keyDisplay: 'W' }
+};
+
+var SHORTCUTS = {};
+
+function loadShortcuts() {
+  try {
+    var raw = localStorage.getItem('herbarium-shortcuts');
+    if (raw) {
+      var saved = JSON.parse(raw);
+      for (var k in SHORTCUT_DEFAULTS) {
+        SHORTCUTS[k] = (saved[k] !== undefined) ? saved[k] : SHORTCUT_DEFAULTS[k].key;
+      }
+    } else {
+      for (var k in SHORTCUT_DEFAULTS) { SHORTCUTS[k] = SHORTCUT_DEFAULTS[k].key; }
+    }
+  } catch(e) {
+    for (var k in SHORTCUT_DEFAULTS) { SHORTCUTS[k] = SHORTCUT_DEFAULTS[k].key; }
+  }
+}
+function saveShortcuts() {
+  try { localStorage.setItem('herbarium-shortcuts', JSON.stringify(SHORTCUTS)); } catch(e) {}
+}
+loadShortcuts();
+
+// ── Render shortcut config rows ──
+function renderShortcutRows() {
+  var container = document.getElementById('shortcutsList');
+  if (!container) return;
+  container.innerHTML = '';
+  var keys = Object.keys(SHORTCUT_DEFAULTS);
+  for (var i = 0; i < keys.length; i++) {
+    var id = keys[i];
+    var def = SHORTCUT_DEFAULTS[id];
+    var currentKey = SHORTCUTS[id];
+    var display = currentKey === ' ' ? 'Space' : currentKey;
+    var row = document.createElement('div');
+    row.className = 'shortcut-row';
+    row.innerHTML =
+      '<span class="sc-label"><strong>' + def.label + '</strong> <span style="opacity:0.6;font-size:11px;">' + def.desc + '</span></span>' +
+      '<input class="shortcut-key-input" data-sc-id="' + id + '" value="' + display + '" readonly>';
+    container.appendChild(row);
+  }
+  // Bind listeners
+  var inputs = container.querySelectorAll('.shortcut-key-input');
+  for (var j = 0; j < inputs.length; j++) {
+    inputs[j].addEventListener('click', function() { startKeyCapture(this); });
+    inputs[j].addEventListener('keydown', function(e) { captureKey(e, this); });
+  }
+}
+
+// ── Key capture ──
+var capturingInput = null;
+function startKeyCapture(input) {
+  if (capturingInput && capturingInput !== input) {
+    capturingInput.classList.remove('listening');
+  }
+  capturingInput = input;
+  input.classList.add('listening');
+  input.value = '...';
+  input.focus();
+}
+function captureKey(e, input) {
+  if (!capturingInput) return;
+  e.preventDefault();
+  e.stopPropagation();
+  var key = e.key;
+  if (key === 'Escape') {
+    // Cancel capture, restore
+    var id = input.dataset.scId;
+    var current = SHORTCUTS[id];
+    input.value = current === ' ' ? 'Space' : current;
+    input.classList.remove('listening');
+    capturingInput = null;
+    input.blur();
+    return;
+  }
+  if (key === 'Tab') return; // Allow tabbing
+  SHORTCUTS[input.dataset.scId] = key;
+  input.value = key === ' ' ? 'Space' : key;
+  input.classList.remove('listening');
+  capturingInput = null;
+  input.blur();
+  saveShortcuts();
+}
+// Cancel capture on click outside
+document.addEventListener('click', function(e) {
+  if (capturingInput && !e.target.closest('.shortcut-key-input')) {
+    var id = capturingInput.dataset.scId;
+    var current = SHORTCUTS[id];
+    capturingInput.value = current === ' ' ? 'Space' : current;
+    capturingInput.classList.remove('listening');
+    capturingInput = null;
+  }
+});
+
+function resetShortcuts() {
+  for (var k in SHORTCUT_DEFAULTS) { SHORTCUTS[k] = SHORTCUT_DEFAULTS[k].key; }
+  saveShortcuts();
+  renderShortcutRows();
+}
+
+// ── Shortcuts modal ──
+function openShortcuts() {
+  renderShortcutRows();
+  document.getElementById('shortcutsOverlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function closeShortcuts(e) {
+  if (e && e.target !== document.getElementById('shortcutsOverlay')) return;
+  if (capturingInput) {
+    var id = capturingInput.dataset.scId;
+    capturingInput.value = SHORTCUTS[id] === ' ' ? 'Space' : SHORTCUTS[id];
+    capturingInput.classList.remove('listening');
+    capturingInput = null;
+  }
+  document.getElementById('shortcutsOverlay').classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+// ── Event listener ──
+var shortcutLockUntil = 0;
+document.addEventListener('keydown', function(e) {
+  // Don't intercept when capturing a shortcut key
+  if (capturingInput) return;
+
+  var tag = e.target.tagName;
+  var isInput = (tag === 'INPUT' || tag === 'TEXTAREA');
+  var isQuizInput = (e.target.id === 'quizInput');
+
+  var fcActive = document.getElementById('flashcard').classList.contains('active');
+  var qzActive = document.getElementById('quiz').classList.contains('active');
+
+  var now = Date.now();
+  var locked = now < shortcutLockUntil;
+
+  if (fcActive && !isInput) {
+    if (e.key === SHORTCUTS.flip) { e.preventDefault(); if (!locked) { flipCard(); shortcutLockUntil = now + 400; } }
+    if (e.key === SHORTCUTS.dontKnow) { e.preventDefault(); if (!locked) { markDontKnow(); shortcutLockUntil = now + 400; } }
+    if (e.key === SHORTCUTS.focus) { e.preventDefault(); if (!locked) { markFocus(); shortcutLockUntil = now + 400; } }
+    if (e.key === SHORTCUTS.know) { e.preventDefault(); if (!locked) { markKnow(); shortcutLockUntil = now + 400; } }
+  }
+  if (qzActive && isQuizInput && e.key === SHORTCUTS.submit) {
+    e.preventDefault(); if (!locked) { checkAnswer(); shortcutLockUntil = now + 400; }
+  }
+  if (!isInput && e.key === SHORTCUTS.backToTop) {
+    e.preventDefault(); if (!locked) { scrollToTop(); shortcutLockUntil = now + 400; }
+  }
+});
+// Clear lock on blur so returning user can immediately use shortcuts
+window.addEventListener('blur', function() { shortcutLockUntil = 0; });
+
+/* ═══════════════════════════════════════════════
+   INIT
+   ═══════════════════════════════════════════════ */
+buildBrowseGrid();
+renderFlashcard();
+updateProgressBar();
+updateCardIndicators();
+</script>
+<button id="backToTop" onclick="scrollToTop()" style="position:fixed;bottom:32px;right:28px;z-index:99999;width:44px;height:44px;border-radius:50%;border:2px solid #5a9858;background:rgba(255,255,255,0.9);color:#5a9858;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 12px rgba(0,0,0,0.15);" title="返回顶部">&#9650;</button>
+</body>
+</html>

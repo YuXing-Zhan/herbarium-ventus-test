@@ -1,0 +1,14 @@
+# Original large images (156MB) — only upload compressed WebP version
+plant-images/
+
+# Python utility scripts
+download_images.py
+compress_images.py
+
+# Claude Code local settings
+.claude/
+
+# Other experimental HTML files
+latin-learning-best.html
+latin-learning-living.html
+latin-learning-wind-fresh.html
