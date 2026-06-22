@@ -803,6 +803,8 @@ header .subtitle {
   white-space: nowrap;
 }
 .progress-text strong { color: var(--accent); }
+.stat-chip { cursor: help; transition: opacity 0.2s; }
+.stat-chip:hover { opacity: 0.7; }
 .reset-btn {
   width: 26px; height: 26px; border: 1px solid var(--border);
   background: transparent; border-radius: 50%; cursor: pointer;
@@ -1411,7 +1413,11 @@ function updateProgressBar() {
   if (mc) mc.textContent = c.mastered;
   if (pb) pb.style.width = pct + '%';
   if (pp) pp.textContent = pct + '%';
-  if (detail) detail.textContent = '🟢 ' + c.mastered + ' 🟡 ' + c.learning + ' 🔴 ' + c.weak + ' ⭐ ' + c.focused;
+  if (detail) detail.innerHTML =
+    '<span class="stat-chip" title="已掌握 Box 4~5">🟢 ' + c.mastered + '</span> ' +
+    '<span class="stat-chip" title="学习中 Box 2~3">🟡 ' + c.learning + '</span> ' +
+    '<span class="stat-chip" title="薄弱 Box 1">🔴 ' + c.weak + '</span> ' +
+    '<span class="stat-chip" title="已星标">⭐ ' + c.focused + '</span>';
 }
 
 // ── Card mastery indicators ──
