@@ -2273,10 +2273,36 @@ function populateVoices() {
   if (enF) addOpt('🇬🇧 英语 · 女声', enF);
   if (enM) addOpt('🇬🇧 英语 · 男声', enM);
 
+  // --- PASS 4: Catch-all — grab any it/en voice (Android Edge has different names) ---
+  if (!itF && !itM && !enF && !enM) {
+    for (var v4 = 0; v4 < voices.length; v4++) {
+      var l3 = voices[v4].lang;
+      if (!itF && l3.startsWith('it')) { itF = voices[v4]; }
+      else if (!enF && l3.startsWith('en') && !isMale(voices[v4].name)) { enF = voices[v4]; }
+      else if (!enM && l3.startsWith('en')) { enM = voices[v4]; }
+    }
+  }
+
   // Default to Italian female
   if (firstItalianIdx > 0) {
     select.selectedIndex = firstItalianIdx;
     selectedVoice = select.options[select.selectedIndex]._voice;
+  }
+  // Fallback: select any voice so speak() can work
+  if (!selectedVoice) {
+    var fbVoice = itF || itM || enF || enM;
+    if (!fbVoice) {
+      for (var v5 = 0; v5 < voices.length; v5++) {
+        if (voices[v5].lang.startsWith('en') || voices[v5].lang.startsWith('it')) {
+          fbVoice = voices[v5]; break;
+        }
+      }
+    }
+    if (!fbVoice && voices.length > 0) fbVoice = voices[0];
+    if (fbVoice) {
+      selectedVoice = fbVoice;
+      select.selectedIndex = 1; // skip the "系统默认" option
+    }
   }
 }
 function onVoiceChange() {
@@ -2290,8 +2316,26 @@ setTimeout(populateVoices, 200);
 function speak(text) {
   if (speaking) { window.speechSynthesis.cancel(); speaking = false; return; }
   var u = new SpeechSynthesisUtterance(text);
-  if (selectedVoice) u.voice = selectedVoice;
-  u.lang = 'la'; u.rate = 0.85; u.volume = 1.0;
+  if (selectedVoice) {
+    u.voice = selectedVoice;
+    u.lang = selectedVoice.lang;
+  } else {
+    // Fallback: try it-IT, then en-US. Never use 'la' — unsupported on Android.
+    var allVoices = window.speechSynthesis.getVoices();
+    var fb = null;
+    for (var vi = 0; vi < allVoices.length; vi++) {
+      if (allVoices[vi].lang.startsWith('it')) { fb = allVoices[vi]; break; }
+    }
+    if (!fb) {
+      for (var vj = 0; vj < allVoices.length; vj++) {
+        if (allVoices[vj].lang.startsWith('en')) { fb = allVoices[vj]; break; }
+      }
+    }
+    if (!fb && allVoices.length > 0) fb = allVoices[0];
+    if (fb) { u.voice = fb; u.lang = fb.lang; }
+    else u.lang = 'it-IT';
+  }
+  u.rate = 0.85; u.volume = 1.0;
   u.onstart = function() {
     speaking = true;
     // Emit sound rings
