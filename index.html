@@ -2176,12 +2176,25 @@ function onVoiceChange() {
   selectedLang = sel.value;
 }
 
-var speakTimer = null;
+var speakTimer = null, speechReady = false;
+
+// Pre-warm: initialise TTS engine on first user tap (avoids 500ms+ cold-start delay)
+function warmUpSpeech() {
+  if (speechReady) return;
+  speechReady = true;
+  var u = new SpeechSynthesisUtterance('');
+  u.volume = 0; u.rate = 1;
+  window.speechSynthesis.speak(u);
+  document.removeEventListener('click', warmUpSpeech);
+  document.removeEventListener('touchstart', warmUpSpeech);
+}
+document.addEventListener('click', warmUpSpeech);
+document.addEventListener('touchstart', warmUpSpeech);
+
 function speak(text, sourceEl) {
-  // Always cancel any in-flight speech immediately
-  window.speechSynthesis.cancel();
-  speaking = false;
-  // Debounce: clear pending timer so rapid clicks don't queue up
+  // Only cancel if something is actually playing
+  if (speaking) { window.speechSynthesis.cancel(); speaking = false; }
+  // Debounce: rapid clicks reset timer, only last one fires
   clearTimeout(speakTimer);
   speakTimer = setTimeout(function() {
     var u = new SpeechSynthesisUtterance(text);
@@ -2194,7 +2207,7 @@ function speak(text, sourceEl) {
     u.onend = function() { speaking = false; };
     u.onerror = function() { speaking = false; };
     window.speechSynthesis.speak(u);
-  }, 120);
+  }, 80);
 }
 
 /* Sound wave rings — originate from source element or screen center */
