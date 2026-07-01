@@ -1144,7 +1144,10 @@ function scrollToTop() { window.scrollTo({top:0,behavior:'smooth'}); }
 })();
 
 /* ── GALLERY / IMAGES ── */
+var currentGalleryGenus = null;
 function loadImages(genusName) {
+  if (genusName === currentGalleryGenus) return;
+  currentGalleryGenus = genusName;
   var grid=document.getElementById('galleryGrid'), empty=document.getElementById('galleryEmpty'), genusTag=document.getElementById('galleryGenus');
   var cnName=genusName;
   for(var pi=0; pi<PLANTS.length; pi++) { if(PLANTS[pi][1]===genusName) { cnName=PLANTS[pi][0]; break; } }
@@ -1387,6 +1390,8 @@ function getTempWeight(idx) {
   return weight;
 }
 
+var probDisplayOrder = null;
+
 function buildProbChart() {
   var chart=document.getElementById('probChart'); if(!chart) return;
   var panel=document.querySelector('.prob-panel'), st=panel?panel.scrollTop:0;
@@ -1397,9 +1402,15 @@ function buildProbChart() {
     var e=getTempEntry(PLANTS[i][1]);
     items.push({idx:i, cn:PLANTS[i][0], la:PLANTS[i][1], box:e.box, weight:getTempWeight(i), focus:e.focus});
   }
-  items.sort(function(a,b){ return b.weight-a.weight; });
-  var totalWeight=0; for(var i=0; i<items.length; i++) totalWeight+=items[i].weight;
-  var maxWeight=items[0].weight;
+  if (hasUnsavedChanges() && probDisplayOrder) {
+    // Keep stable order while editing — reorder items to match the saved display order
+    var orderMap = {}; for (var oi = 0; oi < probDisplayOrder.length; oi++) orderMap[probDisplayOrder[oi]] = oi;
+    items.sort(function(a,b){ return (orderMap[a.idx]||0) - (orderMap[b.idx]||0); });
+  } else {
+    items.sort(function(a,b){ return b.weight-a.weight; });
+    probDisplayOrder = []; for (var si = 0; si < items.length; si++) probDisplayOrder.push(items[si].idx);
+  }
+  var totalWeight=0, maxWeight=0; for(var i=0; i<items.length; i++) { totalWeight+=items[i].weight; if(items[i].weight>maxWeight) maxWeight=items[i].weight; }
   for(var i=0; i<items.length; i++) {
     var it=items[i], pct=(it.weight/totalWeight*100);
     var row=document.createElement('div'); row.className='prob-row';
@@ -1467,7 +1478,7 @@ function saveProbChanges() {
 }
 
 function closeProbOverlay() {
-  tempProgress=null;
+  tempProgress=null; probDisplayOrder=null;
   var ov=document.getElementById('probOverlay'); if(ov) ov.classList.remove('show');
   document.body.style.overflow='';
 }
